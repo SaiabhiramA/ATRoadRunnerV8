@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+    }
+
+/*plugins {
+    id 'java-library'
+}
+*/
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+repositories {
+    maven { url 'https://jitpack.io' }
+    maven { url = 'https://maven.brott.dev/' }
+}
+
+dependencies {
+  //  implementation 'com.github.NoahBres:MeepMeep:2.0.2'
+}
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.0'
+    }
+}
+// This is now required because aapt2 has to be downloaded from the
+// google() repository beginning with version 3.2 of the Android Gradle Plugin
+allprojects {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
+
+repositories {
+    mavenCentral()
+
+    flatDir {
+        dirs '../libs'
+    }
+}
