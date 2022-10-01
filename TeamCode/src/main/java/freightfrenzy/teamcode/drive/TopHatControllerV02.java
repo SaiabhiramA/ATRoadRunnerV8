@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive;
+package freightfrenzy.teamcode.drive;
 
 //import String;
 
@@ -12,7 +12,6 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaCurrentGame;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -21,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TfodCurrentGame;
 
 import java.util.List;
 
-public class TopHatController{
+public class TopHatControllerV02 {
 
     private DcMotor intake;
     private DcMotor carosuelmoter;
@@ -114,12 +113,11 @@ public class TopHatController{
         AutoTurnTable = false;
         RobotPosition = "R";
         IsArmPositionReady = false;
-        IntakeAction("R", -0.2);
-        IntakeAction("R", 0);
+        //remove intake power
+        ResetArmNTurnTableAuto();
+        setIntakeBoxPosition("R");
         sleep(10000);
         recognitions = tfod.getRecognitions();
-        teleMetry.addData("GO ATOMIC TOADS, You may press play now", "HIT PLAY BUTTON");
-        teleMetry.update();
     }
 
 
@@ -171,10 +169,6 @@ public class TopHatController{
 
     private void blueAllianceDetectDuckLocation(){
         int Counter=0;
-        //List<Recognition> recognitions = tfod.getRecognitions();
-        //Recognition recognition;
-        // Get a list of recognitions from TFOD.
-        //sleep(2000);
         // Get a list of recognitions from TFOD.
         recognitions = tfod.getUpdatedRecognitions();
         for (Recognition recognition_item : recognitions) {
@@ -207,10 +201,6 @@ public class TopHatController{
      */
     private void redAllianceDetectDuckLocation() {
         int Counter=0;
-        //****List<Recognition> recognitions = tfod.getRecognitions();
-        //****Recognition recognition;
-        // Get a list of recognitions from TFOD.
-        //sleep(2000);
         // Get a list of recognitions from TFOD.
         recognitions = tfod.getUpdatedRecognitions();
         for (Recognition recognition_item : recognitions) {
@@ -292,7 +282,7 @@ public class TopHatController{
      */
     public void Red_alliance_carousel() {
         // Red alliance Carousel
-        carosuelmoter.setPower(-0.15);
+        carosuelmoter.setPower(-0.25);
         sleep(4000);
         carosuelmoter.setPower(0);
     }
@@ -324,7 +314,7 @@ public class TopHatController{
      * Describe this function...
      */
     public void MoveTurnTablePosition() {
-        SetArmPosition(-1500);
+        SetArmPosition(-1000);//changed from 1500
         SetTurnTablePosition(4386);
     }
 
@@ -362,8 +352,8 @@ public class TopHatController{
         arm.setTargetPosition(Position2);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         ((DcMotorEx) arm).setVelocity(ArmVelocity);
-      // while (!(arm.isBusy() || armdowntouch.isPressed() || armuptouch.isPressed())) {
-       // }
+     // while (!(arm.isBusy() || armdowntouch.isPressed() || armuptouch.isPressed())) {
+      // }
     }
 
     /**
@@ -435,7 +425,7 @@ public class TopHatController{
         turntable.setTargetPosition(Position2);
         turntable.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         ((DcMotorEx) turntable).setVelocity(TurnTableVelocity);
-        //while (!(turntable.getCurrentPosition() == Position2 || turntabletouch.isPressed())) {
+       // while (!(turntable.isBusy() || turntabletouch.isPressed())) {
         //}
     }
 

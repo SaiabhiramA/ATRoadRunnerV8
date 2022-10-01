@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive;
+package freightfrenzy.teamcode.drive;
 
 //import String;
 
@@ -20,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TfodCurrentGame;
 
 import java.util.List;
 
-public class TopHatControllerV02 {
+public class TopHatControllerV03 {
 
     private DcMotor intake;
     private DcMotor carosuelmoter;
@@ -114,11 +114,14 @@ public class TopHatControllerV02 {
         RobotPosition = "R";
         IsArmPositionReady = false;
         //remove intake power
+        IntakeAction("R", -0.2);//12172021-Fixed Block holding
         ResetArmNTurnTableAuto();
+        IntakeAction("R", 0);
         setIntakeBoxPosition("R");
-        sleep(10000);
-        recognitions = tfod.getRecognitions();
-    }
+        //sleep(10000);
+        //recognitions = tfod.getRecognitions();
+        detectDuckByAllianceMarkers(Alliance,"INIT");
+         }
 
 
     public void initializeRobotArmOnly(HardwareMap hardwareMapAT, Telemetry telemetry) {
@@ -167,74 +170,61 @@ public class TopHatControllerV02 {
 
 
 
-    private void blueAllianceDetectDuckLocation(){
-        int Counter=0;
+    private void blueAllianceDetectDuckLocation(String State) {
+        ducklocation="LEFT";
         // Get a list of recognitions from TFOD.
-        recognitions = tfod.getUpdatedRecognitions();
+        if (State.equals("INIT")) {
+            recognitions = tfod.getRecognitions();
+        }
+        else{
+            recognitions = tfod.getUpdatedRecognitions();
+        }
         for (Recognition recognition_item : recognitions) {
             recognition = recognition_item;
             if (recognition.getLabel().equals("Duck")) {
                 xPosition_Left = Double.parseDouble(JavaUtil.formatNumber(recognition.getLeft(), 0));
                 xPosition_Right = Double.parseDouble(JavaUtil.formatNumber(recognition.getRight(), 0));
-                if (xPosition_Left >= 10 && xPosition_Left <= 120) {
+                if (xPosition_Left >= 1 && xPosition_Left <= 180) {
                     ducklocation = "CENTER";
-                } else if (xPosition_Left >= 285 && xPosition_Left <= 475) {
-                    ducklocation = "RIGHT";
                 } else {
-                    ducklocation = "ERROR: GOOFY LEFT - Adjust Left Position in the code";
+                    ducklocation = "RIGHT";
                 }
-                IsDetected = true;
             }
         }
-        if (IsDetected != true) {
-            ducklocation = "LEFT";
         }
-
-        teleMetry.addData("Checked for object # of Times", Counter);
-        teleMetry.addData("duck position", ducklocation);
-        teleMetry.addData("duck right position", xPosition_Right);
-        teleMetry.addData("duck left position", xPosition_Left);
-        teleMetry.update();
-    }
     /**
      * Describe this function...
      */
-    private void redAllianceDetectDuckLocation() {
-        int Counter=0;
+    private void redAllianceDetectDuckLocation(String State) {
+        ducklocation = "RIGHT";
         // Get a list of recognitions from TFOD.
-        recognitions = tfod.getUpdatedRecognitions();
+        if (State.equals("INIT")) {
+            recognitions = tfod.getRecognitions();
+        }
+        else{
+            recognitions = tfod.getUpdatedRecognitions();
+        }
         for (Recognition recognition_item : recognitions) {
             recognition = recognition_item;
             if (recognition.getLabel().equals("Duck")) {
                 xPosition_Left = Double.parseDouble(JavaUtil.formatNumber(recognition.getLeft(), 0));
                 xPosition_Right = Double.parseDouble(JavaUtil.formatNumber(recognition.getRight(), 0));
-                if (xPosition_Left >= 10 && xPosition_Left <= 120) {
+                if (xPosition_Left >= 1 && xPosition_Left <= 180) {
                     ducklocation = "LEFT";
-                } else if (xPosition_Left >= 285 && xPosition_Left <= 475) {
-                    ducklocation = "CENTER";
-                } else {
-                    ducklocation = "ERROR: GOOFY RIGHT - Adjust Left Position in the code";
-                }
-                IsDetected = true;
+                } else{
+                    ducklocation = "CENTER";}
             }
         }
-        if (IsDetected != true) {
-            ducklocation = "RIGHT";
-        }
+      }
 
-        teleMetry.addData("Checked for object # of Times", Counter);
-        teleMetry.addData("duck position", ducklocation);
-        teleMetry.addData("duck right position", xPosition_Right);
-        teleMetry.addData("duck left position", xPosition_Left);
-       }
-
-    public void detectDuckByAllianceMarkers(String Alliance){
+    public void detectDuckByAllianceMarkers(String Alliance,String State){
         if (Alliance == "RED") {
-            redAllianceDetectDuckLocation();
+            redAllianceDetectDuckLocation(State);
         }
         if (Alliance == "BLUE") {
-            blueAllianceDetectDuckLocation();
+            blueAllianceDetectDuckLocation(State);
         }
+        teleMetry.update();
     }
 
     /**
@@ -250,9 +240,7 @@ public class TopHatControllerV02 {
             ResetArmDown();
 
         //}
-        Display_Key_Measures();
-        teleMetry.update();
-            }
+    }
 
     /**
      * Describe this function...
@@ -282,7 +270,7 @@ public class TopHatControllerV02 {
      */
     public void Red_alliance_carousel() {
         // Red alliance Carousel
-        carosuelmoter.setPower(-0.25);
+        carosuelmoter.setPower(-0.15);
         sleep(4000);
         carosuelmoter.setPower(0);
     }
@@ -314,7 +302,7 @@ public class TopHatControllerV02 {
      * Describe this function...
      */
     public void MoveTurnTablePosition() {
-        SetArmPosition(-1000);//changed from 1500
+        SetArmPosition(-2000);//changed from 1500
         SetTurnTablePosition(4386);
     }
 
@@ -340,7 +328,7 @@ public class TopHatControllerV02 {
      */
     public void Blue_alliance_carousel() {
         // Blue alliance Carousel
-        carosuelmoter.setPower(0.25);
+        carosuelmoter.setPower(0.20);
         sleep(4000);
         carosuelmoter.setPower(0);
     }
@@ -455,8 +443,6 @@ public class TopHatControllerV02 {
             tfod.setZoom(1.1, 16.0/9.0);
         }
 
-        teleMetry.update();
-
     }
 
     /**
@@ -520,15 +506,24 @@ public String duckLocationSymbol(){
     /**
      * Describe this function...
      */
-    private void Display_Key_Measures() {
-        teleMetry.addData("Front Left Position", frontLeft.getCurrentPosition());
+    public void Display_Key_Measures(String State) {
+        /*teleMetry.addData("Front Left Position", frontLeft.getCurrentPosition());
         teleMetry.addData("Front Right Position", frontRight.getCurrentPosition());
         teleMetry.addData("Rear Left Position", rearLeft.getCurrentPosition());
         teleMetry.addData("Rear Right Position", rearRight.getCurrentPosition());
         teleMetry.addData("Turn Table", turntable.getCurrentPosition());
         teleMetry.addData("Arm", arm.getCurrentPosition());
-        teleMetry.addData("Intake Box Position", intakebox.getPosition());
-    }
+        teleMetry.addData("Intake Box Position", intakebox.getPosition());*/
+        teleMetry.addData("DUCK Position", ducklocation);
+        teleMetry.addData("Duck Right Angle", xPosition_Right);
+        teleMetry.addData("Duck Left Angle", xPosition_Left);
+        if (State.equals("INIT")){
+            teleMetry.addData("GOOD LUCK ATOMIC TOADS, You may press play now", "HIT PLAY BUTTON");
+        }
+        else if (State.equals("PLAY")) {
+            teleMetry.addData(", GO ATOMIC TODS, Watch Play Now", "HAVE FUN");
+        }
+        }
 
     /**
      * Describe this function...
