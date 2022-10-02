@@ -47,8 +47,8 @@ public class DriveConstantsAT {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 1.88976; // in
-    public static double GEAR_RATIO = .99; // output (wheel) speed / input (motor) speed- MODIFIED
-    public static double TRACK_WIDTH = 14; // in    ???? RA-CHANGE THIS WILL NEED TO BE CHANGED ONCE NEW Chasis is Built
+    public static double GEAR_RATIO = 1;//.99; // output (wheel) speed / input (motor) speed- MODIFIED
+    public static double TRACK_WIDTH = 10.77;//13.84;//14; // in    ???? RA-CHANGE THIS WILL NEED TO BE CHANGED ONCE NEW Chasis is Built
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -73,7 +73,7 @@ public class DriveConstantsAT {
     /*  ORIGINAL
     public static double MAX_VEL = 52.48180821614297;
     public static double MAX_ACCEL = 52.48180821614297;
-    public static double MAX_ANG_VEL = Math.toRadians(184.02607784577722);
+    public static double MAX_ANG_VEL = 0.008888889104127884;//Math.toRadians(184.02607784577722);
     public static double MAX_ANG_ACCEL = Math.toRadians(184.02607784577722);
 */
     // RA-CHANGE
