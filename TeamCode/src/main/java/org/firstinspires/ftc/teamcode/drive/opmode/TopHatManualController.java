@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -39,11 +38,11 @@ public class TopHatManualController extends LinearOpMode {
 
         // Set servo to mid position
         ElbowPosition = 0;
-        ElbowSpeed = 1;
+        ElbowSpeed = 50;
         WaistPosition = 0;
-        WaistSpeed = 250;
+        WaistSpeed = 10;
         ArmPosition = 0;
-        ArmSpeed = 20;
+        ArmSpeed = 50;
         ClawSpeed = 0.01;
         ClawPosition = 0.1;
         WristSpeed = 0.01;
@@ -53,6 +52,7 @@ public class TopHatManualController extends LinearOpMode {
         turntable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         waitForStart();
         while (opModeIsActive()) {
+            // Use gamepad X and B to open close servo
             if (gamepad1.dpad_up) {
                 WristPosition += WristSpeed;
                 telemetry.addData("DpadUp", "Pressed");
@@ -93,22 +93,20 @@ public class TopHatManualController extends LinearOpMode {
                 WaistPosition += -WaistSpeed;
                 telemetry.addData("Waist Right", "Pressed");
             }
-            // Keep Servo & Motors position in valid range
+            // Keep Servo position in valid range
             ClawPosition = Math.min(Math.max(ClawPosition, 0), 1);
             WristPosition = Math.min(Math.max(WristPosition, 0), 1);
-            ArmPosition = Math.min(Math.max(ArmPosition, -500), 0);
-            ElbowPosition = Math.min(Math.max(ElbowPosition, -150), 0);
-            WaistPosition = Math.min(Math.max(WaistPosition, -100), 8500);
             clawrotate.setPosition(WristPosition);
             claw.setPosition(ClawPosition);
             arm1.setTargetPosition((int) ArmPosition);
             arm1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ((DcMotorEx) arm1).setVelocity(2000);
+            ((DcMotorEx) arm1).setVelocity(5000);
             arm2.setTargetPosition((int) ElbowPosition);
             arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            ((DcMotorEx) arm2).setVelocity(5000);
             turntable.setTargetPosition((int) WaistPosition);
             turntable.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ((DcMotorEx) turntable).setVelocity(10000);
+            ((DcMotorEx) turntable).setVelocity(5000);
             telemetry.addData("wrist position", clawrotate.getPosition());
             telemetry.addData("claw position", claw.getPosition());
             telemetry.addData("arm position", arm1.getCurrentPosition());
