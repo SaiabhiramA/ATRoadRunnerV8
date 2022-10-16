@@ -1,9 +1,12 @@
-package org.firstinspires.ftc.teamcode.drive;
+package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
+import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -18,7 +21,7 @@ public class TeleopAT extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         MecanumDriveAT drive = new MecanumDriveAT(hardwareMap);
-        TopHatAutoController  tophatController = new TopHatAutoController();
+        TopHatAutoController tophatController = new TopHatAutoController();
         tophatController.initializeRobot(hardwareMap,telemetry,gamepad1,gamepad2,"");
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
