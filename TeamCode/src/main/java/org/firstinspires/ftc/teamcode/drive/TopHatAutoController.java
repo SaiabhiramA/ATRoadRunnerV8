@@ -51,29 +51,39 @@ public class TopHatAutoController {
         turntable = hwMap.get(DcMotor.class, "turntable");
         wrist = hwMap.get(Servo.class, "wrist");
         claw = hwMap.get(Servo.class, "claw");
-        //turntabletouch = hwMap.get(TouchSensor.class, "turntabletouch");
-        //armdowntouch = hwMap.get(TouchSensor.class, "armdowntouch");
-        //armuptouch = hwMap.get(TouchSensor.class, "armuptouch");
-        //elbowtouch = hwMap.get(TouchSensor.class, "elbowtouch");
+        turntabletouch = hwMap.get(TouchSensor.class, "turntabletouch");
+        armdowntouch = hwMap.get(TouchSensor.class, "armdowntouch");
+        armuptouch = hwMap.get(TouchSensor.class, "armuptouch");
+        elbowtouch = hwMap.get(TouchSensor.class, "elbowtouch");
         // Set servo to mid position
         ElbowPosition = 0;
         ElbowSpeed = 10;
         TurnTablePosition = 0;
         TurnTableSpeed = 10;
         ArmPosition = 0;
-        ArmSpeed = 10;
+        ArmSpeed = 100;
         ClawSpeed = 0.05;
-        ClawPosition = 0.1;
+        ClawPosition = 0;
         WristSpeed = 0.05;
-        WristPosition = 0.1;
+        WristPosition = 1;
         ArmVelocity=5000;
-        ElbowVelocity=5000;
-        TurnTableVelocity=5000;
+        ElbowVelocity=2500;
+        TurnTableVelocity=1000;
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elbow.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turntable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        ResetTopHat();
+        telemetry.update();
     }
+
+    private void ResetTopHat(){
+        ResetArmUp();
+        ResetWristNClaw();
+        ResetArmElbow();
+        ResetTurnTable();
+        ResetArmDown();
+     }
 
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
@@ -93,7 +103,7 @@ public class TopHatAutoController {
             }
             if (gamepad2.dpad_right) {
                 //ClawPosition += ClawSpeed;
-                ClawPosition = 0 ;
+                ClawPosition = 0.3 ;
                 HoldCone = true;
                 telemetry.addData("DpadRight Claw Close", "Pressed");
             }
@@ -103,22 +113,22 @@ public class TopHatAutoController {
                 HoldCone = false;
                 telemetry.addData("DpadLeft Claw Open", "Pressed");
             }
-            if (gamepad2.left_stick_y > 0) {
-                ArmPosition += gamepad2.left_stick_y*ArmSpeed;
-                telemetry.addData("Left Stick -Y Arm Down", "Pressed");
+            if (gamepad2.left_stick_y != 0) {
+                ArmPosition += -gamepad2.left_stick_y*ArmSpeed;
+         //       telemetry.addData("Left Stick -Y Arm Down", "Pressed");
             }
-            if (gamepad2.left_stick_y < 0) {
+           /* if (gamepad2.left_stick_y > 0) {
                 ArmPosition += gamepad2.left_stick_y*ArmSpeed;
                 telemetry.addData("Left Stick Y Arm Up", "Pressed");
-            }
-            if (gamepad2.right_stick_y < 0) {
+            }*/
+            if (gamepad2.right_stick_y != 0) {
                 ElbowPosition += gamepad2.right_stick_y*ElbowSpeed;
-                telemetry.addData("Right Stick -Y Elbow Down", "Pressed");
+              //  telemetry.addData("Right Stick -Y Elbow Down", "Pressed");
             }
-            if (gamepad2.right_stick_y > 0) {
+            /*if (gamepad2.right_stick_y < 0) {
                 ElbowPosition += gamepad2.right_stick_y*ElbowSpeed;
                 telemetry.addData("Right Stick Y Elbow Up", "Pressed");
-            }
+            }*/
             if (gamepad2.left_trigger > 0) {
                 TurnTablePosition += gamepad2.left_trigger*TurnTableSpeed;
                 telemetry.addData("Left Trigger TurnTable Left", "Pressed");
@@ -127,9 +137,20 @@ public class TopHatAutoController {
                 TurnTablePosition += -gamepad2.right_trigger*TurnTableSpeed;
                 telemetry.addData("Right Trigger TurnTable Right", "Pressed");
             }
+            if (gamepad2.right_bumper && gamepad2.x){
+                rightSidePickup();
+            }
+        if (gamepad2.left_bumper && gamepad2.y){
+            leftSideHighDrop();
+        }
             // Keep Servo position in valid range
             ClawPosition = Math.min(Math.max(ClawPosition, 0), 1);
             WristPosition = Math.min(Math.max(WristPosition, 0), 1);
+
+            TurnTablePosition = Math.min(Math.max(TurnTablePosition, 100), 1650);
+            ElbowPosition = Math.min(Math.max(ElbowPosition, -1200), -40);
+            ArmPosition=Math.min(Math.max(ArmPosition, 0), 4700);
+
             wrist.setPosition(WristPosition);
             claw.setPosition(ClawPosition);
             setMotorPosition((int) ArmPosition,arm,ArmVelocity);
@@ -145,29 +166,113 @@ public class TopHatAutoController {
       //  }
     }
     private void ResetTurnTable() {
-        if (!turntabletouch.isPressed()) {
-            setMotorPosition(-5000,turntable,TurnTableVelocity);
-            while (!turntabletouch.isPressed()) {
-                telemetry.addData("Reset Turn Table Position", turntable.getCurrentPosition());
-            }
-            turntable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            setMotorPosition(300,turntable,TurnTableVelocity);
+        //if (!turntabletouch.isPressed()) {
+        setMotorPosition(-5000,turntable,TurnTableVelocity);
+        while (!turntabletouch.isPressed()) {
+            telemetry.addData("Reset Turn Table Position", turntable.getCurrentPosition());
         }
-    }
+        turntable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //}
+        while (turntable.getCurrentPosition() < 200) {
+            setMotorPosition(200, turntable, TurnTableVelocity);
+        }
+        TurnTablePosition=turntable.getCurrentPosition();
+      }
     private void ResetArmUp() {
-        if (!armuptouch.isPressed()) {
-            arm.setTargetPosition(-5000);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ((DcMotorEx) arm).setVelocity(ArmVelocity);
+        //if (!armuptouch.isPressed()) {
+            setMotorPosition(10000,arm,ArmVelocity);
             while (!armuptouch.isPressed()) {
                 telemetry.addData("Reset Arm Position", arm.getCurrentPosition());
             }
             arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        }
+        //}
     }
-    private void setMotorPosition(int pos, DcMotor motor, int motorVel){
+    private void ResetArmDown() {
+        //if (!armdowntouch.isPressed()) {
+            setMotorPosition(-10000,arm,ArmVelocity);
+            while (!armdowntouch.isPressed()) {
+                telemetry.addData("Reset Arm Position", arm.getCurrentPosition());
+            }
+            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        while (arm.getCurrentPosition() < 100) {
+            setMotorPosition(100, arm, ArmVelocity);
+        }
+        //}
+        ArmPosition=arm.getCurrentPosition();
+    }
+    private void ResetArmElbow() {
+        //if (!elbowtouch.isPressed()) {
+        setMotorPosition(5000,elbow,ElbowVelocity);
+        while (!elbowtouch.isPressed()) {
+            telemetry.addData("Reset Elbow Position", elbow.getCurrentPosition());
+        }
+        elbow.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        while (elbow.getCurrentPosition() > -20) {
+            setMotorPosition(-20, elbow, ElbowVelocity);
+        }
+        ElbowPosition=elbow.getCurrentPosition();
+        //}
+    }
+
+    private void ResetWristNClaw(){
+        WristPosition=.9;
+        wrist.setPosition(WristPosition);
+        ClawPosition=0.3;
+        claw.setPosition(ClawPosition);
+    }
+
+
+    public void setMotorPosition(int pos, DcMotor motor, int motorVel){
         motor.setTargetPosition(pos);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         ((DcMotorEx) motor).setVelocity(motorVel);
     }
+    private void setWristPosition(double pos){
+        WristPosition=pos;
+        //wrist.setPosition(WristPosition);
+    }
+    private void openClaw(boolean status){
+        if (status) {
+            ClawPosition = 1;
+        }
+        else{
+            ClawPosition=0.3;
+        }
+        //claw.setPosition(ClawPosition);
+    }
+    private void rightSidePickup(){
+        double desiredWristPosition = 0.65;
+        double desiredClawPosition = 0.3;
+        int desiredArmPosition=724;
+        int desiredElbowPosition=-1036;
+        int desiredTurnTablePosition=201;
+        //setMotorPosition(desiredArmPosition, arm,ArmVelocity);
+        //setMotorPosition(desiredTurnTablePosition,turntable,TurnTableVelocity);
+        //setMotorPosition(desiredElbowPosition,elbow,ElbowVelocity);
+        //setWristPosition(desiredWristPosition);
+        ArmPosition=desiredArmPosition;
+        TurnTablePosition=desiredTurnTablePosition;
+        ElbowPosition=desiredElbowPosition;
+        WristPosition=desiredWristPosition;
+        openClaw(true);
+
+    }
+    private void leftSideHighDrop(){
+        double desiredWristPosition = 0.799999;
+        double desiredClawPosition = 0.3;
+        int desiredArmPosition=3742;
+        int desiredElbowPosition=-1204;
+        int desiredTurnTablePosition=1504;
+        //setMotorPosition(desiredArmPosition, arm,ArmVelocity);
+        //setMotorPosition(desiredTurnTablePosition,turntable,TurnTableVelocity);
+        //setMotorPosition(desiredElbowPosition,elbow,ElbowVelocity);
+        //setWristPosition(desiredWristPosition);
+        ArmPosition=desiredArmPosition;
+        TurnTablePosition=desiredTurnTablePosition;
+        ElbowPosition=desiredElbowPosition;
+        WristPosition=desiredWristPosition;
+        openClaw(true);
+
+    }
+
 }
