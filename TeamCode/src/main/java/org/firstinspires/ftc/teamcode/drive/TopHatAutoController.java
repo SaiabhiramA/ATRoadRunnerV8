@@ -57,7 +57,7 @@ public class TopHatAutoController {
         elbowtouch = hwMap.get(TouchSensor.class, "elbowtouch");
         // Set servo to mid position
         ElbowPosition = 0;
-        ElbowSpeed = 10;
+        ElbowSpeed = 100;
         TurnTablePosition = 0;
         TurnTableSpeed = 10;
         ArmPosition = 0;
@@ -67,7 +67,7 @@ public class TopHatAutoController {
         WristSpeed = 0.05;
         WristPosition = 1;
         ArmVelocity=5000;
-        ElbowVelocity=2500;
+        ElbowVelocity=5000;
         TurnTableVelocity=1000;
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elbow.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -78,8 +78,8 @@ public class TopHatAutoController {
     }
 
     private void ResetTopHat(){
-        ResetArmUp();
         ResetWristNClaw();
+        ResetArmUp();
         ResetArmElbow();
         ResetTurnTable();
         ResetArmDown();
@@ -148,7 +148,7 @@ public class TopHatAutoController {
             WristPosition = Math.min(Math.max(WristPosition, 0), 1);
 
             TurnTablePosition = Math.min(Math.max(TurnTablePosition, 100), 1650);
-            ElbowPosition = Math.min(Math.max(ElbowPosition, -1200), -40);
+            ElbowPosition = Math.min(Math.max(ElbowPosition, -8500), -40);
             ArmPosition=Math.min(Math.max(ArmPosition, 0), 4700);
 
             wrist.setPosition(WristPosition);
@@ -244,7 +244,7 @@ public class TopHatAutoController {
         double desiredWristPosition = 0.65;
         double desiredClawPosition = 0.3;
         int desiredArmPosition=724;
-        int desiredElbowPosition=-1036;
+        int desiredElbowPosition=-3959;
         int desiredTurnTablePosition=201;
         //setMotorPosition(desiredArmPosition, arm,ArmVelocity);
         //setMotorPosition(desiredTurnTablePosition,turntable,TurnTableVelocity);
@@ -260,9 +260,9 @@ public class TopHatAutoController {
     private void leftSideHighDrop(){
         double desiredWristPosition = 0.799999;
         double desiredClawPosition = 0.3;
-        int desiredArmPosition=3742;
-        int desiredElbowPosition=-1204;
-        int desiredTurnTablePosition=1504;
+        int desiredArmPosition=4284;
+        int desiredElbowPosition=-5325;
+        int desiredTurnTablePosition=1514;
         //setMotorPosition(desiredArmPosition, arm,ArmVelocity);
         //setMotorPosition(desiredTurnTablePosition,turntable,TurnTableVelocity);
         //setMotorPosition(desiredElbowPosition,elbow,ElbowVelocity);
