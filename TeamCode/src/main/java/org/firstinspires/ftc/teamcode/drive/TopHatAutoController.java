@@ -40,6 +40,7 @@ public class TopHatAutoController {
     int ArmVelocity;
     int TurnTableVelocity;
     int ElbowVelocity;
+    boolean autoMode=false;
 
     public void initializeRobot(HardwareMap hardwareMapAT, Telemetry tl, Gamepad gp1 , Gamepad gp2, String Alliance) {
         hwMap = hardwareMapAT;
@@ -89,60 +90,8 @@ public class TopHatAutoController {
      * This function is executed when this Op Mode is selected from the Driver Station.
      */
     public void runTopHat() {
-
-       /*if (HoldCone) {
-            ClawPosition = 0 ;
-        }*/
-            if (gamepad2.dpad_up) {
-                WristPosition += WristSpeed;
-                telemetry.addData("DpadUp Wrist Up", "Pressed");
-            }
-            if (gamepad2.dpad_down) {
-                WristPosition += -WristSpeed;
-                telemetry.addData("DpadDown Wrist Down", "Pressed");
-            }
-            if (gamepad2.dpad_right) {
-                //ClawPosition += ClawSpeed;
-                ClawPosition = 0.3 ;
-                HoldCone = true;
-                telemetry.addData("DpadRight Claw Close", "Pressed");
-            }
-            if (gamepad2.dpad_left) {
-                //ClawPosition += -ClawSpeed;
-                ClawPosition = 1 ;
-                HoldCone = false;
-                telemetry.addData("DpadLeft Claw Open", "Pressed");
-            }
-            if (gamepad2.left_stick_y != 0) {
-                ArmPosition += -gamepad2.left_stick_y*ArmSpeed;
-         //       telemetry.addData("Left Stick -Y Arm Down", "Pressed");
-            }
-           /* if (gamepad2.left_stick_y > 0) {
-                ArmPosition += gamepad2.left_stick_y*ArmSpeed;
-                telemetry.addData("Left Stick Y Arm Up", "Pressed");
-            }*/
-            if (gamepad2.right_stick_y != 0) {
-                ElbowPosition += gamepad2.right_stick_y*ElbowSpeed;
-              //  telemetry.addData("Right Stick -Y Elbow Down", "Pressed");
-            }
-            /*if (gamepad2.right_stick_y < 0) {
-                ElbowPosition += gamepad2.right_stick_y*ElbowSpeed;
-                telemetry.addData("Right Stick Y Elbow Up", "Pressed");
-            }*/
-            if (gamepad2.left_trigger > 0) {
-                TurnTablePosition += gamepad2.left_trigger*TurnTableSpeed;
-                telemetry.addData("Left Trigger TurnTable Left", "Pressed");
-            }
-            if (gamepad2.right_trigger > 0) {
-                TurnTablePosition += -gamepad2.right_trigger*TurnTableSpeed;
-                telemetry.addData("Right Trigger TurnTable Right", "Pressed");
-            }
-            if (gamepad2.right_bumper && gamepad2.x){
-                rightSidePickup();
-            }
-        if (gamepad2.left_bumper && gamepad2.y){
-            leftSideHighDrop();
-        }
+            fullManualControl();
+            partialManualControl();
             // Keep Servo position in valid range
             ClawPosition = Math.min(Math.max(ClawPosition, 0), 1);
             WristPosition = Math.min(Math.max(WristPosition, 0), 1);
@@ -161,9 +110,6 @@ public class TopHatAutoController {
             telemetry.addData("arm position", arm.getCurrentPosition());
             telemetry.addData("elbow position", elbow.getCurrentPosition());
             telemetry.addData("turntable position", turntable.getCurrentPosition());
-           // telemetry.update();
-
-      //  }
     }
     private void ResetTurnTable() {
         //if (!turntabletouch.isPressed()) {
@@ -215,9 +161,9 @@ public class TopHatAutoController {
     }
 
     private void ResetWristNClaw(){
-        WristPosition=.9;
+        WristPosition = .9;
         wrist.setPosition(WristPosition);
-        ClawPosition=0.3;
+        ClawPosition = 0.3;
         claw.setPosition(ClawPosition);
     }
 
@@ -236,43 +182,77 @@ public class TopHatAutoController {
             ClawPosition = 1;
         }
         else{
-            ClawPosition=0.3;
+            ClawPosition = 0.3;
         }
-        //claw.setPosition(ClawPosition);
     }
     private void rightSidePickup(){
-        double desiredWristPosition = 0.65;
-        double desiredClawPosition = 0.3;
-        int desiredArmPosition=724;
-        int desiredElbowPosition=-3959;
-        int desiredTurnTablePosition=201;
-        //setMotorPosition(desiredArmPosition, arm,ArmVelocity);
-        //setMotorPosition(desiredTurnTablePosition,turntable,TurnTableVelocity);
-        //setMotorPosition(desiredElbowPosition,elbow,ElbowVelocity);
-        //setWristPosition(desiredWristPosition);
-        ArmPosition=desiredArmPosition;
-        TurnTablePosition=desiredTurnTablePosition;
-        ElbowPosition=desiredElbowPosition;
-        WristPosition=desiredWristPosition;
+        double desiredWristPosition = 0.49;
+        double desiredClawPosition = 1.0;
+        int desiredArmPosition = 1100;
+        int desiredElbowPosition = -4392;
+        int desiredTurnTablePosition = 242;
+        ArmPosition = desiredArmPosition;
+        TurnTablePosition = desiredTurnTablePosition;
+        ElbowPosition = desiredElbowPosition;
+        WristPosition = desiredWristPosition;
         openClaw(true);
 
     }
     private void leftSideHighDrop(){
         double desiredWristPosition = 0.799999;
         double desiredClawPosition = 0.3;
-        int desiredArmPosition=4284;
-        int desiredElbowPosition=-5325;
-        int desiredTurnTablePosition=1514;
-        //setMotorPosition(desiredArmPosition, arm,ArmVelocity);
-        //setMotorPosition(desiredTurnTablePosition,turntable,TurnTableVelocity);
-        //setMotorPosition(desiredElbowPosition,elbow,ElbowVelocity);
-        //setWristPosition(desiredWristPosition);
+        int desiredArmPosition = 4284;
+        int desiredElbowPosition = -5325;
+        int desiredTurnTablePosition = 1514;
         ArmPosition=desiredArmPosition;
         TurnTablePosition=desiredTurnTablePosition;
         ElbowPosition=desiredElbowPosition;
         WristPosition=desiredWristPosition;
-        openClaw(true);
+        openClaw(false);
 
+    }
+
+    private void fullManualControl(){
+        if (gamepad2.dpad_up) {
+            WristPosition += WristSpeed;
+            telemetry.addData("DpadUp Wrist Up", "Pressed");
+        }
+        if (gamepad2.dpad_down) {
+            WristPosition += -WristSpeed;
+            telemetry.addData("DpadDown Wrist Down", "Pressed");
+        }
+        if (gamepad2.dpad_right) {
+            ClawPosition = 0.3 ;
+            HoldCone = true;
+            telemetry.addData("DpadRight Claw Close", "Pressed");
+        }
+        if (gamepad2.dpad_left) {
+            ClawPosition = 1 ;
+            HoldCone = false;
+            telemetry.addData("DpadLeft Claw Open", "Pressed");
+        }
+        if (gamepad2.left_stick_y != 0) {
+            ArmPosition += -gamepad2.left_stick_y*ArmSpeed;
+        }
+        if (gamepad2.right_stick_y != 0) {
+            ElbowPosition += gamepad2.right_stick_y*ElbowSpeed;
+        }
+        if (gamepad2.left_trigger > 0) {
+            TurnTablePosition += gamepad2.left_trigger*TurnTableSpeed;
+            telemetry.addData("Left Trigger TurnTable Left", "Pressed");
+        }
+        if (gamepad2.right_trigger > 0) {
+            TurnTablePosition += -gamepad2.right_trigger*TurnTableSpeed;
+            telemetry.addData("Right Trigger TurnTable Right", "Pressed");
+        }
+    }
+    private void partialManualControl(){
+        if (gamepad2.right_bumper && gamepad2.x){
+            rightSidePickup();
+        }
+        if (gamepad2.left_bumper && gamepad2.y){
+            leftSideHighDrop();
+        }
     }
 
 }
