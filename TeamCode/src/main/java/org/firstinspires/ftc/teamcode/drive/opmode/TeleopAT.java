@@ -36,6 +36,7 @@ public class TeleopAT extends LinearOpMode {
                     )
             );
 
+
             drive.update();
 
             Pose2d poseEstimate = drive.getPoseEstimate();
@@ -45,7 +46,8 @@ public class TeleopAT extends LinearOpMode {
             tophatController.runTopHat();
             telemetry.update();
 
-            //sleep(20); // check if we need this is all action are not being performed.
+            sleep(20); // check if we need this is all action are not being performed.
         }
+        //tophatController.ResetTopHat(); TBD
     }
 }
