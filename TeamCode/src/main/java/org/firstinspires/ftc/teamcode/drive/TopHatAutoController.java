@@ -48,6 +48,8 @@ public class TopHatAutoController {
     int desiredArmPosition ;
     int desiredElbowPosition ;
     int desiredTurnTablePosition ;
+    int step = 0 ;
+    int noOfCones = 0 ;
 
     String sRobotMode ="Reset";
     //enum
@@ -103,18 +105,12 @@ public class TopHatAutoController {
     public void runTopHat() {
             fullManualControl();
             partialManualControl();
-            setRobotPos();
+            autonConePickUp();
             // Keep Servo position in valid range
             ClawPosition = Math.min(Math.max(ClawPosition, 0), 1);
             WristPosition = Math.min(Math.max(WristPosition, 0), 1);
 
-            TurnTablePosition = Math.min(Math.max(TurnTablePosition, 100), 1650);
-            ElbowPosition = Math.min(Math.max(ElbowPosition, -8500), -40);
-            ArmPosition=Math.min(Math.max(ArmPosition, 0), 4700);
-
-            setMotorPosition((int) ArmPosition,arm,ArmVelocity);
-            setMotorPosition((int) ElbowPosition,elbow,ElbowVelocity);
-            setMotorPosition((int) TurnTablePosition,turntable,TurnTableVelocity);
+            setRobotPosition();
 
 
             telemetry.addData("wrist position", wrist.getPosition());
@@ -125,6 +121,17 @@ public class TopHatAutoController {
             telemetry.addData("testCounter", testCounter);
 
     }
+
+    private void setRobotPosition() {
+        TurnTablePosition = Math.min(Math.max(TurnTablePosition, 100), 1650);
+        ElbowPosition = Math.min(Math.max(ElbowPosition, -8500), -40);
+        ArmPosition=Math.min(Math.max(ArmPosition, 0), 4700);
+
+        setMotorPosition((int) ArmPosition,arm,ArmVelocity);
+        setMotorPosition((int) ElbowPosition,elbow,ElbowVelocity);
+        setMotorPosition((int) TurnTablePosition,turntable,TurnTableVelocity);
+    }
+
     private void ResetTurnTable() {
         //if (!turntabletouch.isPressed()) {
         setMotorPosition(-5000,turntable,TurnTableVelocity);
@@ -199,56 +206,121 @@ public class TopHatAutoController {
         }
         claw.setPosition(ClawPosition);
     }
-    private void rightSidePickup(){
-        this.sRobotMode = "RightBumperX";
-        desiredWristPosition = .52;
-        desiredClawPosition = 1.0;
-        desiredArmPosition = 887;
-        desiredElbowPosition = -3959;
-        desiredTurnTablePosition = 201;
-        ArmPosition = desiredArmPosition;
-        TurnTablePosition = desiredTurnTablePosition;
-        ElbowPosition = desiredElbowPosition;
-        openClaw(true);
-        sleep(1000);
-        /*while (claw.getPosition()<0.9){
-            sleep(500);
-            telemetry.addData("wait for claw opening", claw.getPosition());
-
-        }*/
-        setWristPosition(.52);
-        sleep(1000);
-        /*while (wrist.getPosition()!=.52){
-            sleep(500);
-            telemetry.addData("wait for wrist movement to pickup", wrist.getPosition());
-        }*/
+   /* private void rightSidePickup(){
+        this.sRobotMode = "RedRightAutoPickup";
     }
-    private void setRobotPos( )
-    {
-        if (this.sRobotMode == "RightBumperX")
-        {
 
-            if (isInRange(ElbowPosition,elbow.getCurrentPosition())
+    */
+    private void autonConePickUp( )
+    {
+        //int desiredElbowPosition;
+       // int d
+
+        if (this.sRobotMode == "RedRightAutoPickup" )
+        {
+            if( step==0 )
+            {
+
+                if(noOfCones==0){
+                    setWristPosition(.55);
+                    desiredElbowPosition=-3431;
+                    desiredArmPosition = 473;
+                } else if (noOfCones==1){
+                    setWristPosition(.54);
+                    desiredElbowPosition=-3709;
+                    desiredArmPosition = 526;
+                }else if (noOfCones==2) {
+                    setWristPosition(.49);
+                    desiredElbowPosition = -3927;
+                    desiredArmPosition = 562;
+                } else if (noOfCones==3) {
+                    setWristPosition(.49);
+                    desiredElbowPosition = -4068;
+                    desiredArmPosition = 604;
+                } else if (noOfCones==4) {
+                    setWristPosition(.44);
+                    desiredElbowPosition = -4375;
+                    desiredArmPosition = 737;
+                }
+
+                setRobotPosition(.55,true,desiredArmPosition,desiredElbowPosition,215);
+
+
+                openClaw(true);
+
+
+
+            //if (noOfCones==1 )  this.sRobotMode = "Reset";
+            step =1 ;
+
+            } else if (step ==1 && isInRange(ElbowPosition,elbow.getCurrentPosition())
             && isInRange(ArmPosition,arm.getCurrentPosition())
                 && isInRange(TurnTablePosition,turntable.getCurrentPosition()))
             {
                 telemetry.addData(" LOWER WRIST", "Pressed");
-                this.sRobotMode = "Reset";
+
                 openClaw(false);
-                sleep(1000);
-                /*while (claw.getPosition()>=0.4){
-                    sleep(500);
-                    telemetry.addData("wait for claw closing", claw.getPosition());
-                }*/
-                setWristPosition(.19);
-                sleep(1000);
-                /*while (wrist.getPosition()!=.19){
-                    sleep(500);
-                    telemetry.addData("wait for wrist movement to drop", wrist.getPosition());
-                }*/
+                sleep(800);
+
+                setRobotPosition(.55,false,4405,-3427,215);
+                step = 2 ;
+
+
+
+                //turnTowardsBigPole();
+
+            } else if (step==2 && isInRange(-3427,elbow.getCurrentPosition())
+                    && isInRange(4405,arm.getCurrentPosition())
+                    && isInRange(215,turntable.getCurrentPosition())) {
+                setRobotPosition(.59,true,4405,-3427,1505);
+                setWristPosition(.59);
+                //sleep(500);
+                step=3;
+
+            } else if (step==3 && isInRange(-3427,elbow.getCurrentPosition())
+                    && isInRange(4405,arm.getCurrentPosition())
+                    && isInRange(1505,turntable.getCurrentPosition())) {
+                setRobotPosition(.59,true,4113,-4900,1522);
+
+
+                openClaw(true);
+
+                step=4;
+            } else if (step==4 && isInRange(-4900,elbow.getCurrentPosition())
+                        && isInRange(4113,arm.getCurrentPosition())
+                        && isInRange(1522,turntable.getCurrentPosition())) {
+                    setRobotPosition(.59,true,4113,-3388,1522);
+
+                    step=5;
+            } else if (step==5 && isInRange(-3388,elbow.getCurrentPosition())
+                    && isInRange(4113,arm.getCurrentPosition())
+                    && isInRange(1522,turntable.getCurrentPosition())) {
+                setRobotPosition(.59,true,4113,-3388,215);
+
+
+
+            } else if (step==5 && isInRange(-3388,elbow.getCurrentPosition())
+                    && isInRange(4113,arm.getCurrentPosition())
+                    && isInRange(215,turntable.getCurrentPosition())) {
+
+                    noOfCones = noOfCones +1;
+                    step=0;
             }
+
+            if (noOfCones==6 )  this.sRobotMode = "Reset";
         }
     }
+    // THis method is to lift the arm after the pole if picked up..
+    private void setRobotPosition(double desiredWristPosition, boolean desiredClawPosition ,int desiredArmPosition ,int desiredElbowPosition ,double desiredTurnTablePosition ){
+        //openClaw(desiredClawPosition);
+        ArmPosition = desiredArmPosition;
+        TurnTablePosition = desiredTurnTablePosition;
+        ElbowPosition = desiredElbowPosition;
+        //setWristPosition(desiredWristPosition);
+    }
+
+
+
     private boolean isInRange(double desiredValue, double inputValue){
         return (Math.abs(inputValue)>=Math.abs(desiredValue)-5) && (Math.abs(inputValue)<=Math.abs(desiredValue)+5);
     }
@@ -312,7 +384,8 @@ public class TopHatAutoController {
     }
     private void partialManualControl(){
         if (gamepad2.right_bumper && gamepad2.x){
-            rightSidePickup();
+           // rightSidePickup();
+            this.sRobotMode = "RedRightAutoPickup";
         }
         if (gamepad2.left_bumper && gamepad2.y){
             leftSideHighDrop();
