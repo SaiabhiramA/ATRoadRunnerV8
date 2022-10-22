@@ -22,7 +22,7 @@ public class TeleopAT extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         MecanumDriveAT drive = new MecanumDriveAT(hardwareMap);
         TopHatAutoController tophatController = new TopHatAutoController();
-        tophatController.initializeRobot(hardwareMap,telemetry,gamepad1,gamepad2,"");
+        tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"");
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
@@ -35,19 +35,17 @@ public class TeleopAT extends LinearOpMode {
                             -gamepad1.right_stick_x
                     )
             );
-
+            tophatController.runTopHat();
 
             drive.update();
-
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
-            tophatController.runTopHat();
+            telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
             telemetry.update();
-
-            sleep(20); // check if we need this is all action are not being performed.
+            //sleep(20); // check if we need this is all action are not being performed.
         }
-        //tophatController.ResetTopHat(); TBD
+
     }
+
 }
