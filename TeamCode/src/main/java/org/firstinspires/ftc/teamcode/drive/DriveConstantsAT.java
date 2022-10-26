@@ -36,7 +36,8 @@ public class DriveConstantsAT {
        //     getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
     //public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(3, 0, 3,12.5);//RA-CHANGE
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(20, 0, 5,12.5);//RA-CHANGE
+    //public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(20, 0, 5,12.5);//RA-CHANGE
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(10, 0, 3,12);//DS-CHANGE 16
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -47,8 +48,8 @@ public class DriveConstantsAT {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 1.88976; // in
-    public static double GEAR_RATIO = 1;//.99; // output (wheel) speed / input (motor) speed- MODIFIED
-    public static double TRACK_WIDTH = 10.77;//13.84;//14; // in    ???? RA-CHANGE THIS WILL NEED TO BE CHANGED ONCE NEW Chasis is Built
+    public static double GEAR_RATIO = 1.015;//.99; // output (wheel) speed / input (motor) speed- MODIFIED
+    public static double TRACK_WIDTH = 10.76;//13.84;//14; // in    ???? RA-CHANGE THIS WILL NEED TO BE CHANGED ONCE NEW Chasis is Built
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -77,10 +78,10 @@ public class DriveConstantsAT {
     public static double MAX_ANG_ACCEL = Math.toRadians(184.02607784577722);
 */
     // RA-CHANGE
-    public static double MAX_VEL = 40; //52.48180821614297;
-    public static double MAX_ACCEL = 52.48180821614297;
-    public static double MAX_ANG_VEL = 5.337777614593506; // Math.toRadians(184.02607784577722);
-    public static double MAX_ANG_ACCEL = Math.toRadians(184.02607784577722);
+    public static double MAX_VEL = 50;//40; //52.48180821614297;
+    public static double MAX_ACCEL = 52.5;
+    public static double MAX_ANG_VEL = 5; //0.006666666828095913;// Math.toRadians(184.02607784577722);
+    public static double MAX_ANG_ACCEL = 4.5;//;Math.toRadians(184.02607784577722);
 
     public static double encoderTicksToInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;

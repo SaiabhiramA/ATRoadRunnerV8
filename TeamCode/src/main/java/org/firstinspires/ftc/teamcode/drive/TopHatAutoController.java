@@ -414,10 +414,10 @@ public class TopHatAutoController {
             TurnTablePosition += -gamepad2.right_trigger*TurnTableSpeed;
             telemetry.addData("Right Trigger TurnTable Right", "Pressed");
         }
-        if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x) {
+        /*if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x) {
             this.ResetTopHat();
             telemetry.addData("Reset Top Hat", "Pressed");
-        }
+        }*/ //Code moved under runPlatform Section to have all Gamepad1 controller conditions in once place
 
     }
     private void partialManualControl(){
