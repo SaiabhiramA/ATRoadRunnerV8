@@ -73,11 +73,12 @@ public class TeleopAT extends LinearOpMode {
 
                     TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
                                     .splineToLinearHeading(new Pose2d(35, -40, Math.toRadians(90)),Math.toRadians(90))
-                                    .addTemporalMarker(1, ()->{
+                                    .addTemporalMarker(.1, ()->{
                                         tophatController.setRobotMode(robotMode);
                                         tophatController.redAllianceRightAutonMedium();})
+                                    //.waitSeconds(3)
                                     .splineToLinearHeading(new Pose2d(35, 0, Math.toRadians(90)),Math.toRadians(90))
-                                    .splineToSplineHeading(new Pose2d(35, -7, Math.toRadians(270)),Math.toRadians(0))
+                                    .splineToLinearHeading(new Pose2d(42, -5.2096, Math.toRadians(270)),Math.toRadians(0))
                                     .build();
                     drive.followTrajectorySequence(trajSeq);
         }
