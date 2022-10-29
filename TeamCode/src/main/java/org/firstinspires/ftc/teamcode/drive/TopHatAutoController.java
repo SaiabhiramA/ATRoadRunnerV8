@@ -19,7 +19,6 @@ public class TopHatAutoController {
     private TouchSensor armdowntouch;
     private TouchSensor armuptouch;
     private TouchSensor elbowtouch;
-    private HardwareMap hwMap;
     private  Telemetry telemetry;
     private Gamepad gamepad1;
     private Gamepad gamepad2;
@@ -51,34 +50,33 @@ public class TopHatAutoController {
     ATRobotMode robotMode=ATRobotMode.RESET;
 
     public void initializeRobot(HardwareMap hardwareMapAT, MecanumDriveAT driveAT, Telemetry tl, Gamepad gp1 , Gamepad gp2, String Alliance, ATRobotMode rMode) {
-        hwMap = hardwareMapAT;
         drive=driveAT;
         robotMode=rMode;
         telemetry = tl;
         gamepad1=gp1;
         gamepad2=gp2;
-        arm = hwMap.get(DcMotor.class, "arm");
-        elbow = hwMap.get(DcMotor.class, "elbow");
-        turntable = hwMap.get(DcMotor.class, "turntable");
-        wrist = hwMap.get(Servo.class, "wrist");
-        claw = hwMap.get(Servo.class, "claw");
-        turntabletouch = hwMap.get(TouchSensor.class, "turntabletouch");
-        armdowntouch = hwMap.get(TouchSensor.class, "armdowntouch");
-        armuptouch = hwMap.get(TouchSensor.class, "armuptouch");
-        elbowtouch = hwMap.get(TouchSensor.class, "elbowtouch");
+        arm = hardwareMapAT.get(DcMotor.class, "arm");
+        elbow = hardwareMapAT.get(DcMotor.class, "elbow");
+        turntable = hardwareMapAT.get(DcMotor.class, "turntable");
+        wrist = hardwareMapAT.get(Servo.class, "wrist");
+        claw = hardwareMapAT.get(Servo.class, "claw");
+        turntabletouch = hardwareMapAT.get(TouchSensor.class, "turntabletouch");
+        armdowntouch = hardwareMapAT.get(TouchSensor.class, "armdowntouch");
+        armuptouch = hardwareMapAT.get(TouchSensor.class, "armuptouch");
+        elbowtouch = hardwareMapAT.get(TouchSensor.class, "elbowtouch");
         // Set servo to mid position
         ElbowPosition = 0;
-        ElbowSpeed = 100;
+        ElbowSpeed = 10;
         TurnTablePosition = 0;
         TurnTableSpeed = 10;
         ArmPosition = 0;
-        ArmSpeed = 100;
+        ArmSpeed = 10;
         ClawSpeed = 0.05;
         ClawPosition = 0;
-        WristSpeed = 0.05;
+        WristSpeed = 0.01;
         WristPosition = 1;
-        ArmVelocity=5000;
-        ElbowVelocity=5000;
+        ArmVelocity=500;//5000;
+        ElbowVelocity=500;//5000;
         TurnTableVelocity=1000;
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elbow.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -135,9 +133,17 @@ public class TopHatAutoController {
         ClawPosition = Math.min(Math.max(ClawPosition, 0), 1);
         WristPosition = Math.min(Math.max(WristPosition, 0), 1);
 
-        TurnTablePosition = Math.min(Math.max(TurnTablePosition, 100), 1800);
-        ElbowPosition = Math.min(Math.max(ElbowPosition, -8500), -40);
+        TurnTablePosition = Math.min(Math.max(TurnTablePosition, 100), 1900);
+        ElbowPosition = Math.min(Math.max(ElbowPosition, -8500), -400);
         ArmPosition=Math.min(Math.max(ArmPosition, 0), 4700);
+    }
+
+    public void setTopHatMotorsVelocity(int TTVel, int ArmVel, int ElbowVel){
+
+        TurnTableVelocity=TTVel;
+        ArmVelocity=ArmVel;
+        ElbowVelocity=ElbowVel;
+
     }
 
     private void ResetTurnTable() {
@@ -237,10 +243,10 @@ public class TopHatAutoController {
 
     private void fullAutoControl( )
     {
-      if (this.robotMode == ATRobotMode.AUTO_RED_RIGHT_HIGH ) {
+      if (this.robotMode==ATRobotMode.AUTO_RED_RIGHT_HIGH_PICK_CONE) {
           redAllianceRightAutonHigh();
         }
-      if (this.robotMode == ATRobotMode.AUTO_RED_RIGHT_MEDIUM){
+      if (this.robotMode==ATRobotMode.AUTO_RED_RIGHT_MEDIUM_PICK_CONE){
           redAllianceRightAutonMedium();
       }
 
@@ -256,177 +262,187 @@ public class TopHatAutoController {
         TurnTablePosition = desiredTurnTablePosition;
         ElbowPosition = desiredElbowPosition;
         moveTopHatMotors();
-        setWristPosition(desiredWristPosition);
-        openClaw(desiredClawPosition);
+        if (desiredWristPosition==-1){
+            wrist.getController().pwmDisable();
+            claw.getController().pwmDisable();
+        }
+        else {
+            setWristPosition(desiredWristPosition);
+            openClaw(desiredClawPosition);
+        }
+
     }
 
     public void setRobotMode(ATRobotMode rMode){
         robotMode=rMode;
     }
 
-    private void redAllianceRightAutonHigh( ){
-        if( step==0 )
-        {
-            if(noOfCones==0){
-                setWristPosition(.55);
-                desiredElbowPosition=-3431;
-                desiredArmPosition = 473;
-            } else if (noOfCones==1){
-                setWristPosition(.54);
-                desiredElbowPosition=-3709;
-                desiredArmPosition = 526;
-            }else if (noOfCones==2) {
-                setWristPosition(.49);
-                desiredElbowPosition = -3927;
-                desiredArmPosition = 562;
-            } else if (noOfCones==3) {
-                setWristPosition(.49);
-                desiredElbowPosition = -4068;
-                desiredArmPosition = 604;
-            } else if (noOfCones==4) {
-                setWristPosition(.44);
-                desiredElbowPosition = -4375;
-                desiredArmPosition = 737;
-            }
-            setTopHatPosition(.55,true,desiredArmPosition,desiredElbowPosition,215);
-            openClaw(true);
-            step =1 ;
-        } else if (step ==1 && isInRange(ElbowPosition,elbow.getCurrentPosition())
-                && isInRange(ArmPosition,arm.getCurrentPosition())
-                && isInRange(TurnTablePosition,turntable.getCurrentPosition()))
-        {
-            telemetry.addData(" LOWER WRIST", "Pressed");
-
-            openClaw(false);
-            sleep(800);
-            setWristPosition(.15);
-            sleep(500);
-
-            setTopHatPosition(.55,false,4405,-3427,215);
-            step = 2 ;
-
-        } else if (step==2 && isInRange(-3427,elbow.getCurrentPosition())
-                && isInRange(4405,arm.getCurrentPosition())
-                && isInRange(215,turntable.getCurrentPosition())) {
-            setTopHatPosition(.59,true,4405,-3427,1505);
-            setWristPosition(.59);
-            //sleep(500);
-            step=3;
-
-        } else if (step==3 && isInRange(-3427,elbow.getCurrentPosition())
-                && isInRange(4405,arm.getCurrentPosition())
-                && isInRange(1505,turntable.getCurrentPosition())) {
-            setTopHatPosition(.59,true,4113,-4900,1522);
-            openClaw(true);
-
-            step=4;
-        } else if (step==4 && isInRange(-4900,elbow.getCurrentPosition())
-                && isInRange(4113,arm.getCurrentPosition())
-                && isInRange(1522,turntable.getCurrentPosition())) {
-            setTopHatPosition(.59,true,4113,-3388,1522);
-
-            step=5;
-        } else if (step==5 && isInRange(-3388,elbow.getCurrentPosition())
-                && isInRange(4113,arm.getCurrentPosition())
-                && isInRange(1522,turntable.getCurrentPosition())) {
-            setTopHatPosition(.59,true,4113,-3388,215);
-
-        } else if (step==5 && isInRange(-3388,elbow.getCurrentPosition())
-                && isInRange(4113,arm.getCurrentPosition())
-                && isInRange(215,turntable.getCurrentPosition())) {
-
-            noOfCones = noOfCones +1;
-            step=0;
-        }
-
-        if (noOfCones==5 )  {
-            this.robotMode = ATRobotMode.RESET;
-            noOfCones=0;
-
-        }
+    public ATRobotMode getRobotMode(){
+        return robotMode;
     }
 
-    public void redAllianceRightAutonMedium( ){
-        moveTopHatPosition(.1,true,4700,-8499,1800);
-        /*if( step==0 )
-        {
-            if(noOfCones==0){
-                setWristPosition(.55);
-                desiredElbowPosition=-3431;
-                desiredArmPosition = 473;
-            } else if (noOfCones==1){
-                setWristPosition(.54);
-                desiredElbowPosition=-3709;
-                desiredArmPosition = 526;
-            }else if (noOfCones==2) {
-                setWristPosition(.49);
-                desiredElbowPosition = -3927;
-                desiredArmPosition = 562;
-            } else if (noOfCones==3) {
-                setWristPosition(.49);
-                desiredElbowPosition = -4068;
-                desiredArmPosition = 604;
-            } else if (noOfCones==4) {
-                setWristPosition(.44);
-                desiredElbowPosition = -4375;
-                desiredArmPosition = 737;
+
+    public void redAllianceRightAutonHigh(){
+        if (this.robotMode==ATRobotMode.AUTO_RED_RIGHT_HIGH_PICK_CONE) {
+            if (step == 0) {
+                if (noOfCones == 0) {
+                    setWristPosition(.55);
+                    desiredElbowPosition = -3431;
+                    desiredArmPosition = 473;
+                } else if (noOfCones == 1) {
+                    setWristPosition(.54);
+                    desiredElbowPosition = -3709;
+                    desiredArmPosition = 526;
+                } else if (noOfCones == 2) {
+                    setWristPosition(.49);
+                    desiredElbowPosition = -3927;
+                    desiredArmPosition = 562;
+                } else if (noOfCones == 3) {
+                    setWristPosition(.49);
+                    desiredElbowPosition = -4068;
+                    desiredArmPosition = 604;
+                } else if (noOfCones == 4) {
+                    setWristPosition(.44);
+                    desiredElbowPosition = -4375;
+                    desiredArmPosition = 737;
+                }
+                setTopHatPosition(.55, true, desiredArmPosition, desiredElbowPosition, 215);
+                openClaw(true);
+                step = 1;
+            } else if (step == 1 && isInRange(ElbowPosition, elbow.getCurrentPosition())
+                    && isInRange(ArmPosition, arm.getCurrentPosition())
+                    && isInRange(TurnTablePosition, turntable.getCurrentPosition())) {
+                telemetry.addData(" LOWER WRIST", "Pressed");
+
+                openClaw(false);
+                sleep(800);
+                setWristPosition(.15);
+                sleep(500);
+
+                setTopHatPosition(.55, false, 4405, -3427, 215);
+                step = 2;
+
+            } else if (step == 2 && isInRange(-3427, elbow.getCurrentPosition())
+                    && isInRange(4405, arm.getCurrentPosition())
+                    && isInRange(215, turntable.getCurrentPosition())) {
+                setTopHatPosition(.59, true, 4405, -3427, 1505);
+                setWristPosition(.59);
+                //sleep(500);
+                step = 3;
+
+            } else if (step == 3 && isInRange(-3427, elbow.getCurrentPosition())
+                    && isInRange(4405, arm.getCurrentPosition())
+                    && isInRange(1505, turntable.getCurrentPosition())) {
+                setTopHatPosition(.59, true, 4113, -4900, 1522);
+                openClaw(true);
+
+                step = 4;
+            } else if (step == 4 && isInRange(-4900, elbow.getCurrentPosition())
+                    && isInRange(4113, arm.getCurrentPosition())
+                    && isInRange(1522, turntable.getCurrentPosition())) {
+                setTopHatPosition(.59, true, 4113, -3388, 1522);
+
+                step = 5;
+            } else if (step == 5 && isInRange(-3388, elbow.getCurrentPosition())
+                    && isInRange(4113, arm.getCurrentPosition())
+                    && isInRange(1522, turntable.getCurrentPosition())) {
+                setTopHatPosition(.59, true, 4113, -3388, 215);
+
+            } else if (step == 5 && isInRange(-3388, elbow.getCurrentPosition())
+                    && isInRange(4113, arm.getCurrentPosition())
+                    && isInRange(215, turntable.getCurrentPosition())) {
+
+                noOfCones = noOfCones + 1;
+                step = 0;
             }
-            setTopHatPosition(.55,true,desiredArmPosition,desiredElbowPosition,215);
-            openClaw(true);
-            step =1 ;
-        } else if (step ==1 && isInRange(ElbowPosition,elbow.getCurrentPosition())
-                && isInRange(ArmPosition,arm.getCurrentPosition())
-                && isInRange(TurnTablePosition,turntable.getCurrentPosition()))
-        {
-            telemetry.addData(" LOWER WRIST", "Pressed");
 
-            openClaw(false);
-            sleep(800);
-            setWristPosition(.15);
-            sleep(500);
+            if (noOfCones == 5) {
+                this.robotMode = ATRobotMode.RESET;
+                noOfCones = 0;
 
-            setTopHatPosition(.55,false,4405,-3427,215);
-            step = 2 ;
-
-        } else if (step==2 && isInRange(-3427,elbow.getCurrentPosition())
-                && isInRange(4405,arm.getCurrentPosition())
-                && isInRange(215,turntable.getCurrentPosition())) {
-            setTopHatPosition(.59,true,4405,-3427,1505);
-            setWristPosition(.59);
-            //sleep(500);
-            step=3;
-
-        } else if (step==3 && isInRange(-3427,elbow.getCurrentPosition())
-                && isInRange(4405,arm.getCurrentPosition())
-                && isInRange(1505,turntable.getCurrentPosition())) {
-            setTopHatPosition(.59,true,4113,-4900,1522);
-            openClaw(true);
-
-            step=4;
-        } else if (step==4 && isInRange(-4900,elbow.getCurrentPosition())
-                && isInRange(4113,arm.getCurrentPosition())
-                && isInRange(1522,turntable.getCurrentPosition())) {
-            setTopHatPosition(.59,true,4113,-3388,1522);
-
-            step=5;
-        } else if (step==5 && isInRange(-3388,elbow.getCurrentPosition())
-                && isInRange(4113,arm.getCurrentPosition())
-                && isInRange(1522,turntable.getCurrentPosition())) {
-            setTopHatPosition(.59,true,4113,-3388,215);
-
-        } else if (step==5 && isInRange(-3388,elbow.getCurrentPosition())
-                && isInRange(4113,arm.getCurrentPosition())
-                && isInRange(215,turntable.getCurrentPosition())) {
-
-            noOfCones = noOfCones +1;
-            step=0;
+            }
         }
-
-        if (noOfCones==5 )  {
-            this.robotMode = ATRobotMode.RESET;
+    }
+    public boolean areFiveConesDone(){
+        if (noOfCones>4) {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public void redAllianceRightAutonMedium(){
+        if (this.robotMode==ATRobotMode.AUTO_RED_RIGHT_MEDIUM_SETUP) {
+            moveTopHatPosition(-1, false, 4700, -50, 1800);
             noOfCones=0;
+        }
+        if (this.robotMode==ATRobotMode.AUTO_RED_RIGHT_MEDIUM_PICK_CONE) {
+                if (step == 0) {
+                    if (noOfCones == 0) {
+                        desiredElbowPosition = -6241;
+                        desiredArmPosition = 2189;
+                        desiredTurnTablePosition=1800;
+                    } else if (noOfCones == 1) {
+                        desiredElbowPosition = -6160;
+                        desiredArmPosition = 2040;
+                        desiredTurnTablePosition=1800;
+                    } else if (noOfCones == 2) {
+                        desiredElbowPosition = -6057;
+                        desiredArmPosition = 1866;
+                        desiredTurnTablePosition=1800;
+                    } else if (noOfCones == 3) {
+                        desiredElbowPosition = -5801;
+                        desiredArmPosition = 1544;
+                        desiredTurnTablePosition=1800;
+                    } else if (noOfCones == 4) {
+                        desiredElbowPosition = -5779;
+                        desiredArmPosition = 1483;
+                        desiredTurnTablePosition=1800;
+                    }
+                    moveTopHatPosition(0, true, desiredArmPosition, desiredElbowPosition, desiredTurnTablePosition);
+                    openClaw(true);
+                    step = 1;
+                } else if (step == 1 && isInRange(desiredElbowPosition, elbow.getCurrentPosition())
+                        && isInRange(desiredArmPosition, arm.getCurrentPosition())
+                        && isInRange(desiredTurnTablePosition, turntable.getCurrentPosition())) {
+                    telemetry.addData(" LOWER WRIST", "Pressed");
+                    setWristPosition(.3);
+                    sleep(500);
+                    openClaw(false);
+                    sleep(800);
+                    setWristPosition(.10);
+                    sleep(500);
 
-        }*/
+                    moveTopHatPosition(0, false, 4242, -5895, 533);
+                    step = 2;
+
+                } else if (step == 2 && isInRange(-5895, elbow.getCurrentPosition())
+                        && isInRange(4242, arm.getCurrentPosition())
+                        && isInRange(533, turntable.getCurrentPosition())) {
+                    setWristPosition(.45);
+                    sleep(500);
+                    openClaw(true);
+                    sleep(500);
+                    moveTopHatPosition(0, false, 4500, -6163, 900);
+                    step = 3;
+                }else if (step == 3 && isInRange(-6163, elbow.getCurrentPosition())
+                        && isInRange(4500, arm.getCurrentPosition())
+                        && isInRange(900, turntable.getCurrentPosition())) {
+                    noOfCones = noOfCones + 1;
+                    step = 0;
+                }
+                if (noOfCones>4){
+                    robotMode=ATRobotMode.AUTO_RED_RIGHT_MEDIUM_PARK;
+                }
+        }
+        telemetry.addData("wrist position", wrist.getPosition());
+        telemetry.addData("wrist position while moving", wrist.getController().getServoPosition(0));
+        telemetry.addData("claw position", claw.getPosition());
+        telemetry.addData("arm position", arm.getCurrentPosition());
+        telemetry.addData("elbow position", elbow.getCurrentPosition());
+        telemetry.addData("turntable position", turntable.getCurrentPosition());
+        telemetry.addData("noOfCones", noOfCones);
     }
 
     private boolean isInRange(double desiredValue, double inputValue){
@@ -481,7 +497,7 @@ public class TopHatAutoController {
 
     private void partialManualControl(){
         if (gamepad2.right_bumper && gamepad2.x){
-             this.robotMode = ATRobotMode.AUTO_RED_RIGHT_HIGH;
+             this.robotMode = ATRobotMode.AUTO_RED_RIGHT_HIGH_SETUP;
         }
         if (gamepad2.left_bumper && gamepad2.y){
             robotMode=ATRobotMode.MANUAL;

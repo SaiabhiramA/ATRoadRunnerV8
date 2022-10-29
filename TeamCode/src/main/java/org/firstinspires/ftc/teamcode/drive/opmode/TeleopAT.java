@@ -25,23 +25,24 @@ public class TeleopAT extends LinearOpMode {
     ATRobotMode robotMode=ATRobotMode.AUTO;
     @Override
     public void runOpMode() throws InterruptedException {
-        drive = new MecanumDriveAT(hardwareMap);
+        //drive = new MecanumDriveAT(hardwareMap);
         tophatController = new TopHatAutoController();
 
         tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"",robotMode);
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (!isStopRequested()) {
 
-            this.runPlatform();
-            tophatController.runTopHat();
+          /*  this.runPlatform();
+           // tophatController.runTopHat();
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-            telemetry.update();
+            telemetry.addData("robot mode", robotMode);
+            telemetry.update();*/
             //sleep(20); // check if we need this is all action are not being performed.
         }
 
@@ -67,20 +68,31 @@ public class TeleopAT extends LinearOpMode {
             drive.update();
         }
         if (gamepad1.b && gamepad1.right_bumper && gamepad1.left_bumper){
-                    robotMode=ATRobotMode.AUTO_RED_RIGHT_MEDIUM;
+                    robotMode=ATRobotMode.AUTO_RED_RIGHT_MEDIUM_SETUP;
                     Pose2d startPose = new Pose2d(30, -55, Math.toRadians(90));
                     drive.setPoseEstimate(startPose);
 
                     TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
-                                    .splineToLinearHeading(new Pose2d(35, -40, Math.toRadians(90)),Math.toRadians(90))
+                                    .splineToLinearHeading(new Pose2d(33, -40, Math.toRadians(90)),Math.toRadians(90))
                                     .addTemporalMarker(.1, ()->{
                                         tophatController.setRobotMode(robotMode);
                                         tophatController.redAllianceRightAutonMedium();})
-                                    //.waitSeconds(3)
-                                    .splineToLinearHeading(new Pose2d(35, 0, Math.toRadians(90)),Math.toRadians(90))
-                                    .splineToLinearHeading(new Pose2d(42, -5.2096, Math.toRadians(270)),Math.toRadians(0))
+                                    //.waitSeconds(3)robotMode
+                                    .splineToLinearHeading(new Pose2d(33, -2, Math.toRadians(90)),Math.toRadians(90))
+                                    .splineToSplineHeading(new Pose2d(42, -12, Math.toRadians(270)),Math.toRadians(0))
+                                    //.splineToLinearHeading(new Pose2d(42, -7, Math.toRadians(270)),Math.toRadians(90))
+                                    //changed from 42
+                                    .back(5)
                                     .build();
                     drive.followTrajectorySequence(trajSeq);
+                    robotMode=ATRobotMode.AUTO_RED_RIGHT_MEDIUM_PICK_CONE;
+                    tophatController.setRobotMode(robotMode);
+                    //tophatController.redAllianceRightAutonMedium(robotMode);
+        }
+        if (gamepad1.y && gamepad1.right_bumper && gamepad1.left_bumper) {
+            robotMode = ATRobotMode.AUTO_RED_RIGHT_HIGH_PICK_CONE;
+            tophatController.setRobotMode(robotMode);
+            //tophatController.redAllianceRightAutonHigh();
         }
 
     }
