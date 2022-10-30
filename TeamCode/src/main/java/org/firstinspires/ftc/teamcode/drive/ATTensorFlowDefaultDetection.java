@@ -27,32 +27,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.drive;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
+import java.util.Locale;
 
-/**
- * This 2022-2023 OpMode illustrates the basics of using the TensorFlow Object Detection API to
- * determine which image is being presented to the robot.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
- *
- * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
- * is explained below.
- */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-public class ConceptTensorFlowObjectDetectionShalabh extends LinearOpMode {
+public class ATTensorFlowDefaultDetection {
 
     /*
      * Specify the source for the Tensor Flow Model.
@@ -62,16 +51,13 @@ public class ConceptTensorFlowObjectDetectionShalabh extends LinearOpMode {
      * Here we assume it's an Asset.    Also see method initTfod() below .
      */
     private static final String TFOD_MODEL_ASSET = "PowerPlay.tflite";
-    // private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
-    //private static final String TFOD_MODEL_ASSET = "mnist_model.tflite";
 
-private static final String[] LABELS = {
+public static final String[] LABELS = {
       "1 Bolt",
       "2 Bulb",
       "3 Panel"
+
     };
-
-
 
     /*
      * IMPORTANT: You need to obtain ll not function.
@@ -98,11 +84,17 @@ private static final String[] LABELS = {
      * Detection engine.
      */
     private TFObjectDetector tfod;
+    private HardwareMap hardwareMap;
+    private ATRobotMode robotMode;
+    private Telemetry telemetry;
 
-    @Override
-    public void runOpMode() {
+
+    public void initalizeTensorFlow(HardwareMap hwmap , Telemetry ATTelemetry, ATRobotMode rMode) {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
+        hardwareMap = hwmap;
+        telemetry = ATTelemetry;
+        robotMode = rMode;
         initVuforia();
         initTfod();
 
@@ -119,21 +111,19 @@ private static final String[] LABELS = {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(1.0, 16.0/9.0);
+            tfod.setZoom(1.0, 16.0 / 9.0);
         }
+    }
 
-        /** Wait for the game to begin */
-        telemetry.addData(">", "Press Play to start op mode");
-        telemetry.update();
-        waitForStart();
+public ATRobotMode detectObjectLabel() {
 
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
+         String object ="";
+
+
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-
 
 
                     if (updatedRecognitions != null) {
@@ -149,14 +139,20 @@ private static final String[] LABELS = {
 
                             telemetry.addData(""," ");
                             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 );
-                            //telemetry.addData("- Position (Row/Col)","%.0f / %.0f", row, col);
-                            //telemetry.addData("- Size (Width/Height)","%.0f / %.0f", width, height);
+                            object = recognition.getLabel();
                         }
-                        telemetry.update();
                     }
                 }
-            }
-        }
+
+                if (object.toLowerCase().equals( LABELS[0].toLowerCase())){
+                    return  ATRobotMode.PARK1;
+                } else if (object.toLowerCase().equals( LABELS[1].toLowerCase())){
+                     return  ATRobotMode.PARK2;
+                } else if (object.toLowerCase().equals( LABELS[2].toLowerCase())){
+                    return  ATRobotMode.PARK3;
+                }  else {
+                    return ATRobotMode.SUBSTATION;
+                }
     }
 
     /**
@@ -170,7 +166,6 @@ private static final String[] LABELS = {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = CameraDirection.BACK;
-
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
@@ -186,10 +181,6 @@ private static final String[] LABELS = {
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 300;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-
-        // Use loadModelFromAsset() if the TF Model is built in as an asset by Android Studio
-        // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-        // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
     }
 }

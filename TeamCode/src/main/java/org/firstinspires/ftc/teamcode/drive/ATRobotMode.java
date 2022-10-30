@@ -10,5 +10,11 @@ public enum ATRobotMode {
     MANUAL,
     RESET,
     STOP,
-    AUTO
+    AUTO ,
+    PARK1 ,
+    PARK2 ,
+    PARK3 ,
+    SUBSTATION ,
+    TERMINAL
+
 }

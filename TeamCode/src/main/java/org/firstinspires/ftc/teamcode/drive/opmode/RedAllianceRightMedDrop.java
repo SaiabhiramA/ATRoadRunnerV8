@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.MAX_ACCEL;
 import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.MAX_ANG_VEL;
+import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.MAX_VEL;
 import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.TRACK_WIDTH;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -35,12 +36,12 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 //@Disabled
 public class RedAllianceRightMedDrop extends LinearOpMode {
     MecanumDriveAT drive;
-    TopHatAutoController tophatController;
+  //  TopHatAutoController tophatController;
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new MecanumDriveAT(hardwareMap);
-        tophatController=new TopHatAutoController();
-        tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"", ATRobotMode.RESET);
+       // tophatController=new TopHatAutoController();
+      //  tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"", ATRobotMode.RESET);
         Pose2d startPose = new Pose2d(30, -55, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
 
@@ -50,29 +51,34 @@ public class RedAllianceRightMedDrop extends LinearOpMode {
 
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(33, -40, Math.toRadians(90)),Math.toRadians(90))
-                .addTemporalMarker(.1, ()->{
+              /*  .addTemporalMarker(.1, ()->{
                     tophatController.setRobotMode(ATRobotMode.AUTO_RED_RIGHT_MEDIUM_SETUP);
-                    tophatController.redAllianceRightAutonMedium();})
-                .splineToLinearHeading(new Pose2d(33, -2, Math.toRadians(90)),Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(43, -8, Math.toRadians(270)),Math.toRadians(0),drive.getVelocityConstraint(40, 40, TRACK_WIDTH), drive.getAccelerationConstraint(35))
+                    tophatController.redAllianceRightAutonMedium();})*/
+                .lineToLinearHeading(new Pose2d(33, 0, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(33, -2.75, Math.toRadians(90)))
+                //.lineToLinearHeading(new Pose2d(33, -5.75, Math.toRadians(270)))
+                .lineToLinearHeading(new Pose2d(33, -5.75, Math.toRadians(270)),
+                        drive.getVelocityConstraint(MAX_VEL, 40, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+
+                .lineToLinearHeading(new Pose2d(44.75, -5.75, Math.toRadians(270)))
 
                 //.strafeLeft(10)
                 .build();
         drive.followTrajectorySequence(trajSeq);
-        tophatController.setRobotMode(ATRobotMode.AUTO_RED_RIGHT_MEDIUM_PICK_CONE);
+       // tophatController.setRobotMode(ATRobotMode.AUTO_RED_RIGHT_MEDIUM_PICK_CONE);
         Pose2d poseEstimate = drive.getPoseEstimate();
         telemetry.addData("x", poseEstimate.getX());
         telemetry.addData("y", poseEstimate.getY());
         telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-        telemetry.addData("robot mode", tophatController.getRobotMode());
+       // telemetry.addData("robot mode", tophatController.getRobotMode());
         telemetry.update();
-        while ((!isStopRequested()) || !tophatController.areFiveConesDone()) {
+      /*  while ((!isStopRequested()) || !tophatController.areFiveConesDone()) {
             tophatController.redAllianceRightAutonMedium();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
             telemetry.addData("robot mode", tophatController.getRobotMode());
             telemetry.update();
-        }
+        }*/
     }
 }

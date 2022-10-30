@@ -29,8 +29,14 @@ public class MeepMeepTesting {
                                 //.turn(Math.toRadians(90))
                                 .splineToLinearHeading(new Pose2d(33, -40, Math.toRadians(90)),Math.toRadians(90))
                                 .lineToLinearHeading(new Pose2d(33, -2, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(33, -9, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(42, -9, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(33, -5.75, Math.toRadians(270)))
+                                .lineToLinearHeading(new Pose2d(46.5, -5.75, Math.toRadians(270)))
+                                .waitSeconds(4)
+                                .lineToLinearHeading(new Pose2d(12, -5.75, Math.toRadians(270))) // park 1
+                                .waitSeconds(4)
+                                .lineToLinearHeading(new Pose2d(36, -5.75, Math.toRadians(270))) //park 2
+                                .waitSeconds(4)
+                                .lineToLinearHeading(new Pose2d(58, -5.75, Math.toRadians(270))) // park 3
                                 .build()
                 );
 
