@@ -78,7 +78,7 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
         telemetry.addData("Parking Zone", parkingZone);
         //telemetry.addData("robot mode", tophatController.getRobotMode());
         telemetry.update();
-        TrajectorySequence trajSeqParking=null;
+        TrajectorySequence trajSeqParking;
         while (getRuntime()<initTimeElapsed + 20){
             telemetry.addData("Get Runtime", initTimeElapsed+this.getRuntime());
             telemetry.update();
