@@ -22,27 +22,28 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class TeleopAT extends LinearOpMode {
     TopHatAutoController tophatController;
     MecanumDriveAT drive;
-    ATRobotMode robotMode=ATRobotMode.AUTO;
+    ATRobotMode robotMode=ATRobotMode.MANUAL;
     @Override
     public void runOpMode() throws InterruptedException {
-        //drive = new MecanumDriveAT(hardwareMap);
+        drive = new MecanumDriveAT(hardwareMap);
         tophatController = new TopHatAutoController();
 
         tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"",robotMode);
-        //drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        telemetry.update();
 
         waitForStart();
 
         while (!isStopRequested()) {
 
-          /*  this.runPlatform();
-           // tophatController.runTopHat();
+            this.runPlatform();
+            tophatController.runTopHat();
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
             telemetry.addData("robot mode", robotMode);
-            telemetry.update();*/
+            telemetry.update();
             //sleep(20); // check if we need this is all action are not being performed.
         }
 
