@@ -134,8 +134,8 @@ public class TopHatAutoController {
         WristPosition = Math.min(Math.max(WristPosition, 0), 1);
 
         TurnTablePosition = Math.min(Math.max(TurnTablePosition, 100), 1900);
-        ElbowPosition = Math.min(Math.max(ElbowPosition, -8500), -400);
-        ArmPosition=Math.min(Math.max(ArmPosition, 0), 4300);
+        ElbowPosition = Math.min(Math.max(ElbowPosition, -8500), -100);
+        ArmPosition=Math.min(Math.max(ArmPosition, 100), 4300);
     }
 
     public void setTopHatMotorsVelocity(int TTVel, int ArmVel, int ElbowVel){
@@ -171,6 +171,10 @@ public class TopHatAutoController {
                 telemetry.addData("Reset Arm Position", arm.getCurrentPosition());
             }
             arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        while (arm.getCurrentPosition() > -200) {
+            setMotorPosition(-200, arm, ArmVelocity);
+        }
+        ArmPosition=arm.getCurrentPosition();
     }
 
     private void ResetArmUptoStop() {
@@ -261,7 +265,6 @@ public class TopHatAutoController {
         ArmPosition = desiredArmPosition;
         TurnTablePosition = desiredTurnTablePosition;
         ElbowPosition = desiredElbowPosition;
-        moveTopHatMotors();
         if (desiredWristPosition==-1){
             wrist.getController().pwmDisable();
             claw.getController().pwmDisable();
@@ -270,7 +273,7 @@ public class TopHatAutoController {
             setWristPosition(desiredWristPosition);
             openClaw(desiredClawPosition);
         }
-
+        moveTopHatMotors();
     }
 
     public void setRobotMode(ATRobotMode rMode){
@@ -323,18 +326,19 @@ public class TopHatAutoController {
                     && isInRange(TurnTablePosition, turntable.getCurrentPosition())) {
                 telemetry.addData(" LOWER WRIST", "Pressed");
                 setWristPosition(desiredWristPosition);
-                sleep(800);
+                sleep(1000);
                 openClaw(false);
-                sleep(800);
+                sleep(1000);
                 setWristPosition(.10);
-                sleep(800);
+                sleep(500);
 
-                moveTopHatPosition(0, false, 4224, -4726, 216);
+                //moveTopHatPosition(0, false, 4224, -4726, 216);
+                moveTopHatPosition(0, false, 4224, -3500, 1502);
                 step = 2;
 
-            } else if (step == 2 && isInRange(-4726, elbow.getCurrentPosition())
+            } else if (step == 2 && isInRange(-3500, elbow.getCurrentPosition())
                     && isInRange(4224, arm.getCurrentPosition())
-                    && isInRange(216, turntable.getCurrentPosition())) {
+                    && isInRange(1502, turntable.getCurrentPosition())) {
                 moveTopHatPosition(0, false, 3553, -4207, 1502);
                 step = 3;
 
@@ -342,13 +346,14 @@ public class TopHatAutoController {
                     && isInRange(3553, arm.getCurrentPosition())
                     && isInRange(1502, turntable.getCurrentPosition())) {
                 setWristPosition(.64);
-                sleep(800);
-                openClaw(true);
                 sleep(1000);
-                moveTopHatPosition(0, false, 4224, -4726, 216);
+                openClaw(true);
+                sleep(500);
+                //moveTopHatPosition(0, false, 4224, -4726, 216);
+                moveTopHatPosition(0, false, 4224, -3500, 216);
                 step = 4;
             }
-            else if (step == 4 && isInRange(-4726, elbow.getCurrentPosition())
+            else if (step == 4 && isInRange(-3500, elbow.getCurrentPosition())
                     && isInRange(4224, arm.getCurrentPosition())
                     && isInRange(216, turntable.getCurrentPosition())) {
                 noOfCones = noOfCones + 1;
@@ -358,6 +363,8 @@ public class TopHatAutoController {
             if (noOfCones>4){
                 robotMode=ATRobotMode.AUTO_RED_RIGHT_MEDIUM_PARK;
                 noOfCones=0;
+
+                moveTopHatPosition(-1, false, 4224, -200, 216);
             }
         }
     }

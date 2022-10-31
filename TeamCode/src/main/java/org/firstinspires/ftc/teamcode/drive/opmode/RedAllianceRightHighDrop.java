@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.ATRobotMode;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
+import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.drive.ATTensorFlowDefaultDetection;
 
@@ -29,17 +30,18 @@ import org.firstinspires.ftc.teamcode.drive.ATTensorFlowDefaultDetection;
 //@Disabled
 public class RedAllianceRightHighDrop extends LinearOpMode {
     MecanumDriveAT drive;
-    //TopHatAutoController tophatController;
+    TopHatAutoController tophatController;
     ATTensorFlowDefaultDetection ATObjectDetection;
     ATRobotMode parkingZone;
     double initTimeElapsed;
+    Pose2d poseEstimate;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //tophatController=new TopHatAutoController();
-        //tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"", ATRobotMode.RESET);
+        tophatController=new TopHatAutoController();
+        tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"", ATRobotMode.RESET);
         ATObjectDetection = new ATTensorFlowDefaultDetection();
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotMode.AUTO_RED_RIGHT_HIGH_SETUP);
         drive = new MecanumDriveAT(hardwareMap);
@@ -53,36 +55,43 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
             sleep(500);
 
         }
-
-
         initTimeElapsed = this.getRuntime();
         //waitForStart();
         if (isStopRequested()) return;
-
         TrajectorySequence trajSeqConePickup = drive.trajectorySequenceBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(33, -40, Math.toRadians(90)), Math.toRadians(90))
-                //.addTemporalMarker(.1, ()->{
-                //tophatController.setRobotMode(ATRobotMode.AUTO_RED_RIGHT_HIGH_SETUP);
-                //tophatController.redAllianceRightAutonHigh();})
+                .addTemporalMarker(.1, ()->{
+                tophatController.setRobotMode(ATRobotMode.AUTO_RED_RIGHT_HIGH_SETUP);
+                tophatController.redAllianceRightAutonHigh();})
                 .lineToLinearHeading(new Pose2d(33, -2, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(33, -5.75, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(41, -5.75, Math.toRadians(90)))
                 .build();
         drive.followTrajectorySequence(trajSeqConePickup);
-        //tophatController.setRobotMode(ATRobotMode.AUTO_RED_RIGHT_HIGH_PICK_CONE);
+        tophatController.setRobotMode(ATRobotMode.AUTO_RED_RIGHT_HIGH_PICK_CONE);
 
-        Pose2d poseEstimate = drive.getPoseEstimate();
+        while ((!isStopRequested()) || !tophatController.areFiveConesDone()) {
+            tophatController.redAllianceRightAutonHigh();
+            poseEstimate = drive.getPoseEstimate();
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+            telemetry.addData("robot mode", tophatController.getRobotMode());
+            telemetry.addData("Parking Zone", parkingZone);
+            telemetry.addData("Get Runtime", this.getRuntime());
+            telemetry.update();
+        }
         telemetry.addData("x", poseEstimate.getX());
         telemetry.addData("y", poseEstimate.getY());
         telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-        telemetry.addData("Parking Zone", parkingZone);
-        //telemetry.addData("robot mode", tophatController.getRobotMode());
+        telemetry.addData("*** Moving to Parking Zone Now ***", parkingZone);
+        telemetry.addData("robot mode", tophatController.getRobotMode());
         telemetry.update();
         TrajectorySequence trajSeqParking;
-        while (getRuntime()<initTimeElapsed + 20){
+        /*while (getRuntime()<initTimeElapsed + 20){
             telemetry.addData("Get Runtime", initTimeElapsed+this.getRuntime());
             telemetry.update();
-        }
+        }*/
             if (parkingZone==ATRobotMode.PARK1){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(13, -6, Math.toRadians(90)))
@@ -108,18 +117,5 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }
-
-            //telemetry.addData("Get Runtime", this.getRuntime());
-            //telemetry.update();
-
-        /*while ((!isStopRequested()) || !tophatController.areFiveConesDone()) {
-            tophatController.redAllianceRightAutonHigh();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-            telemetry.addData("robot mode", tophatController.getRobotMode());
-            telemetry.update();
-        }
-*/
     }
 }
