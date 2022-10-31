@@ -13,7 +13,7 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(0), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(30, -55, Math.toRadians(90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-30, 55, Math.toRadians(270)))
 
                                 //.splineTo(50,50)
                                 //.lineToLinearHeading(new Pose2d(35, -55, Math.toRadians(90)))
@@ -27,16 +27,19 @@ public class MeepMeepTesting {
                                 //.turn(Math.toRadians(90))
                                 //.forward(30)
                                 //.turn(Math.toRadians(90))
-                                .splineToLinearHeading(new Pose2d(33, -40, Math.toRadians(90)),Math.toRadians(90))
-                                .lineToLinearHeading(new Pose2d(33, -2, Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(33, -5.75, Math.toRadians(270)))
-                                .lineToLinearHeading(new Pose2d(46.5, -5.75, Math.toRadians(270)))
+                                .splineToLinearHeading(new Pose2d(-33, 40, Math.toRadians(270)), Math.toRadians(270))
+                                .lineToLinearHeading(new Pose2d(-33, 2, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(-33, 5.75, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(-41, 5.75, Math.toRadians(90)))
                                 .waitSeconds(4)
-                                .lineToLinearHeading(new Pose2d(12, -5.75, Math.toRadians(270))) // park 1
+                                .lineToLinearHeading(new Pose2d(-13, 6, Math.toRadians(90))) // park 1
                                 .waitSeconds(4)
-                                .lineToLinearHeading(new Pose2d(36, -5.75, Math.toRadians(270))) //park 2
+                                .lineToLinearHeading(new Pose2d(-36, 6, Math.toRadians(90))) //park 2
                                 .waitSeconds(4)
-                                .lineToLinearHeading(new Pose2d(58, -5.75, Math.toRadians(270))) // park 3
+                                .lineToLinearHeading(new Pose2d(-55, 6, Math.toRadians(90))) // park 3
+                                .waitSeconds(4)
+                                .lineToLinearHeading(new Pose2d(-10, 6, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(-10, 53, Math.toRadians(90))) // Substation
                                 .build()
                 );
 
