@@ -66,11 +66,12 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(33, -2, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(33, -5.75, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(41, -5.75, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(41.1, -5.75, Math.toRadians(90)))
                 .build();
         drive.followTrajectorySequence(trajSeqConePickup);
         tophatController.setRobotMode(ATRobotMode.AUTO_RED_RIGHT_HIGH_PICK_CONE);
 
-        while ((!isStopRequested()) || !tophatController.areFiveConesDone()) {
+        while ((!isStopRequested()) && !tophatController.areFiveConesDone()) {
             tophatController.redAllianceRightAutonHigh();
             poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
@@ -79,8 +80,12 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
             telemetry.addData("robot mode", tophatController.getRobotMode());
             telemetry.addData("Parking Zone", parkingZone);
             telemetry.addData("Get Runtime", this.getRuntime());
+            telemetry.addData("In While Loop", "YES");
+            telemetry.addData("Stop  Requested", isStopRequested());
+            telemetry.addData("are FiveCones Done", tophatController.areFiveConesDone());
             telemetry.update();
         }
+        telemetry.addData("Outside While Loop", "YES");
         telemetry.addData("x", poseEstimate.getX());
         telemetry.addData("y", poseEstimate.getY());
         telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));

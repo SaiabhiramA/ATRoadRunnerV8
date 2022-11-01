@@ -31,6 +31,7 @@ public class MeepMeepTesting {
                                 .lineToLinearHeading(new Pose2d(-33, 2, Math.toRadians(90)))
                                 .lineToLinearHeading(new Pose2d(-33, 5.75, Math.toRadians(90)))
                                 .lineToLinearHeading(new Pose2d(-41, 5.75, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(-41.1, 5.75, Math.toRadians(90)))
                                 .waitSeconds(4)
                                 .lineToLinearHeading(new Pose2d(-13, 6, Math.toRadians(90))) // park 1
                                 .waitSeconds(4)
