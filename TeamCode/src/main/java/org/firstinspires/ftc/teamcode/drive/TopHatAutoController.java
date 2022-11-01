@@ -66,11 +66,11 @@ public class TopHatAutoController {
         elbowtouch = hardwareMapAT.get(TouchSensor.class, "elbowtouch");
         // Set servo to mid position
         ElbowPosition = 0;
-        ElbowSpeed = 10;
+        ElbowSpeed = 100;
         TurnTablePosition = 0;
         TurnTableSpeed = 10;
         ArmPosition = 0;
-        ArmSpeed = 10;
+        ArmSpeed = 100;
         ClawSpeed = 0.05;
         ClawPosition = 0;
         WristSpeed = 0.01;
@@ -105,13 +105,19 @@ public class TopHatAutoController {
      * This function is executed when this Op Mode is selected from the Driver Station.
      */
     public void runTopHat() {
-            fullManualControl();
-            partialManualControl();
-            fullAutoControl();
 
-            setMotorNServoMaximums();
+        fullManualControl();
+        partialManualControl();
+        //fullAutoControl();
 
-            moveTopHatMotors();
+        setMotorNServoMaximums();
+
+        moveTopHatMotors();
+        if (robotMode == ATRobotMode.MANUAL) {
+            setTopHatMotorsVelocity(2000, 5000, 5000);
+        } else if (robotMode == ATRobotMode.AUTO) {
+            setTopHatMotorsVelocity(500, 5000, 5000);
+        }
 
             telemetry.addData("wrist position", wrist.getPosition());
             telemetry.addData("wrist position while moving", wrist.getController().getServoPosition(0));
@@ -120,7 +126,6 @@ public class TopHatAutoController {
             telemetry.addData("elbow position", elbow.getCurrentPosition());
             telemetry.addData("turntable position", turntable.getCurrentPosition());
             telemetry.addData("testCounter", testCounter);
-
     }
 
     private void moveTopHatMotors(){
@@ -504,20 +509,24 @@ public class TopHatAutoController {
     }
 
     private void partialManualControl(){
-        if (gamepad2.right_bumper && gamepad2.x){
-             this.robotMode = ATRobotMode.AUTO_RED_RIGHT_HIGH_SETUP;
+        if (gamepad2.left_bumper && gamepad2.x){
+             robotMode=ATRobotMode.AUTO;
+             ArmPosition=1590;
+             TurnTablePosition=1665;
+             ElbowPosition=-5936;
+             setWristPosition(.3094);
+             openClaw(true);
         }
-        if (gamepad2.left_bumper && gamepad2.y){
-            robotMode=ATRobotMode.MANUAL;
-        }
-        if (gamepad2.b){
-            robotMode=ATRobotMode.MANUAL;
-            wrist.getController().pwmEnable();
-        }
-        if (gamepad2.a){
-            robotMode=ATRobotMode.MANUAL;
-            wrist.getController().pwmDisable();
-        }
+        if (gamepad2.right_bumper && gamepad2.y){
+            robotMode=ATRobotMode.AUTO;
+            openClaw(false);
+            sleep(1000);
+            setWristPosition(.02);
+            ArmPosition=3565;
+            TurnTablePosition=471;
+            ElbowPosition=-3714;
+            setWristPosition(.6599);
+         }
     }
 
     public final void sleep(long milliseconds) {
