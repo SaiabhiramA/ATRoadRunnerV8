@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.drive.ATRobotMode;
+import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -22,7 +21,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class TeleopAT extends LinearOpMode {
     TopHatAutoController tophatController;
     MecanumDriveAT drive;
-    ATRobotMode robotMode=ATRobotMode.MANUAL;
+    ATRobotEnumeration robotMode= ATRobotEnumeration.MANUAL;
     Pose2d poseEstimate;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -50,15 +49,15 @@ public class TeleopAT extends LinearOpMode {
     }
     public void runPlatform(){
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x && gamepad1.left_trigger>0 && gamepad1.right_trigger>0) {
-            robotMode=ATRobotMode.RESET;
+            robotMode= ATRobotEnumeration.RESET;
             tophatController.ResetTopHat();
             telemetry.addData("Reset Top Hat", "Pressed");
         }
 
         if (gamepad1.left_stick_y!= 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x !=0){
-            robotMode=ATRobotMode.MANUAL;
+            robotMode= ATRobotEnumeration.MANUAL;
         }
-        if (robotMode==ATRobotMode.MANUAL) {
+        if (robotMode== ATRobotEnumeration.MANUAL) {
             drive.setWeightedDrivePower(
                     new Pose2d(
                             -gamepad1.left_stick_y,

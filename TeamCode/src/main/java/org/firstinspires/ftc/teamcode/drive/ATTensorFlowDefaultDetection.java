@@ -39,7 +39,6 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
-import java.util.Locale;
 
 public class ATTensorFlowDefaultDetection {
 
@@ -85,11 +84,11 @@ public static final String[] LABELS = {
      */
     private TFObjectDetector tfod;
     private HardwareMap hardwareMap;
-    private ATRobotMode robotMode;
+    private ATRobotEnumeration robotMode;
     private Telemetry telemetry;
 
 
-    public void initalizeTensorFlow(HardwareMap hwmap , Telemetry ATTelemetry, ATRobotMode rMode) {
+    public void initalizeTensorFlow(HardwareMap hwmap , Telemetry ATTelemetry, ATRobotEnumeration rMode) {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         hardwareMap = hwmap;
@@ -115,7 +114,7 @@ public static final String[] LABELS = {
         }
     }
 
-public ATRobotMode detectObjectLabel() {
+public ATRobotEnumeration detectObjectLabel() {
 
          String object ="";
 
@@ -145,13 +144,13 @@ public ATRobotMode detectObjectLabel() {
                 }
 
                 if (object.toLowerCase().equals( LABELS[0].toLowerCase())){
-                    return  ATRobotMode.PARK1;
+                    return  ATRobotEnumeration.PARK1;
                 } else if (object.toLowerCase().equals( LABELS[1].toLowerCase())){
-                     return  ATRobotMode.PARK2;
+                     return  ATRobotEnumeration.PARK2;
                 } else if (object.toLowerCase().equals( LABELS[2].toLowerCase())){
-                    return  ATRobotMode.PARK3;
+                    return  ATRobotEnumeration.PARK3;
                 }  else {
-                    return ATRobotMode.SUBSTATION;
+                    return ATRobotEnumeration.SUBSTATION;
                 }
     }
 

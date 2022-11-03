@@ -9,7 +9,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.drive.ATRobotMode;
+import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.ATTensorFlowDefaultDetection;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -35,12 +35,12 @@ public class RedAllianceLeftMedDrop extends LinearOpMode {
     MecanumDriveAT drive;
   //  TopHatAutoController tophatController;
     ATTensorFlowDefaultDetection ATObjectDetection;
-    ATRobotMode parkingZone;
+    ATRobotEnumeration parkingZone;
     double initTimeElapsed;
     @Override
     public void runOpMode() throws InterruptedException {
         ATObjectDetection = new ATTensorFlowDefaultDetection();
-        ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotMode.AUTO_RED_RIGHT_HIGH_SETUP);
+        ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_SETUP);
 
        // tophatController=new TopHatAutoController();
       //  tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"", ATRobotMode.RESET);
@@ -105,16 +105,16 @@ public class RedAllianceLeftMedDrop extends LinearOpMode {
             telemetry.addData("Get Runtime", initTimeElapsed+this.getRuntime());
             telemetry.update();
         }
-        if (parkingZone==ATRobotMode.PARK1){
+        if (parkingZone== ATRobotEnumeration.PARK1){
             drive.followTrajectorySequence(trajSeqPark1);
         }
-        else if (parkingZone==ATRobotMode.PARK2){
+        else if (parkingZone== ATRobotEnumeration.PARK2){
             drive.followTrajectorySequence(trajSeqPark2);
         }
-        else if (parkingZone==ATRobotMode.PARK3){
+        else if (parkingZone== ATRobotEnumeration.PARK3){
             drive.followTrajectorySequence(trajSeqPark3);
         }
-        else if (parkingZone==ATRobotMode.SUBSTATION){
+        else if (parkingZone== ATRobotEnumeration.SUBSTATION){
             drive.followTrajectorySequence(trajSeqSubStation);
         }
 

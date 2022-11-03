@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive;
 
-public enum ATRobotMode {
+public enum ATRobotEnumeration {
     AUTO_RED_RIGHT_MEDIUM_SETUP,
     AUTO_RED_RIGHT_MEDIUM_PICK_CONE,
     AUTO_RED_RIGHT_MEDIUM_PARK,
