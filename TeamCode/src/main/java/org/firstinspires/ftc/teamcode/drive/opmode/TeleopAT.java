@@ -5,9 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
+import org.firstinspires.ftc.teamcode.drive.MecanumDriveATCancelable;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -20,30 +23,36 @@ import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
 @TeleOp(name = "AT Tele Op Mode")
 public class TeleopAT extends LinearOpMode {
     TopHatAutoController tophatController;
-    MecanumDriveAT drive;
+    MecanumDriveATCancelable drive;
     ATRobotEnumeration robotMode= ATRobotEnumeration.MANUAL;
     Pose2d poseEstimate;
+    TrajectorySequence trajSeqPark1;
+    TrajectorySequence trajSeqPark2;
+    TrajectorySequence trajSeqPark3;
+    boolean teleOpConePickupPositioned=false;
+
     @Override
     public void runOpMode() throws InterruptedException {
-        drive = new MecanumDriveAT(hardwareMap);
+        drive = new MecanumDriveATCancelable(hardwareMap);
         tophatController = new TopHatAutoController();
 
-        tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"",robotMode);
+        tophatController.initializeRobot(hardwareMap,telemetry,gamepad1,gamepad2,"",robotMode);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.update();
-
+        drive.setPoseEstimate(ATGlobalStorage.currentPose);
         waitForStart();
-
         while (!isStopRequested()) {
-
-            this.runPlatform();
-            tophatController.runTopHat();
+            drive.update();
             poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
             telemetry.addData("robot mode", robotMode);
+            telemetry.addData("AutoMode Name", ATGlobalStorage.autonModeName);
+            telemetry.addData("Parking Zone", ATGlobalStorage.parkingPos);
             telemetry.update();
+            this.runPlatform();
+            tophatController.runTopHat();
         }
 
     }
@@ -65,7 +74,37 @@ public class TeleopAT extends LinearOpMode {
                             -gamepad1.right_stick_x
                     )
             );
-            drive.update();
+        }
+        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.x){
+            robotMode= ATRobotEnumeration.AUTO;
+            teleOpConePickupPositioned=true;
+            if (ATGlobalStorage.parkingPos==ATRobotEnumeration.PARK1){
+                trajSeqPark1=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(13, -6, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(13, -40, Math.toRadians(180)))
+                        .build();
+                drive.followTrajectorySequenceAsync(trajSeqPark1);
+            }
+            else if (ATGlobalStorage.parkingPos==ATRobotEnumeration.PARK2){
+                trajSeqPark2=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(36, -6, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(36, -40, Math.toRadians(180)))
+                        .lineToLinearHeading(new Pose2d(13, -40, Math.toRadians(180)))
+                        .build();
+                drive.followTrajectorySequenceAsync(trajSeqPark2);
+            }
+            else if (ATGlobalStorage.parkingPos==ATRobotEnumeration.PARK3){
+                trajSeqPark3=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(55, -6, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(55, -40, Math.toRadians(180)))
+                        .lineToLinearHeading(new Pose2d(13, -40, Math.toRadians(180)))
+                        .build();
+                drive.followTrajectorySequenceAsync(trajSeqPark3);
+            }
+        }
+        if (!gamepad1.left_bumper && !gamepad1.right_bumper && gamepad1.x){
+            robotMode= ATRobotEnumeration.MANUAL;
+            drive.breakFollowing();
         }
     }
 

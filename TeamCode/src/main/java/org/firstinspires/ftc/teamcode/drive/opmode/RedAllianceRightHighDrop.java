@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
@@ -35,18 +36,17 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
     ATRobotEnumeration parkingZone;
     double initTimeElapsed;
     Pose2d poseEstimate;
-
-
     @Override
     public void runOpMode() throws InterruptedException {
-
         tophatController=new TopHatAutoController();
-        tophatController.initializeRobot(hardwareMap,drive,telemetry,gamepad1,gamepad2,"", ATRobotEnumeration.RESET);
+        tophatController.initializeRobot(hardwareMap,telemetry,gamepad1,gamepad2,"", ATRobotEnumeration.RESET);
         ATObjectDetection = new ATTensorFlowDefaultDetection();
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_SETUP);
         drive = new MecanumDriveAT(hardwareMap);
         Pose2d startPose = new Pose2d(30, -55, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
+        parkingZone=ATRobotEnumeration.SUBSTATION;
+        setRobotStateInStorage();
        while (!isStarted()){
             parkingZone = ATObjectDetection.detectObjectLabel();
             telemetry.addData("Parking Zone", parkingZone);
@@ -61,18 +61,15 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
         TrajectorySequence trajSeqConePickup = drive.trajectorySequenceBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(35, -40, Math.toRadians(90)), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(41, -5, Math.toRadians(90)), Math.toRadians(90))
-                //.lineToLinearHeading(new Pose2d(40, -5, Math.toRadians(90)))
                 .addTemporalMarker(.1, ()->{
                     tophatController.setRobotMode(ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_SETUP);
                     tophatController.redAllianceRightAutonHigh();})
-                //.lineToLinearHeading(new Pose2d(33, -5.75, Math.toRadians(90)))
-                //.lineToLinearHeading(new Pose2d(41, -5.75, Math.toRadians(90)))
-                //.lineToLinearHeading(new Pose2d(41.1, -5.75, Math.toRadians(90)))
                 .build();
         drive.followTrajectorySequence(trajSeqConePickup);
-        tophatController.setRobotMode(ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PICK_CONE);
+        /*tophatController.setRobotMode(ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PICK_CONE);
 
-        while ((!isStopRequested()) && !tophatController.areFiveConesDone()) {
+        while ((!isStopRequested())&& !tophatController.areFiveConesDone())
+        {
             tophatController.redAllianceRightAutonHigh();
             poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
@@ -92,7 +89,8 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
         telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
         telemetry.addData("*** Moving to Parking Zone Now ***", parkingZone);
         telemetry.addData("robot mode", tophatController.getRobotMode());
-        telemetry.update();
+        telemetry.update();*/
+
         TrajectorySequence trajSeqParking;
 
             if (parkingZone==ATRobotEnumeration.PARK1){
@@ -120,11 +118,13 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }
-
-
-                /*while (getRuntime()<initTimeElapsed + 20){
-            telemetry.addData("Get Runtime", initTimeElapsed+this.getRuntime());
-            telemetry.update();
-        }*/
+        setRobotStateInStorage();
     }
+
+    private void setRobotStateInStorage(){
+        ATGlobalStorage.autonModeName=ATRobotEnumeration.RED_RIGHT_HIGH_DROP;
+        ATGlobalStorage.currentPose=drive.getPoseEstimate();
+        ATGlobalStorage.parkingPos=parkingZone;
+    }
+
 }

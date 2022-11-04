@@ -142,7 +142,6 @@ public ATRobotEnumeration detectObjectLabel() {
                         }
                     }
                 }
-
                 if (object.toLowerCase().equals( LABELS[0].toLowerCase())){
                     return  ATRobotEnumeration.PARK1;
                 } else if (object.toLowerCase().equals( LABELS[1].toLowerCase())){

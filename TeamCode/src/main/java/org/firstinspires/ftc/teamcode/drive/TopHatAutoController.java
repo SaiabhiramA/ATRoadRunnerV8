@@ -50,8 +50,7 @@ public class TopHatAutoController {
     MecanumDriveAT drive;
     ATRobotEnumeration robotMode= ATRobotEnumeration.RESET;
 
-    public void initializeRobot(HardwareMap hardwareMapAT, MecanumDriveAT driveAT, Telemetry tl, Gamepad gp1 , Gamepad gp2, String Alliance, ATRobotEnumeration rMode) {
-        drive=driveAT;
+    public void initializeRobot(HardwareMap hardwareMapAT, Telemetry tl, Gamepad gp1 , Gamepad gp2, String Alliance, ATRobotEnumeration rMode) {
         robotMode=rMode;
         telemetry = tl;
         gamepad1=gp1;
