@@ -30,5 +30,6 @@ public enum ATRobotEnumeration {
     BLUE_RIGHT_MEDIUM_DROP,
     BLUE_LEFT_HIGH_DROP,
     BLUE_LEFT_MEDIUM_DROP,
+    TELE_OP_AUTO,
     TERMINAL
 }

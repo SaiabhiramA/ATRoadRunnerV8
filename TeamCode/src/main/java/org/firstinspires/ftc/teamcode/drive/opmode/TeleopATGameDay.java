@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
-import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveATCancelable;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -20,11 +19,11 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
 //@TeleOp(group = "drive")
-@TeleOp(name = "AT Tele Op Mode")
-public class TeleopAT extends LinearOpMode {
+@TeleOp(name = "ATTeleOpMode-GameDay")
+public class TeleopATGameDay extends LinearOpMode {
     TopHatAutoController tophatController;
     MecanumDriveATCancelable drive;
-    ATRobotEnumeration robotMode= ATRobotEnumeration.MANUAL;
+    ATRobotEnumeration robotMode= ATRobotEnumeration.TELE_OP_AUTO;
     Pose2d poseEstimate;
     TrajectorySequence trajSeqPark1;
     TrajectorySequence trajSeqPark2;
@@ -35,8 +34,7 @@ public class TeleopAT extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         drive = new MecanumDriveATCancelable(hardwareMap);
         tophatController = new TopHatAutoController();
-
-        tophatController.initializeRobot(hardwareMap,telemetry,gamepad1,gamepad2,"",robotMode);
+        tophatController.basicInitializeRobot(hardwareMap,telemetry,gamepad1,gamepad2,robotMode);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.update();
         drive.setPoseEstimate(ATGlobalStorage.currentPose);
@@ -81,23 +79,23 @@ public class TeleopAT extends LinearOpMode {
             if (ATGlobalStorage.parkingPos==ATRobotEnumeration.PARK1){
                 trajSeqPark1=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(13, -6, Math.toRadians(90)))
-                        .lineToLinearHeading(new Pose2d(13, -40, Math.toRadians(180)))
+                        .lineToSplineHeading(new Pose2d(12, -32, Math.toRadians(180)))
                         .build();
                 drive.followTrajectorySequenceAsync(trajSeqPark1);
             }
             else if (ATGlobalStorage.parkingPos==ATRobotEnumeration.PARK2){
                 trajSeqPark2=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(36, -6, Math.toRadians(90)))
-                        .lineToLinearHeading(new Pose2d(36, -40, Math.toRadians(180)))
-                        .lineToLinearHeading(new Pose2d(13, -40, Math.toRadians(180)))
+                        .lineToLinearHeading(new Pose2d(36, -28, Math.toRadians(180)))
+                        .lineToSplineHeading(new Pose2d(12, -32, Math.toRadians(180)))
                         .build();
                 drive.followTrajectorySequenceAsync(trajSeqPark2);
             }
             else if (ATGlobalStorage.parkingPos==ATRobotEnumeration.PARK3){
                 trajSeqPark3=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(55, -6, Math.toRadians(90)))
-                        .lineToLinearHeading(new Pose2d(55, -40, Math.toRadians(180)))
-                        .lineToLinearHeading(new Pose2d(13, -40, Math.toRadians(180)))
+                        .lineToLinearHeading(new Pose2d(56, -6, Math.toRadians(90)))
+                        .lineToSplineHeading(new Pose2d(60, -28, Math.toRadians(180)))
+                        .lineToSplineHeading(new Pose2d(12, -32, Math.toRadians(180)))
                         .build();
                 drive.followTrajectorySequenceAsync(trajSeqPark3);
             }
@@ -105,6 +103,7 @@ public class TeleopAT extends LinearOpMode {
         if (!gamepad1.left_bumper && !gamepad1.right_bumper && gamepad1.x){
             robotMode= ATRobotEnumeration.MANUAL;
             drive.breakFollowing();
+            tophatController.stopTopHatMovement();
         }
     }
 

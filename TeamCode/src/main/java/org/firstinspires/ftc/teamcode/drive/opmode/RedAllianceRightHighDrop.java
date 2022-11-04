@@ -39,7 +39,7 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         tophatController=new TopHatAutoController();
-        tophatController.initializeRobot(hardwareMap,telemetry,gamepad1,gamepad2,"", ATRobotEnumeration.RESET);
+        tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, ATRobotEnumeration.RESET, hardwareMap);
         ATObjectDetection = new ATTensorFlowDefaultDetection();
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_SETUP);
         drive = new MecanumDriveAT(hardwareMap);
@@ -107,7 +107,7 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
             }
             else if (parkingZone==ATRobotEnumeration.PARK3){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(55, -6, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(56, -6, Math.toRadians(90)))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }

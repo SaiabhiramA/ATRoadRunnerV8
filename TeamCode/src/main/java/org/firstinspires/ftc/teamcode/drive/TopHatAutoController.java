@@ -50,7 +50,7 @@ public class TopHatAutoController {
     MecanumDriveAT drive;
     ATRobotEnumeration robotMode= ATRobotEnumeration.RESET;
 
-    public void initializeRobot(HardwareMap hardwareMapAT, Telemetry tl, Gamepad gp1 , Gamepad gp2, String Alliance, ATRobotEnumeration rMode) {
+    public void fullyInitializeRobot(Telemetry tl, Gamepad gp1, Gamepad gp2, ATRobotEnumeration rMode, HardwareMap hardwareMapAT) {
         robotMode=rMode;
         telemetry = tl;
         gamepad1=gp1;
@@ -83,6 +83,46 @@ public class TopHatAutoController {
         turntable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         ResetTopHat();
       }
+
+    public void basicInitializeRobot(HardwareMap hardwareMapAT, Telemetry tl, Gamepad gp1, Gamepad gp2, ATRobotEnumeration rMode) {
+        robotMode=rMode;
+        telemetry = tl;
+        gamepad1=gp1;
+        gamepad2=gp2;
+        arm = hardwareMapAT.get(DcMotor.class, "arm");
+        elbow = hardwareMapAT.get(DcMotor.class, "elbow");
+        turntable = hardwareMapAT.get(DcMotor.class, "turntable");
+        wrist = hardwareMapAT.get(Servo.class, "wrist");
+        claw = hardwareMapAT.get(Servo.class, "claw");
+        turntabletouch = hardwareMapAT.get(TouchSensor.class, "turntabletouch");
+        armdowntouch = hardwareMapAT.get(TouchSensor.class, "armdowntouch");
+        armuptouch = hardwareMapAT.get(TouchSensor.class, "armuptouch");
+        elbowtouch = hardwareMapAT.get(TouchSensor.class, "elbowtouch");
+        // Set servo to mid position
+        ElbowPosition = elbow.getCurrentPosition();
+        ElbowSpeed = 100;
+        TurnTablePosition = elbow.getCurrentPosition();
+        TurnTableSpeed = 10;
+        ArmPosition = elbow.getCurrentPosition();
+        ArmSpeed = 100;
+        ClawSpeed = 0.05;
+        ClawPosition = claw.getPosition();
+        WristSpeed = 0.01;
+        WristPosition = wrist.getPosition();
+        ArmVelocity=5000;
+        ElbowVelocity=5000;
+        TurnTableVelocity=1000;
+
+        telemetry.addData("wrist position", wrist.getPosition());
+        telemetry.addData("wrist position while moving", wrist.getController().getServoPosition(0));
+        telemetry.addData("claw position", claw.getPosition());
+        telemetry.addData("arm position", arm.getCurrentPosition());
+        telemetry.addData("elbow position", elbow.getCurrentPosition());
+        telemetry.addData("turntable position", turntable.getCurrentPosition());
+        telemetry.addData("testCounter", testCounter);
+
+    }
+
     public void ResetTopHat(){
         robotMode= ATRobotEnumeration.RESET;
         ResetWristNClaw();
@@ -100,34 +140,27 @@ public class TopHatAutoController {
         ResetTurnTabletoStop();
         ResetArmDowntoStop();
      }
-
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
      */
     public void runTopHat() {
-
-        fullManualControl();
-        partialManualControl();
-        //fullAutoControl();
-
-        setMotorNServoMaximums();
-
-        moveTopHatMotors();
+        if (robotMode==ATRobotEnumeration.TELE_OP_AUTO){
+            moveTopHatPosition(-1,false,arm.getCurrentPosition(),elbow.getCurrentPosition(),turntable.getCurrentPosition());
+        }
         if (robotMode == ATRobotEnumeration.MANUAL) {
             setTopHatMotorsVelocity(2000, 5000, 5000);
         }
-
         if (robotMode== ATRobotEnumeration.AUTO_TOPHAT_MOVE_BEGIN){
             if (teleOpStep==0){
                 openClaw(desiredClawPosition);
                 sleep(1000);
-                moveTopHatPosition(.1,desiredClawPosition,4300,-2500,turntable.getCurrentPosition());
+                moveTopHatPosition(.1,desiredClawPosition,4300,-2600,turntable.getCurrentPosition());
                 teleOpStep=1;
             }
 
-            if (teleOpStep == 1 && isInRange(-2500, elbow.getCurrentPosition())
+            if (teleOpStep == 1 && isInRange(-2600, elbow.getCurrentPosition())
                     && isInRange(4300, arm.getCurrentPosition())){
-                moveTopHatPosition(.1,desiredClawPosition,4300,-2500,desiredTurnTablePosition);
+                moveTopHatPosition(.1,desiredClawPosition,4300,-2600,desiredTurnTablePosition);
                 teleOpStep=2;
             }
             if (teleOpStep == 2 && isInRange(desiredTurnTablePosition, turntable.getCurrentPosition())){
@@ -145,15 +178,17 @@ public class TopHatAutoController {
             }
 
         }
-
-
-            telemetry.addData("wrist position", wrist.getPosition());
-            telemetry.addData("wrist position while moving", wrist.getController().getServoPosition(0));
-            telemetry.addData("claw position", claw.getPosition());
-            telemetry.addData("arm position", arm.getCurrentPosition());
-            telemetry.addData("elbow position", elbow.getCurrentPosition());
-            telemetry.addData("turntable position", turntable.getCurrentPosition());
-            telemetry.addData("testCounter", testCounter);
+        fullManualControl();
+        partialManualControl();
+        moveTopHatMotors();
+        setMotorNServoMaximums();
+        telemetry.addData("wrist position", wrist.getPosition());
+        telemetry.addData("wrist position while moving", wrist.getController().getServoPosition(0));
+        telemetry.addData("claw position", claw.getPosition());
+        telemetry.addData("arm position", arm.getCurrentPosition());
+        telemetry.addData("elbow position", elbow.getCurrentPosition());
+        telemetry.addData("turntable position", turntable.getCurrentPosition());
+        telemetry.addData("testCounter", testCounter);
     }
 
     private void moveTopHatMotors(){
@@ -296,7 +331,7 @@ public class TopHatAutoController {
         desiredWristPosition=desiredWristPos;
         desiredClawPosition=desiredClawPos;
     }
-    private void moveTopHatPosition(double desiredWristPosition, boolean desiredClawPosition , double desiredArmPosition , double desiredElbowPosition , double desiredTurnTablePosition ){
+    public void moveTopHatPosition(double desiredWristPosition, boolean desiredClawPosition , double desiredArmPosition , double desiredElbowPosition , double desiredTurnTablePosition ){
         ArmPosition = desiredArmPosition;
         TurnTablePosition = desiredTurnTablePosition;
         ElbowPosition = desiredElbowPosition;
@@ -309,6 +344,10 @@ public class TopHatAutoController {
             openClaw(desiredClawPosition);
         }
         moveTopHatMotors();
+    }
+
+    public void stopTopHatMovement(){
+        moveTopHatPosition(-1,false,arm.getCurrentPosition(),elbow.getCurrentPosition(), turntable.getCurrentPosition());
     }
 
     public void setRobotMode(ATRobotEnumeration rMode){
@@ -546,15 +585,35 @@ public class TopHatAutoController {
     }
 
     private void partialManualControl(){
-        if (gamepad2.left_bumper && gamepad2.x){
+        if (!gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.x){
              robotMode= ATRobotEnumeration.AUTO_TOPHAT_MOVE_BEGIN;
              /*ArmPosition=1590;
              TurnTablePosition=1665;
              ElbowPosition=-5936;
              setWristPosition(.3094);
              openClaw(true);*/
-             setTopHatPosition(.42,true,748,-4440,1584);
+             setTopHatPosition(.3999,true,1359,-5347,1649);
         }
+
+        if (gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.x){
+            robotMode= ATRobotEnumeration.AUTO_TOPHAT_MOVE_BEGIN;
+            /*openClaw(false);
+            sleep(1000);
+            setWristPosition(.02);
+            ArmPosition=3565;
+            TurnTablePosition=471;
+            ElbowPosition=-3714;
+            setWristPosition(.6599);*/
+            setTopHatPosition(.3999,true,1359,-5347,1649);
+
+            if (isInRange(-5347, elbow.getCurrentPosition())
+                    && isInRange(1359, arm.getCurrentPosition())
+                    && isInRange(1649, turntable.getCurrentPosition()) ) {
+                setTopHatPosition(.1, false, 4300, -2600, 1000);
+            }
+        }
+
+
         if (gamepad2.right_bumper && gamepad2.y){
             robotMode= ATRobotEnumeration.AUTO_TOPHAT_MOVE_BEGIN;
             /*openClaw(false);
@@ -565,9 +624,11 @@ public class TopHatAutoController {
             ElbowPosition=-3714;
             setWristPosition(.6599);*/
 
-            setTopHatPosition(.66888,false,3772,-4313,603);
+            setTopHatPosition(.6777,false,3946,-4309,605);
 
          }
+
+
 
         if (gamepad2.right_bumper && gamepad2.b){
             robotMode= ATRobotEnumeration.AUTO_TOPHAT_MOVE_BEGIN;
