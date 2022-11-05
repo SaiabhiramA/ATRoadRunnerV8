@@ -95,25 +95,25 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
 
             if (parkingZone==ATRobotEnumeration.PARK1){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(13, -6, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(13, -5, Math.toRadians(90)))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }
             else if (parkingZone==ATRobotEnumeration.PARK2){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(36, -6, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(36, -5, Math.toRadians(90)))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }
             else if (parkingZone==ATRobotEnumeration.PARK3){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(56, -6, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(56, -5, Math.toRadians(90)))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }
             else if (parkingZone==ATRobotEnumeration.SUBSTATION){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(10, -6, Math.toRadians(270)))
+                        .lineToLinearHeading(new Pose2d(10, -5, Math.toRadians(270)))
                         .lineToLinearHeading(new Pose2d(10, -53, Math.toRadians(270)))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
