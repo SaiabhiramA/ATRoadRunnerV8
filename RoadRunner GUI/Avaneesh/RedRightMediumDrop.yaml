@@ -17,5 +17,23 @@ waypoints:
   heading: 1.5707963267948966
   tangent: 1.5707963267948966
   interpolationType: "LINEAR"
+- position:
+    x: 56.0
+    y: -5.0
+  heading: 1.5707963267948966
+  tangent: 1.5707963267948966
+  interpolationType: "LINEAR"
+- position:
+    x: 60.0
+    y: -28.0
+  heading: 1.5707963267948966
+  tangent: 1.5707963267948966
+  interpolationType: "LINEAR"
+- position:
+    x: 12.0
+    y: -32.0
+  heading: 3.141592653589793
+  tangent: 1.9198621771937625
+  interpolationType: "SPLINE"
 resolution: 0.25
 version: 1

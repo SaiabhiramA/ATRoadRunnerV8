@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
@@ -26,7 +27,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Config
 //@Autonomous(group = "drive")
 @Autonomous(name = "Blue Allinace Right High Drop")
-//@Disabled
+@Disabled
 public class BlueAllianceRightHighDrop extends LinearOpMode {
     MecanumDriveAT drive;
     //TopHatAutoController tophatController;

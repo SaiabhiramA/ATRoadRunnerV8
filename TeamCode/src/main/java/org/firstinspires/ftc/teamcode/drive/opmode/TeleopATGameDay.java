@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.MAX_ACCEL;
+import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.MAX_ANG_VEL;
+import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.TRACK_WIDTH;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -106,6 +110,14 @@ public class TeleopATGameDay extends LinearOpMode {
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
             robotMode= ATRobotEnumeration.TELE_OP_AUTO;
         }
+
+        /**
+         * This is to set the tophat in navigation position in the field
+         */
+        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
+            tophatController.setRobotMode(ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN);
+            tophatController.setTopHatPosition(.1,false,4300,-1800,945);
+        }
     }
     /**
      * This method needs to be enhanced to make it more dynamic based on either RED or BLUE alliance
@@ -130,7 +142,7 @@ public class TeleopATGameDay extends LinearOpMode {
             case RED_RIGHT_HIGH_DROP:{
                 trajSeqPark1=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(13, -5, Math.toRadians(90)))
-                        .lineToSplineHeading(new Pose2d(12, -32, Math.toRadians(180)))
+                        .lineToSplineHeading(new Pose2d(12, -32, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         //.splineToSplineHeading(new Pose2d(12, -32, Math.toRadians(180)),Math.toRadians(110))
                         .build();
             }
@@ -143,7 +155,7 @@ public class TeleopATGameDay extends LinearOpMode {
             case RED_RIGHT_HIGH_DROP:{
                 trajSeqPark2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(36, -5, Math.toRadians(90)))
-                        .lineToSplineHeading(new Pose2d(36, -28, Math.toRadians(180)))
+                        .lineToSplineHeading(new Pose2d(36, -28, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .lineToLinearHeading(new Pose2d(12, -32, Math.toRadians(180)))
                         /*.splineToLinearHeading(new Pose2d(36, -28, Math.toRadians(90)),Math.toRadians(90))
                         .splineToSplineHeading(new Pose2d(12, -32, Math.toRadians(180)),Math.toRadians(110))*/
@@ -157,7 +169,7 @@ public class TeleopATGameDay extends LinearOpMode {
             case RED_RIGHT_HIGH_DROP:{
                 trajSeqPark3 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .lineToLinearHeading(new Pose2d(56, -5, Math.toRadians(90)))
-                        .lineToSplineHeading(new Pose2d(60, -28, Math.toRadians(180)))
+                        .lineToSplineHeading(new Pose2d(60, -28, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .lineToLinearHeading(new Pose2d(12, -32, Math.toRadians(180)))
 /*                        .splineToLinearHeading(new Pose2d(56, -5, Math.toRadians(90)),Math.toRadians(90))
                         .splineToLinearHeading(new Pose2d(36, -28, Math.toRadians(90)),Math.toRadians(90))

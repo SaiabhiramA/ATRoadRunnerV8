@@ -7,6 +7,7 @@ import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.TRACK_WIDTH
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
@@ -29,6 +30,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
  */
 @Config
 //@Autonomous(group = "drive")
+@Disabled
 @Autonomous(name = "Red Allinace Right Medium Drop")
 //@Disabled
 public class RedAllianceRightMedDrop extends LinearOpMode {
