@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.drive;
 
 public enum ATRobotEnumeration {
+    //Red Alliance Right Enumerations
     AUTO_RED_RIGHT_MEDIUM_SETUP,
     AUTO_RED_RIGHT_MEDIUM_PICK_CONE,
-    AUTO_RED_RIGHT_MEDIUM_PARK,
     AUTO_RED_RIGHT_HIGH_SETUP,
     AUTO_RED_RIGHT_HIGH_PICK_CONE,
+    AUTO_RED_RIGHT_MEDIUM_PARK,
+    AUTO_RED_RIGHT_HIGH_PARK,
     AUTO_RED_RIGHT_LOW,
+
+    //Blue Alliance Left Enumerations
     AUTO_BLUE_LEFT_HIGH_SETUP,
     AUTO_BLUE_LEFT_HIGH_PICK_CONE,
+    AUTO_BLUE_LEFT_HIGH_PARK,
     MANUAL,
     RESET,
     STOP,
@@ -35,5 +40,9 @@ public enum ATRobotEnumeration {
     TELE_OP_AUTO,
     PICK_CONE_READY_TO_NAVIGATE,
     PICK_CONE_DROP_HIGH_IN_LOOP,
-    TERMINAL
+    TERMINAL,
+    NO_CHANGE_IN_OBJECTS,
+    SUBSTATION_LEFT,
+    SUBSTATION_RIGHT,
+    UNKNOWN_OBJECT
 }

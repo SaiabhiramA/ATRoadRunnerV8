@@ -115,19 +115,13 @@ public static final String[] LABELS = {
     }
 
 public ATRobotEnumeration detectObjectLabel() {
-
-         String object ="";
-
-
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-
-
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Objects Detected", updatedRecognitions.size());
-
+                        String object =ATRobotEnumeration.UNKNOWN_OBJECT.name();
                         // step through the list of recognitions and display image position/size information for each one
                         // Note: "Image number" refers to the randomized image orientation/number
                         for (Recognition recognition : updatedRecognitions) {
@@ -140,17 +134,21 @@ public ATRobotEnumeration detectObjectLabel() {
                             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 );
                             object = recognition.getLabel();
                         }
+                        if (object.toLowerCase().equals( LABELS[0].toLowerCase())){
+                            return  ATRobotEnumeration.PARK1;
+                        } else if (object.toLowerCase().equals( LABELS[1].toLowerCase())){
+                            return  ATRobotEnumeration.PARK2;
+                        } else if (object.toLowerCase().equals( LABELS[2].toLowerCase())){
+                            return  ATRobotEnumeration.PARK3;
+                        }  else {
+                            return ATRobotEnumeration.SUBSTATION;
+                        }
+                    }
+                    else{
+                        return ATRobotEnumeration.NO_CHANGE_IN_OBJECTS;
                     }
                 }
-                if (object.toLowerCase().equals( LABELS[0].toLowerCase())){
-                    return  ATRobotEnumeration.PARK1;
-                } else if (object.toLowerCase().equals( LABELS[1].toLowerCase())){
-                     return  ATRobotEnumeration.PARK2;
-                } else if (object.toLowerCase().equals( LABELS[2].toLowerCase())){
-                    return  ATRobotEnumeration.PARK3;
-                }  else {
-                    return ATRobotEnumeration.SUBSTATION;
-                }
+                return ATRobotEnumeration.SUBSTATION;
     }
 
     /**

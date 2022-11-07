@@ -25,10 +25,12 @@ public class MeepMeepTesting {
                                 //blue left high drop an park
                                 //.splineToLinearHeading(new Pose2d(50, 10, Math.toRadians(270)))
                                 //.splineToLinearHeading(new Pose2d(41, 10, Math.toRadians(270)), Math.toRadians(270))
-                                .splineToConstantHeading(new Vector2d(46, 60), Math.toRadians(-170))
-                                .splineToConstantHeading(new Vector2d(36, 20), Math.toRadians(-90))
-                                .splineToConstantHeading(new Vector2d(48, 12), Math.toRadians(0))
-
+                                .splineToConstantHeading(new Vector2d(36, 57), Math.toRadians(-90))
+                                .splineToConstantHeading(new Vector2d(36, 30), Math.toRadians(-90))
+                                .splineToConstantHeading(new Vector2d(44, 10), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(36, 10))
+                                .lineToSplineHeading(new Pose2d(36, 32, Math.toRadians(180)))
+                                .lineToConstantHeading(new Vector2d(12, 32))
                                 .build()
                 );
 

@@ -31,14 +31,13 @@ import org.firstinspires.ftc.teamcode.drive.ATTensorFlowDefaultDetection;
  */
 @Config
 //@Autonomous(group = "drive")
-@Autonomous(name = "Red Allinace Right High Drop")
+@Autonomous(name = "RedAllinaceRightHighDropDS") // ***** this requires similar fix as blue alliance left
 //@Disabled
 public class RedAllianceRightHighDrop extends LinearOpMode {
     MecanumDriveAT drive;
     TopHatAutoController tophatController;
     ATTensorFlowDefaultDetection ATObjectDetection;
-    ATRobotEnumeration parkingZone;
-    double initTimeElapsed;
+    ATRobotEnumeration parkingZone=ATRobotEnumeration.SUBSTATION;
     Pose2d poseEstimate;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -46,35 +45,35 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
         tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, ATRobotEnumeration.RESET, hardwareMap);
         ATObjectDetection = new ATTensorFlowDefaultDetection();
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_SETUP);
+        if (ATObjectDetection.detectObjectLabel()!=ATRobotEnumeration.NO_CHANGE_IN_OBJECTS){
+            parkingZone = ATObjectDetection.detectObjectLabel();
+        }
+        tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, ATRobotEnumeration.RESET, hardwareMap);
         drive = new MecanumDriveAT(hardwareMap);
         Pose2d startPose = new Pose2d(30, -55, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
         parkingZone=ATRobotEnumeration.SUBSTATION;
         setRobotStateInStorage();
-       while (!isStarted()){
-            parkingZone = ATObjectDetection.detectObjectLabel();
-            telemetry.addData("Parking Zone", parkingZone);
-            telemetry.addData("Get Runtime", this.getRuntime());
-            telemetry.update();
-            sleep(500);
-
-        }
-        initTimeElapsed = this.getRuntime();
-        //waitForStart();
-        if (isStopRequested()) return;
         TrajectorySequence trajSeqConePickup = drive.trajectorySequenceBuilder(startPose)
-                //.splineToLinearHeading(new Pose2d(35, -40, Math.toRadians(90)), Math.toRadians(90))
-                //.splineToLinearHeading(new Pose2d(39, -5, Math.toRadians(90)), Math.toRadians(90))
-                //drive.getVelocityConstraint(10, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL)
                 .splineToLinearHeading(new Pose2d(35, -40, Math.toRadians(90)), Math.toRadians(90), drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .splineToLinearHeading(new Pose2d(40, -5, Math.toRadians(90)), Math.toRadians(90), drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(.1, ()->{
                     tophatController.setRobotMode(ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_SETUP);
                     tophatController.redAllianceRightAutonHigh();})
                 .build();
+        while (opModeInInit()) {
+            if (ATObjectDetection.detectObjectLabel()!=ATRobotEnumeration.NO_CHANGE_IN_OBJECTS){
+                parkingZone = ATObjectDetection.detectObjectLabel();
+            }
+            telemetry.addData("Parking Zone", parkingZone);
+            telemetry.addData("Get Runtime", this.getRuntime());
+            telemetry.update();
+        }
+        waitForStart();
+        if (isStopRequested()) return;
         drive.followTrajectorySequence(trajSeqConePickup);
         tophatController.setRobotMode(ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PICK_CONE);
-
+        poseEstimate = drive.getPoseEstimate();
         while ((!isStopRequested())&& !tophatController.areFiveConesDone())
         {
             tophatController.redAllianceRightAutonHigh();
@@ -90,19 +89,11 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
             telemetry.addData("are FiveCones Done", tophatController.areFiveConesDone());
             telemetry.update();
         }
-        telemetry.addData("Outside While Loop", "YES");
-        telemetry.addData("x", poseEstimate.getX());
-        telemetry.addData("y", poseEstimate.getY());
-        telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-        telemetry.addData("*** Moving to Parking Zone Now ***", parkingZone);
-        telemetry.addData("robot mode", tophatController.getRobotMode());
-        telemetry.update();
-
         TrajectorySequence trajSeqParking;
 
             if (parkingZone==ATRobotEnumeration.PARK1){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(13, -5, Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(12, -5, Math.toRadians(90)))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }
