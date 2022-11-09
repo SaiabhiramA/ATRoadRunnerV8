@@ -6,4 +6,5 @@ public class ATGlobalStorage {
     public static Pose2d currentPose = new Pose2d();
     public static ATRobotEnumeration autonModeName;
     public static ATRobotEnumeration parkingPos;
+    public static ATRobotEnumeration allianceName;
 }

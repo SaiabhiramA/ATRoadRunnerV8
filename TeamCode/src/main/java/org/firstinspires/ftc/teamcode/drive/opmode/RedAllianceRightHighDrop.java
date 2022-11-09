@@ -123,6 +123,7 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
         ATGlobalStorage.autonModeName=ATRobotEnumeration.RED_RIGHT_HIGH_DROP;
         ATGlobalStorage.currentPose=drive.getPoseEstimate();
         ATGlobalStorage.parkingPos=parkingZone;
+        ATGlobalStorage.allianceName=ATRobotEnumeration.RED_ALLIANCE;
     }
 
 }

@@ -33,7 +33,11 @@ public class TeleopATGameDay extends LinearOpMode {
     TrajectorySequence trajSeqPark1;
     TrajectorySequence trajSeqPark2;
     TrajectorySequence trajSeqPark3;
+    TrajectorySequence trajSeqSubstation;
     boolean teleOpConePickupPositioned=false;
+    double robotXpos;
+    double robotYpos;
+    double robotHeading;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -137,6 +141,33 @@ public class TeleopATGameDay extends LinearOpMode {
                 drive.followTrajectorySequenceAsync(trajSeqPark3);
             }
         }
+        else{
+                robotXpos=drive.getPoseEstimate().getX();
+                robotYpos=drive.getPoseEstimate().getY();
+                robotHeading=drive.getPoseEstimate().getHeading();
+                telemetry.addData("x", poseEstimate.getX());
+                telemetry.addData("y", poseEstimate.getY());
+                telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+                telemetry.addData("robot mode", tophatController.getRobotMode());
+                telemetry.addData("Alliance Name", ATGlobalStorage.allianceName);
+                telemetry.update();
+                if (ATGlobalStorage.allianceName==ATRobotEnumeration.BLUE_ALLIANCE){
+                    if (robotYpos>29 && robotYpos <37){
+                        trajSeqSubstation=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .lineToSplineHeading(new Pose2d(12, 36, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                        .build();
+                        drive.followTrajectorySequenceAsync(trajSeqSubstation);
+                    }
+                }
+                else if(ATGlobalStorage.allianceName==ATRobotEnumeration.RED_ALLIANCE){
+                    if (robotYpos>-29 && robotYpos <-37){
+                        trajSeqSubstation=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                .lineToSplineHeading(new Pose2d(12, -36, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                                .build();
+                        drive.followTrajectorySequenceAsync(trajSeqSubstation);
+                    }
+                }
+            }
      }
      private void setTrajectorySequenceForPark1(ATRobotEnumeration alliance){
         switch (alliance){
@@ -150,8 +181,9 @@ public class TeleopATGameDay extends LinearOpMode {
             break;
             case BLUE_LEFT_HIGH_DROP:{
                 trajSeqPark1=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .lineToConstantHeading(new Vector2d(60, 10))
                         .lineToConstantHeading(new Vector2d(12, 10))
-                        .lineToSplineHeading(new Pose2d(12, 32, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                        .lineToSplineHeading(new Pose2d(12, 36, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .build();
             }
             break;
@@ -172,7 +204,7 @@ public class TeleopATGameDay extends LinearOpMode {
                 trajSeqPark2=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .lineToConstantHeading(new Vector2d(36, 10))
                         .lineToSplineHeading(new Pose2d(36, 32, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                        .lineToConstantHeading(new Vector2d(12, 32))
+                        .lineToConstantHeading(new Vector2d(12, 36))
                         .build();
             }
             break;
@@ -193,9 +225,8 @@ public class TeleopATGameDay extends LinearOpMode {
             break;
             case BLUE_LEFT_HIGH_DROP:{
                 trajSeqPark3=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(new Vector2d(60, 10))
                         .lineToConstantHeading(new Vector2d(12, 10))
-                        .lineToSplineHeading(new Pose2d(12, 32, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                        .lineToSplineHeading(new Pose2d(12, 36, Math.toRadians(180)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .build();
             }
             break;

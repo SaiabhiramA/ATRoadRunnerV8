@@ -44,7 +44,7 @@ public class TopHatAutoController {
     double desiredArmPosition ;
     double desiredElbowPosition ;
     double desiredTurnTablePosition ;
-    int desiredNoOfConesToPick=0;
+    int desiredNoOfConesToPick=1;
     double robotMidPointWristPosition=.1;
     boolean robotMidPointClawPosition=false ;
     double robotMidPointArmPosition=4200;
@@ -557,6 +557,7 @@ public class TopHatAutoController {
                 moveTopHatPosition(-1, false, 4224, -200, desiredTurnTablePosition);
             }
         }
+
     }
 
     public boolean areFiveConesDone(){
