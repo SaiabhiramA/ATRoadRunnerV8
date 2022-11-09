@@ -86,6 +86,7 @@ public static final String[] LABELS = {
     private HardwareMap hardwareMap;
     private ATRobotEnumeration robotMode;
     private Telemetry telemetry;
+    private ATRobotEnumeration prevObjectLabel;
 
 
     public void initalizeTensorFlow(HardwareMap hwmap , Telemetry ATTelemetry, ATRobotEnumeration rMode) {
@@ -118,37 +119,69 @@ public ATRobotEnumeration detectObjectLabel() {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Objects Detected", updatedRecognitions.size());
-                        String object =ATRobotEnumeration.UNKNOWN_OBJECT.name();
+                    List<Recognition> powerPlayRecognitions = tfod.getRecognitions();
+                    if (powerPlayRecognitions != null) {
+                        telemetry.addData("# Objects Detected", powerPlayRecognitions.size());
+                        String object = ATRobotEnumeration.UNKNOWN_OBJECT.name();
                         // step through the list of recognitions and display image position/size information for each one
                         // Note: "Image number" refers to the randomized image orientation/number
-                        for (Recognition recognition : updatedRecognitions) {
-                            double col = (recognition.getLeft() + recognition.getRight()) / 2 ;
-                            double row = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-                            double width  = Math.abs(recognition.getRight() - recognition.getLeft()) ;
-                            double height = Math.abs(recognition.getTop()  - recognition.getBottom()) ;
+                        for (Recognition recognition : powerPlayRecognitions) {
+                            double col = (recognition.getLeft() + recognition.getRight()) / 2;
+                            double row = (recognition.getTop() + recognition.getBottom()) / 2;
+                            double width = Math.abs(recognition.getRight() - recognition.getLeft());
+                            double height = Math.abs(recognition.getTop() - recognition.getBottom());
 
-                            telemetry.addData(""," ");
-                            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 );
+                            telemetry.addData("", " ");
+                            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
                             object = recognition.getLabel();
                         }
-                        if (object.toLowerCase().equals( LABELS[0].toLowerCase())){
-                            return  ATRobotEnumeration.PARK1;
-                        } else if (object.toLowerCase().equals( LABELS[1].toLowerCase())){
-                            return  ATRobotEnumeration.PARK2;
-                        } else if (object.toLowerCase().equals( LABELS[2].toLowerCase())){
-                            return  ATRobotEnumeration.PARK3;
-                        }  else {
-                            return ATRobotEnumeration.SUBSTATION;
+                        if (object.toLowerCase().equals(LABELS[0].toLowerCase())) {
+                            return ATRobotEnumeration.PARK1;
+                        } else if (object.toLowerCase().equals(LABELS[1].toLowerCase())) {
+                            return ATRobotEnumeration.PARK2;
+                        } else if (object.toLowerCase().equals(LABELS[2].toLowerCase())) {
+                            return ATRobotEnumeration.PARK3;
                         }
-                    }
-                    else{
-                        return ATRobotEnumeration.NO_CHANGE_IN_OBJECTS;
                     }
                 }
                 return ATRobotEnumeration.SUBSTATION;
+    }
+
+    public ATRobotEnumeration smartDetectObjectLabel(ATRobotEnumeration prevObjLabel) {
+        if (tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Objects Detected", updatedRecognitions.size());
+                String object =ATRobotEnumeration.UNKNOWN_OBJECT.name();
+                // step through the list of recognitions and display image position/size information for each one
+                // Note: "Image number" refers to the randomized image orientation/number
+                for (Recognition recognition : updatedRecognitions) {
+                    double col = (recognition.getLeft() + recognition.getRight()) / 2 ;
+                    double row = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+                    double width  = Math.abs(recognition.getRight() - recognition.getLeft()) ;
+                    double height = Math.abs(recognition.getTop()  - recognition.getBottom()) ;
+
+                    telemetry.addData(""," ");
+                    telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 );
+                    object = recognition.getLabel();
+                }
+                if (object.toLowerCase().equals( LABELS[0].toLowerCase())){
+                    return  ATRobotEnumeration.PARK1;
+                } else if (object.toLowerCase().equals( LABELS[1].toLowerCase())){
+                    return  ATRobotEnumeration.PARK2;
+                } else if (object.toLowerCase().equals( LABELS[2].toLowerCase())){
+                    return  ATRobotEnumeration.PARK3;
+                }  else {
+                    return prevObjLabel;
+                }
+            }
+            else{
+                return ATRobotEnumeration.NO_CHANGE_IN_OBJECTS;
+            }
+        }
+        return ATRobotEnumeration.SUBSTATION;
     }
 
     /**

@@ -13,8 +13,8 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(0), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(48, 60, Math.toRadians(270)))
-
+                        drive.trajectorySequenceBuilder(new Pose2d(40, 60, Math.toRadians(270))) // blue left high drop
+                        //drive.trajectorySequenceBuilder(new Pose2d(-34, 60, Math.toRadians(270)))// blue right high drop
                                 //Red Right High Drop & Drop
                                 /*.splineToLinearHeading(new Pose2d(35, -40, Math.toRadians(90)), Math.toRadians(90))
                                 .splineToLinearHeading(new Pose2d(41, -5, Math.toRadians(90)), Math.toRadians(90))
@@ -22,15 +22,34 @@ public class MeepMeepTesting {
                                 .lineToSplineHeading(new Pose2d(60, -28, Math.toRadians(180)))
                                 .lineToLinearHeading(new Pose2d(12, -32, Math.toRadians(180)))*/
 
-                                //blue left high drop an park
-                                //.splineToLinearHeading(new Pose2d(50, 10, Math.toRadians(270)))
-                                //.splineToLinearHeading(new Pose2d(41, 10, Math.toRadians(270)), Math.toRadians(270))
-                                .splineToConstantHeading(new Vector2d(36, 57), Math.toRadians(-90))
-                                .splineToConstantHeading(new Vector2d(36, 30), Math.toRadians(-90))
+                                //blue left high drop & park
+                                .waitSeconds(2.5)
+                                .splineToConstantHeading(new Vector2d(36, 58), Math.toRadians(-90))
+
+                                .lineTo(new Vector2d(36, 4))
+                                .waitSeconds(1)
+                                .lineTo(new Vector2d(33, 4))
+                                .lineTo(new Vector2d(33, 12))
+                                .lineTo(new Vector2d(46, 12))
+                                .addTemporalMarker(.001, ()->{})
+                                .addTemporalMarker(6, ()->{})
+                                /*.splineToConstantHeading(new Vector2d(36, 30), Math.toRadians(-90))
                                 .splineToConstantHeading(new Vector2d(44, 10), Math.toRadians(0))
                                 .lineToConstantHeading(new Vector2d(36, 10))
                                 .lineToSplineHeading(new Pose2d(36, 32, Math.toRadians(180)))
-                                .lineToConstantHeading(new Vector2d(12, 32))
+                                .lineToConstantHeading(new Vector2d(12, 32))*/
+
+                                //Blue right high drop & park in three different zones followed by substation pickup
+                                /*.splineToConstantHeading(new Vector2d(-36, 55), Math.toRadians(-90))
+                                .lineToConstantHeading(new Vector2d(-36, 2))
+                                .addTemporalMarker(1.5, ()->{
+
+                                })
+                                .waitSeconds(1)
+                                //.splineToConstantHeading(new Vector2d(-36, 20), Math.toRadians(-90))
+                                //.lineToConstantHeading(new Vector2d(-36, 12))
+                                .splineToConstantHeading(new Vector2d(-44, 12), Math.toRadians(0))*/
+
                                 .build()
                 );
 
