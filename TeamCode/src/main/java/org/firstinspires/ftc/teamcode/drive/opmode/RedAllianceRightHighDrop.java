@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.drive.ATTensorFlowDefaultDetection;
  */
 @Config
 //@Autonomous(group = "drive")
-@Autonomous(name = "RedAllinaceRightHighDropDS") // ***** this requires similar fix as blue alliance left
+@Autonomous(name = "RedAllianceRightHighDropAT") // ***** this requires similar fix as blue alliance left
 //@Disabled
 public class RedAllianceRightHighDrop extends LinearOpMode {
     MecanumDriveAT drive;

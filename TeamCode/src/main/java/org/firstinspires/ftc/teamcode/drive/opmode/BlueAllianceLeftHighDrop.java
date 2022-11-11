@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
 //@Autonomous(group = "drive")
-@Autonomous(name = "BlueAllinaceLeftHighDropDS")
+@Autonomous(name = "BlueAllianceLeftHighDropAT")
 //@Disabled
 public class BlueAllianceLeftHighDrop extends LinearOpMode {
     MecanumDriveAT drive;
@@ -32,7 +32,7 @@ public class BlueAllianceLeftHighDrop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         tophatController=new TopHatAutoController();
         ATObjectDetection = new ATTensorFlowDefaultDetection();
-        ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_SETUP);
+        ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_SETUP);
         parkingZone = ATObjectDetection.detectObjectLabel();
         tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, ATRobotEnumeration.RESET, hardwareMap);
         drive = new MecanumDriveAT(hardwareMap);
