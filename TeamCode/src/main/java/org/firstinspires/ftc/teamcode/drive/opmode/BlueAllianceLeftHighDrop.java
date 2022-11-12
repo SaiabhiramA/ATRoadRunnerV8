@@ -45,21 +45,26 @@ public class BlueAllianceLeftHighDrop extends LinearOpMode {
                     tophatController.setRobotMode(ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE);
                     tophatController.blueAllianceLeftAutonHigh();})
                 .waitSeconds(2.5)
-                .splineToConstantHeading(new Vector2d(36, 58), Math.toRadians(-90),drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .lineTo(new Vector2d(36, 4), drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .waitSeconds(1)
-                .lineTo(new Vector2d(33, 4), drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(36,58), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(36,3), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(33,3), Math.toRadians(0))
+                .waitSeconds(.5)
+                .splineToConstantHeading(new Vector2d(33,3), Math.toRadians(0),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(.5)
                 .addDisplacementMarker(()->{
                     tophatController.setRobotMode(ATRobotEnumeration.DROP_BLUE_LEFT_PRELOADED_CONE);
                     tophatController.blueAllianceLeftAutonHigh();})
-                .waitSeconds(1)
-                .lineTo(new Vector2d(45, 8), drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(1.5)
+                .splineToConstantHeading(new Vector2d(36,15), Math.toRadians(-270))
+                .splineToConstantHeading(new Vector2d(45,10), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(45,10), Math.toRadians(-90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(12)
                 .build();
         while (opModeInInit()) {
             parkingZone = ATObjectDetection.detectObjectLabel();
             telemetry.addData("Parking Zone", parkingZone);
             telemetry.addData("Get Runtime", this.getRuntime());
-            if (this.getRuntime()>30){
+            if (this.getRuntime()>10){
                 telemetry.addData("ATOMIC TOADS, You may Now PRESS PLAY - WISH YOU GOOD LUCK", this.getRuntime());
             }
             telemetry.update();
@@ -85,20 +90,18 @@ public class BlueAllianceLeftHighDrop extends LinearOpMode {
                 telemetry.update();
             }
         }
-        else{
-            tophatController.setRobotMode(ATRobotEnumeration.DROP_BLUE_LEFT_PRELOADED_CONE);
-            tophatController.setTopHatPosition(.1,false,4300,-1800,945);
-            poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-            telemetry.addData("robot mode", tophatController.getRobotMode());
-            telemetry.addData("Parking Zone", parkingZone);
-            telemetry.addData("Get Runtime", this.getRuntime());
-            telemetry.addData("In While Loop", "YES");
-            telemetry.addData("Stop  Requested", isStopRequested());
-            telemetry.addData("are FiveCones Done", tophatController.areFiveConesDone());
-            telemetry.update();
+        else {
+            tophatController.moveTopHatPosition(-1, false, 4250, -1800, 945);
+            while ((!isStopRequested()) && !tophatController.isTopHatMoveCompleted(4250,-1800,945)) {
+                poseEstimate = drive.getPoseEstimate();
+                telemetry.addData("x", poseEstimate.getX());
+                telemetry.addData("y", poseEstimate.getY());
+                telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+                telemetry.addData("robot mode", tophatController.getRobotMode());
+                telemetry.addData("In While Loop", "YES");
+                telemetry.update();
+            }
+            tophatController.setRobotMode(ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PARK);
         }
         TrajectorySequence trajSeqParking;
             if (parkingZone==ATRobotEnumeration.PARK1){
@@ -127,6 +130,15 @@ public class BlueAllianceLeftHighDrop extends LinearOpMode {
                 drive.followTrajectorySequence(trajSeqParking);
             }
         setRobotStateInStorage();
+
+        poseEstimate = drive.getPoseEstimate();
+        telemetry.addData("x", poseEstimate.getX());
+        telemetry.addData("y", poseEstimate.getY());
+        telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+        telemetry.addData("robot mode", tophatController.getRobotMode());
+        telemetry.addData("Parking Zone", parkingZone);
+        telemetry.addData("Get Runtime", this.getRuntime());
+        telemetry.update();
     }
     private void setRobotStateInStorage(){
         ATGlobalStorage.autonModeName=ATRobotEnumeration.BLUE_LEFT_HIGH_DROP;
