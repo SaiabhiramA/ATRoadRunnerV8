@@ -46,7 +46,8 @@ public class RedAllianceLeftHighDrop extends LinearOpMode {
                     tophatController.setRobotMode(ATRobotEnumeration.SET_RED_LEFT_PRELOADED_CONE);
                     tophatController.redAllianceLeftAutonHigh();})
                 .waitSeconds(2.5)
-                .splineToConstantHeading(new Vector2d(-36,-50), Math.toRadians(90))
+                //Following is one Combination of dropping preloaded cone
+                /*.splineToConstantHeading(new Vector2d(-36,-50), Math.toRadians(90))
                 .splineToConstantHeading(new Vector2d(-36,-3), Math.toRadians(90),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .splineToConstantHeading(new Vector2d(-33.5,-3), Math.toRadians(90))
                 .waitSeconds(.5)
@@ -59,8 +60,19 @@ public class RedAllianceLeftHighDrop extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(-38,-10), Math.toRadians(180),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .waitSeconds(.25)
                 .splineToConstantHeading(new Vector2d(-45,-10), Math.toRadians(180),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .waitSeconds(12)
+                .waitSeconds(12)*/
+
+                .splineToConstantHeading(new Vector2d(-36,-50), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(-33,-20), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(1)
+                .addTemporalMarker(4.5, ()->{
+                    tophatController.setRobotMode(ATRobotEnumeration.DROP_RED_LEFT_PRELOADED_CONE);
+                    tophatController.redAllianceLeftAutonHigh();})
+                .splineToConstantHeading(new Vector2d(-33,-5), Math.toRadians(180),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(-45,-10), Math.toRadians(180))
+                .waitSeconds(.5)
                 .build();
+
         while (opModeInInit()) {
             parkingZone = ATObjectDetection.detectObjectLabel();
             telemetry.addData("Parking Zone", parkingZone);

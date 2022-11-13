@@ -141,13 +141,17 @@ public class TopHatAutoController {
             subTTPickupPos=1636;
             subTTHighDropPos=519;
         }
-        else if ((ATGlobalStorage.autonModeName==ATRobotEnumeration.RED_LEFT_HIGH_DROP ||
+        else if (ATGlobalStorage.autonModeName==ATRobotEnumeration.RED_LEFT_HIGH_DROP ||
                 ATGlobalStorage.autonModeName==ATRobotEnumeration.RED_LEFT_MEDIUM_DROP ||
-                ATGlobalStorage.autonModeName==ATRobotEnumeration.BLUE_LEFT_MEDIUM_DROP ||
-                ATGlobalStorage.autonModeName==ATRobotEnumeration.BLUE_LEFT_HIGH_DROP)) {
+                ATGlobalStorage.autonModeName==ATRobotEnumeration.BLUE_LEFT_MEDIUM_DROP) {
             substationSide=ATRobotEnumeration.SUBSTATION_RIGHT;
             subTTPickupPos=318;
             subTTHighDropPos=1445;
+        }
+        else if (ATGlobalStorage.autonModeName==ATRobotEnumeration.BLUE_LEFT_HIGH_DROP){
+            substationSide=ATRobotEnumeration.SUBSTATION_RIGHT;
+            subTTPickupPos=318;
+            subTTHighDropPos=1600;
         }
         telemetry.addData("wrist position", wrist.getPosition());
         telemetry.addData("wrist position while moving", wrist.getController().getServoPosition(0));
@@ -240,8 +244,8 @@ public class TopHatAutoController {
         }
         turntable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        while (turntable.getCurrentPosition() < 200) {
-            setMotorPosition(200, turntable, TurnTableVelocity);
+        while (turntable.getCurrentPosition() < 10) {
+            setMotorPosition(10, turntable, TurnTableVelocity);
         }
         TurnTablePosition=turntable.getCurrentPosition();
       }
@@ -488,8 +492,8 @@ public class TopHatAutoController {
         }
         if (this.robotMode== ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE) {
             //This is for medium drop with preloaded
-            //moveTopHatPosition(.51, false, 4240, -1539, 1651);
-            moveTopHatPosition(.54, false, 4305, -2153, 1902);
+            moveTopHatPosition(.55, false, 4300, -1366, 1548);
+            //moveTopHatPosition(.54, false, 4305, -2153, 1902);
             noOfCones=0;
         }
         if (this.robotMode== ATRobotEnumeration.DROP_BLUE_LEFT_PRELOADED_CONE) {
@@ -688,8 +692,10 @@ public class TopHatAutoController {
         }
         if (this.robotMode== ATRobotEnumeration.SET_RED_LEFT_PRELOADED_CONE) {
             //This is for medium drop with preloaded
-            //moveTopHatPosition(.51, false, 4240, -1539, 1651);
-            moveTopHatPosition(.53, false, 4300, -2152, 1900);
+            moveTopHatPosition(.58, false, 4300, -1219, 1475);
+
+            //This is for high drop with preloaded
+            //moveTopHatPosition(.53, false, 4300, -2152, 1900);
             noOfCones=0;
         }
         if (this.robotMode== ATRobotEnumeration.DROP_RED_LEFT_PRELOADED_CONE) {
@@ -780,8 +786,6 @@ public class TopHatAutoController {
         }
 
     }
-
-
 
     public boolean areFiveConesDone(){
         if (!(noOfCones<desiredNoOfConesToPick)) {

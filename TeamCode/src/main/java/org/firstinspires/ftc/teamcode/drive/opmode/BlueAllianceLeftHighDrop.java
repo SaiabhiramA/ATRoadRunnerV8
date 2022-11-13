@@ -45,7 +45,7 @@ public class BlueAllianceLeftHighDrop extends LinearOpMode {
                     tophatController.setRobotMode(ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE);
                     tophatController.blueAllianceLeftAutonHigh();})
                 .waitSeconds(2.5)
-                .splineToConstantHeading(new Vector2d(36,58), Math.toRadians(-90))
+                /*.splineToConstantHeading(new Vector2d(36,58), Math.toRadians(-90))
                 .splineToConstantHeading(new Vector2d(36,3), Math.toRadians(-90))
                 .splineToConstantHeading(new Vector2d(33,3), Math.toRadians(0))
                 .waitSeconds(.5)
@@ -58,8 +58,20 @@ public class BlueAllianceLeftHighDrop extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(36,15), Math.toRadians(-270))
                 .splineToConstantHeading(new Vector2d(45,10), Math.toRadians(-90))
                 .splineToConstantHeading(new Vector2d(45,10), Math.toRadians(-90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .waitSeconds(12)
+                .waitSeconds(12)*/
+                .splineToConstantHeading(new Vector2d(36,58), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(36,30), Math.toRadians(-90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(32.5,20), Math.toRadians(-90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .addTemporalMarker(5, ()->{
+                    tophatController.setRobotMode(ATRobotEnumeration.DROP_BLUE_LEFT_PRELOADED_CONE);
+                    tophatController.blueAllianceLeftAutonHigh();})
+                .waitSeconds(3)
+                .splineToConstantHeading(new Vector2d(33,5), Math.toRadians(-90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                //.splineToConstantHeading(new Vector2d(38,12), Math.toRadians(0),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(45,11), Math.toRadians(0))//,drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(.5)
                 .build();
+
         while (opModeInInit()) {
             parkingZone = ATObjectDetection.detectObjectLabel();
             telemetry.addData("Parking Zone", parkingZone);
@@ -106,25 +118,25 @@ public class BlueAllianceLeftHighDrop extends LinearOpMode {
         TrajectorySequence trajSeqParking;
             if (parkingZone==ATRobotEnumeration.PARK1){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(new Vector2d(60, 10),drive.getVelocityConstraint(45, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                        .lineToConstantHeading(new Vector2d(60, 11),drive.getVelocityConstraint(45, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }
             else if (parkingZone==ATRobotEnumeration.PARK2){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(new Vector2d(36, 10),drive.getVelocityConstraint(45, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                        .lineToConstantHeading(new Vector2d(36, 11),drive.getVelocityConstraint(45, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }
             else if (parkingZone==ATRobotEnumeration.PARK3){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(new Vector2d(12, 10),drive.getVelocityConstraint(45, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                        .lineToConstantHeading(new Vector2d(10, 11),drive.getVelocityConstraint(45, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
             }
             else if (parkingZone==ATRobotEnumeration.SUBSTATION){
                 trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(new Vector2d(12, 10),drive.getVelocityConstraint(45, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                        .lineToConstantHeading(new Vector2d(10, 11),drive.getVelocityConstraint(45, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .lineToSplineHeading(new Pose2d(10, 60, Math.toRadians(90)))
                         .build();
                 drive.followTrajectorySequence(trajSeqParking);
