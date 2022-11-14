@@ -395,7 +395,11 @@ public class TopHatAutoController {
         if (this.robotMode== ATRobotEnumeration.SET_RED_RIGHT_PRELOADED_CONE) {
             //This is for medium drop with preloaded
             //moveTopHatPosition(.51, false, 4240, -1539, 1651);
-            moveTopHatPosition(.49, false, 4300, -2136, 194);
+            moveTopHatPosition(.55, false, 4161, -1134, 401);
+            noOfCones=0;
+        }
+        if (this.robotMode== ATRobotEnumeration.DROP_RED_RIGHT_PRELOADED_CONE) {
+            openClaw(true);
             noOfCones=0;
         }
         if (this.robotMode== ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PICK_CONE) {
@@ -593,7 +597,7 @@ public class TopHatAutoController {
         if (this.robotMode== ATRobotEnumeration.SET_BLUE_RIGHT_PRELOADED_CONE) {
             //This is for medium drop with preloaded
             //moveTopHatPosition(.51, false, 4240, -1539, 1651);
-            moveTopHatPosition(.49, false, 4300, -2254, 101);
+            moveTopHatPosition(.56, false, 4251, -1130, 361);
             noOfCones=0;
         }
         if (this.robotMode== ATRobotEnumeration.DROP_BLUE_RIGHT_PRELOADED_CONE) {
