@@ -63,14 +63,12 @@ public class RedAllianceLeftHighDrop extends LinearOpMode {
                 .waitSeconds(12)*/
 
                 .splineToConstantHeading(new Vector2d(-36,-50), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(-32,-18), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(-33,-20), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .waitSeconds(1)
                 .addTemporalMarker(6, ()->{
                     tophatController.setRobotMode(ATRobotEnumeration.DROP_RED_LEFT_PRELOADED_CONE);
                     tophatController.redAllianceLeftAutonHigh();})
-                //
-                //
-                // .waitSeconds(10)
+                .waitSeconds(4)
                 .splineToConstantHeading(new Vector2d(-33,-5), Math.toRadians(180),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .splineToConstantHeading(new Vector2d(-45,-10), Math.toRadians(180))
                 .waitSeconds(.5)
