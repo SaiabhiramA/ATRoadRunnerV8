@@ -26,7 +26,7 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
     ATTensorFlowDefaultDetection ATObjectDetection;
     ATRobotEnumeration parkingZone=ATRobotEnumeration.SUBSTATION;
     Pose2d poseEstimate;
-    boolean isAutonConePickupReady=false;
+    boolean isAutonConePickupReady=true;
     @Override
     public void runOpMode() throws InterruptedException {
         tophatController=new TopHatAutoController();
@@ -50,8 +50,8 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
                 .addTemporalMarker(6, ()->{
                     tophatController.setRobotMode(ATRobotEnumeration.DROP_RED_RIGHT_PRELOADED_CONE);
                     tophatController.redAllianceRightAutonHigh();})
-                .waitSeconds(4)
-                .splineToConstantHeading(new Vector2d(47,-12), Math.toRadians(340),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(2)
+                .splineToConstantHeading(new Vector2d(43,-12), Math.toRadians(340),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .build();
 
         while (opModeInInit()) {
