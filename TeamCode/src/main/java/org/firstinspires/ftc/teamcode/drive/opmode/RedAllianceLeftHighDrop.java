@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.drive.ATConstants;
 import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.ATTensorFlowDefaultDetection;
@@ -46,31 +47,20 @@ public class RedAllianceLeftHighDrop extends LinearOpMode {
                     tophatController.setRobotMode(ATRobotEnumeration.SET_RED_LEFT_PRELOADED_CONE);
                     tophatController.redAllianceLeftAutonHigh();})
                 .waitSeconds(2.5)
-                //Following is one Combination of dropping preloaded cone
-                /*.splineToConstantHeading(new Vector2d(-36,-50), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(-36,-3), Math.toRadians(90),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(-33.5,-3), Math.toRadians(90))
-                .waitSeconds(.5)
-                .splineToConstantHeading(new Vector2d(-33,-3), Math.toRadians(90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .waitSeconds(.5)
-                .addDisplacementMarker(()->{
-                    tophatController.setRobotMode(ATRobotEnumeration.DROP_RED_LEFT_PRELOADED_CONE);
-                    tophatController.redAllianceLeftAutonHigh();})
-                .waitSeconds(1.5)
-                .splineToConstantHeading(new Vector2d(-38,-10), Math.toRadians(180),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .waitSeconds(.25)
-                .splineToConstantHeading(new Vector2d(-45,-10), Math.toRadians(180),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .waitSeconds(12)*/
-
-                .splineToConstantHeading(new Vector2d(-36,-50), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(-33,-20), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                 .splineToConstantHeading(new Vector2d(-36,-50), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(-33,(-20+ ATConstants.RED_LEFT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .waitSeconds(1)
                 .addTemporalMarker(6, ()->{
                     tophatController.setRobotMode(ATRobotEnumeration.DROP_RED_LEFT_PRELOADED_CONE);
                     tophatController.redAllianceLeftAutonHigh();})
-                .waitSeconds(4)
-                .splineToConstantHeading(new Vector2d(-33,-5), Math.toRadians(180),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(-45,-10), Math.toRadians(180))
+                .waitSeconds(2)
+                //.splineToConstantHeading(new Vector2d(-33,-5), Math.toRadians(180))
+                //.splineToConstantHeading(new Vector2d(-36,-12), Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(-33,-5),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(.5)
+                .lineToConstantHeading(new Vector2d(-33,(-10+ATConstants.RED_LEFT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(.5)
+                .lineToConstantHeading(new Vector2d(-41,(-10+ATConstants.RED_LEFT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .waitSeconds(.5)
                 .build();
 
