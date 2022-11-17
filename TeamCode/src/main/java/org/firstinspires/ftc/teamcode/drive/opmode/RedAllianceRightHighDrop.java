@@ -47,7 +47,7 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
                 .waitSeconds(2.5)
                 .splineToConstantHeading(new Vector2d(38,-55), Math.toRadians(90))
                 .splineToConstantHeading(new Vector2d(38,-34), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(34,(-24+ ATConstants.RED_RIGHT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(35,(-24+ ATConstants.RED_RIGHT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(6, ()->{
                     tophatController.setRobotMode(ATRobotEnumeration.DROP_RED_RIGHT_PRELOADED_CONE);
                     tophatController.redAllianceRightAutonHigh();})

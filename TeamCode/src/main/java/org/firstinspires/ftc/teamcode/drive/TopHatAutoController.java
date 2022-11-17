@@ -296,6 +296,10 @@ public class TopHatAutoController {
             pickNSetforHighDrop();
         }
 
+        if (robotMode==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM){
+            pickNSetforMediumDrop();
+        }
+
         moveTopHatMotors();
         setMotorNServoMaximums();
         telemetry.addData("wrist position", wrist.getPosition());
@@ -1048,8 +1052,15 @@ public class TopHatAutoController {
          * This is to preset TopHat to pickup cone from Alliance side specific substation
          */
         if (gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.x){
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
-            setTopHatPosition(subWristHighPickupPos,true, subArmHighPickupPos, subElbowHighPickupPos, subTTHighPickupPos);
+            if (robotMode==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH) {
+                robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+                setTopHatPosition(subWristHighPickupPos, true, subArmHighPickupPos, subElbowHighPickupPos, subTTHighPickupPos);
+            }
+            else if (robotMode==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM){
+                robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+                setTopHatPosition(subWristMedPickupPos, true, subArmMedPickupPos, subElbowMedPickupPos, subTTMedPickupPos);
+
+            }
 
         }
 
@@ -1105,6 +1116,14 @@ public class TopHatAutoController {
         if (gamepad2.left_bumper && !gamepad2.right_bumper && gamepad2.b){
             robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(.87,false,2018,-1888,1507);
+        }
+
+        /**
+         * This is to pickup cone from Alliance side specific substation and have it ready to drop
+         * in medium junction
+         */
+        if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.b){
+            robotMode= ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM;
         }
 
         /**
@@ -1218,8 +1237,6 @@ public class TopHatAutoController {
 
     private void pickNSetforHighDrop(){
          if (teleOpStep==0){
-             //setWristPosition(subWristDropPos);
-             //sleep(500);
              openClaw(false);
              sleep(500);
              setWristPosition(.1);
@@ -1230,6 +1247,21 @@ public class TopHatAutoController {
             teleOpStep=0;
             robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(subWristHighDropPos,false, subArmHighDropPos, subElbowHighDropPos,subTTHighDropPos);
+        }
+    }
+
+    private void pickNSetforMediumDrop(){
+        if (teleOpStep==0){
+            openClaw(false);
+            sleep(500);
+            setWristPosition(.1);
+            sleep(500);
+            teleOpStep=1;
+        }
+        if (teleOpStep == 1){
+            teleOpStep=0;
+            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            setTopHatPosition(subWristMedDropPos,false, subArmMedDropPos, subElbowMedDropPos,subTTMedDropPos);
         }
     }
 
@@ -1322,7 +1354,7 @@ public class TopHatAutoController {
                 && isInRange(subTTMedDropPos, turntable.getCurrentPosition()) ){
             openClaw(true);
             sleep(500);
-            robotMode= ATRobotEnumeration.PICK_CONE_DROP_HIGH_IN_LOOP;
+            robotMode= ATRobotEnumeration.PICK_CONE_DROP_MEDIUM_IN_LOOP;
             teleOpStep=0;
         }
     }
