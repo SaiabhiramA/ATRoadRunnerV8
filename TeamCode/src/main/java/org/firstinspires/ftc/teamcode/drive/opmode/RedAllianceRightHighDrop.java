@@ -36,7 +36,7 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
         parkingZone = ATObjectDetection.detectObjectLabel();
         tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, ATRobotEnumeration.RESET, hardwareMap);
         drive = new MecanumDriveAT(hardwareMap);
-        Pose2d startPose = new Pose2d(32, -64, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(33, -63, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
         parkingZone=ATRobotEnumeration.SUBSTATION;
         setRobotStateInStorage();
@@ -45,8 +45,8 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
                     tophatController.setRobotMode(ATRobotEnumeration.SET_RED_RIGHT_PRELOADED_CONE);
                     tophatController.redAllianceRightAutonHigh();})
                 .waitSeconds(2.5)
-                .splineToConstantHeading(new Vector2d(36,-58), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(36,-40), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(38,-55), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38,-34), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .splineToConstantHeading(new Vector2d(34,(-24+ ATConstants.RED_RIGHT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(6, ()->{
                     tophatController.setRobotMode(ATRobotEnumeration.DROP_RED_RIGHT_PRELOADED_CONE);
