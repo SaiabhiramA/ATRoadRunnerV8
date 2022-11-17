@@ -114,10 +114,10 @@ public class TeleopATGameDay extends LinearOpMode {
          */
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
             robotMode= ATRobotEnumeration.TELE_OP_AUTO;
-            /*TrajectorySequence trajSeqMedSubstation = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                    .lineToSplineHeading(new Pose2d(drive.getPoseEstimate().getX(), drive.getPoseEstimate().getX(), Math.toRadians(Math.toDegrees(drive.getPoseEstimate().getHeading())+180)), drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+            TrajectorySequence trajSeqMedSubstation = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                    .turn(Math.toRadians(180))
                     .build();
-                    drive.followTrajectorySequenceAsync(trajSeqMedSubstation);*/
+                    drive.followTrajectorySequenceAsync(trajSeqMedSubstation);
         }
 
         /**
