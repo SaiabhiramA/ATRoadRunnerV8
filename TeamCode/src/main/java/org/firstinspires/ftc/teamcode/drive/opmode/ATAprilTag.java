@@ -97,17 +97,14 @@
                     {
 
                     }
-
-
                 });
 
                 telemetry.setMsTransmissionInterval(50);
-               // Thread.sleep(1000);
+
                 /*
                  * The INIT-loop:
                  * This REPLACES waitForStart!
                  */
-                  //while (!isStarted() && !isStopRequested())
                 while (count < 300)
                 {
                     count = count +1;
@@ -115,68 +112,37 @@
 
                     if(currentDetections.size() != 0)
                     {
-                        boolean tagFound = false;
-
                         for(AprilTagDetection tag : currentDetections)
                         {
-                            //if(tag.id == ID_TAG_OF_INTEREST)
-                           // tagOfInterest = tag;
-                            //tagFound = true;
-                            telemetry.addLine("INside Count:"+ count);
-                            //telemetry.update();
                             if(tag.id == LEFT )
                             {
                                 telemetry.addLine("PARK ZONE: " + "PARK1" );
                                 parkZone = ATRobotEnumeration.PARK1;
-                              //  telemetry.update();
-                              //  telemetry.update();
                                 tagOfInterest = tag;
-                                tagFound = true;
-                               // break;
+
                             } else if(tag.id == MIDDLE){
                             telemetry.addLine("PARK ZONE: " + "PARK2" );
                                 parkZone = ATRobotEnumeration.PARK2;;
-                            //telemetry.update();
                                 tagOfInterest = tag;
-                                tagFound = true;
-                                //break;
                             } else if(tag.id== RIGHT){
                             telemetry.addLine("PARK ZONE: " + "PARK3" );
                                 parkZone = ATRobotEnumeration.PARK3;;
-                            //telemetry.update();
                                 tagOfInterest = tag;
-                                tagFound = true;
-                                //break;
+
                             }
                         }
-                        telemetry.addLine("Count:"+ count);
-                        //telemetry.update();
+
+
                     }
-                    telemetry.addLine("Counter:"+ count);
-                    telemetry.addLine("PARKING ZONE:"+ parkZone);
+
                     telemetry.update();
                     Thread.sleep(20);
                 }    // ENd While
 
                 /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
                 //while (opModeIsActive()) {sleep(20);}
-                telemetry.addLine("outside Counter:"+ count);
-                telemetry.addLine("outside Counter:"+ count);
                 return parkZone;
             }
 
-            /*void tagToTelemetry(AprilTagDetection detection)
-            {
-                telemetry.addLine(String.format("\nDetected tag ID", detection.id));
-               // telemetry.update();
-     /*   telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
-        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-        telemetry.addLine(String.format("Rotation Pitch: %.2f " +
-                "+degrees", Math.toDegrees(detection.pose.pitch)));
-        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
 
-
-            }*/
         }
