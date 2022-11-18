@@ -25,21 +25,21 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class BlueAllianceLeftHighDrop extends LinearOpMode {
     MecanumDriveAT drive;
     TopHatAutoController tophatController;
-    ATTensorFlowDefaultDetection ATObjectDetection;
+    ATAprilTag ATObjectDetection;
     ATRobotEnumeration parkingZone=ATRobotEnumeration.SUBSTATION;
     Pose2d poseEstimate;
     boolean isAutonConePickupReady=false;
     @Override
     public void runOpMode() throws InterruptedException {
         tophatController=new TopHatAutoController();
-        ATObjectDetection = new ATTensorFlowDefaultDetection();
+        ATObjectDetection =  new ATAprilTag();
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_SETUP);
-        parkingZone = ATObjectDetection.detectObjectLabel();
+        //parkingZone = ATObjectDetection.detectObjectLabel();
         tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, ATRobotEnumeration.RESET, hardwareMap);
         drive = new MecanumDriveAT(hardwareMap);
         Pose2d startPose = new Pose2d(40, 60, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
-        parkingZone=ATRobotEnumeration.SUBSTATION;
+        //parkingZone=ATRobotEnumeration.SUBSTATION;
         setRobotStateInStorage();
         TrajectorySequence trajSeqConePickup = drive.trajectorySequenceBuilder(startPose)
                 .addTemporalMarker(.001, ()->{
