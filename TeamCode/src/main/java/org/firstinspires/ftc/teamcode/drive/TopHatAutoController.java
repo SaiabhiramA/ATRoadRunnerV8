@@ -56,7 +56,9 @@ public class TopHatAutoController {
     int noOfCones = 0 ;
     MecanumDriveAT drive;
     ATRobotEnumeration robotMode= ATRobotEnumeration.RESET;
-    ATRobotEnumeration substationSide;
+    ATRobotEnumeration substationHSide;
+    ATRobotEnumeration substationMSide;
+    ATRobotEnumeration substationPickConfig;
     int subTTHighPickupPos;
     int subArmHighPickupPos;
     int subElbowHighPickupPos;
@@ -162,7 +164,8 @@ public class TopHatAutoController {
                 subArmMedDropPos=2045;
                 subElbowMedDropPos=-2520;
                 subWristMedDropPos=.7794;
-
+                substationHSide=ATRobotEnumeration.SUBSTATION_LEFT;
+                substationMSide=ATRobotEnumeration.SUBSTATION_RIGHT;
             }
             break;
             case RED_LEFT_HIGH_DROP: {
@@ -185,7 +188,8 @@ public class TopHatAutoController {
                 subArmMedDropPos=2018;
                 subElbowMedDropPos=-2429;
                 subWristMedDropPos=.7794;
-
+                substationHSide=ATRobotEnumeration.SUBSTATION_RIGHT;
+                substationMSide=ATRobotEnumeration.SUBSTATION_LEFT;
             }
             break;
             case BLUE_RIGHT_HIGH_DROP: {
@@ -209,7 +213,8 @@ public class TopHatAutoController {
                 subArmMedDropPos=2042;
                 subElbowMedDropPos=-2544;
                 subWristMedDropPos=.7694;
-
+                substationHSide=ATRobotEnumeration.SUBSTATION_LEFT;
+                substationMSide=ATRobotEnumeration.SUBSTATION_RIGHT;
             }
             break;
             case BLUE_LEFT_HIGH_DROP: {
@@ -233,7 +238,8 @@ public class TopHatAutoController {
                 subArmMedDropPos=1668;
                 subElbowMedDropPos=-2128;
                 subWristMedDropPos=.7894;
-
+                substationHSide=ATRobotEnumeration.SUBSTATION_RIGHT;
+                substationMSide=ATRobotEnumeration.SUBSTATION_LEFT;
             }
             break;
         }
@@ -1052,14 +1058,13 @@ public class TopHatAutoController {
          * This is to preset TopHat to pickup cone from Alliance side specific substation
          */
         if (gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.x){
-            if (robotMode==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH) {
-                robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            if (substationPickConfig ==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH) {
                 setTopHatPosition(subWristHighPickupPos, true, subArmHighPickupPos, subElbowHighPickupPos, subTTHighPickupPos);
-            }
-            else if (robotMode==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM){
                 robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            }
+            else if (substationPickConfig ==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM){
                 setTopHatPosition(subWristMedPickupPos, true, subArmMedPickupPos, subElbowMedPickupPos, subTTMedPickupPos);
-
+                robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             }
 
         }
@@ -1093,6 +1098,7 @@ public class TopHatAutoController {
          */
         if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.y){
             robotMode= ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH;
+            substationPickConfig =ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH;
         }
 
         /**
@@ -1124,6 +1130,7 @@ public class TopHatAutoController {
          */
         if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.b){
             robotMode= ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM;
+            substationPickConfig =ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM;
         }
 
         /**
