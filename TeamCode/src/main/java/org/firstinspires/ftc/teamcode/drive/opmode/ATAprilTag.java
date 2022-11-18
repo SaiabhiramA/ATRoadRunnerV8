@@ -61,11 +61,9 @@
 
             // UNITS ARE METERS
             double tagsize = 0.166;
-            int LEFT =1;
-            int MIDDLE = 2;
-            int RIGHT = 3;
-
-            int ID_TAG_OF_INTEREST = 18; // Tag ID 18 from the 36h11 family
+            int IMAGE1 =1;
+            int IMAGE2 = 2;
+            int IMAGE3 = 3;
 
             AprilTagDetection tagOfInterest = null;
 
@@ -86,7 +84,6 @@
                     @Override
                     public void onOpened() {
                          camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
-                        telemetry.addData("CAmera open", "OPen");
                     }
 
                     @Override
@@ -98,46 +95,32 @@
             public ATRobotEnumeration detectObjectLabel() throws InterruptedException {
 
 
-                /*
-                 * The INIT-loop:
-                 * This REPLACES waitForStart!
-                 */
+                  ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
-              //  while ( RedAllianceLeftHighDrop.startprog = false && count < 100000)
-              //  while (  count < 250)
-                //{
-
-                    ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
-
-                  // if(currentDetections!=null) {telemetry.addLine("DTECtions: " + currentDetections.size() );}
                     if(currentDetections!=null && currentDetections.size() != 0)
                     {
                         for(AprilTagDetection tag : currentDetections)
                         {
                             telemetry.addLine("FOR LOOP: " + "LOOP" );
-                            if(tag.id == LEFT )
+                            if(tag.id == IMAGE1 )
                             {
                                 telemetry.addLine("PARK ZONE APRIL TAG: " + "PARK1" );
                                 parkZone = ATRobotEnumeration.PARK1;
 
-
-                            } else if(tag.id == MIDDLE){
+                            } else if(tag.id == IMAGE2){
                             telemetry.addLine("PARK ZONE APRIL TAG: " + "PARK2" );
                                 parkZone = ATRobotEnumeration.PARK2;;
 
-                            } else if(tag.id== RIGHT){
+                            } else if(tag.id== IMAGE3){
                             telemetry.addLine("PARK ZONE APRIL TAG: " + "PARK3" );
                                 parkZone = ATRobotEnumeration.PARK3;;
 
-                            } else {
-                                parkZone = ATRobotEnumeration.SUBSTATION;
                             }
-                            //Thread.sleep(1000);
                         }
                     }
-
-               // }    // ENd While
-
+                    else{
+                        parkZone = ATRobotEnumeration.SUBSTATION;
+                    }
                 return parkZone;
             }
         }
