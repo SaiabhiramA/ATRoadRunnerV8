@@ -43,7 +43,7 @@
             private HardwareMap hardwareMap;
             private ATRobotEnumeration robotMode;
             private Telemetry telemetry;
-            ATRobotEnumeration parkZone = ATRobotEnumeration.SUBSTATION;
+            ATRobotEnumeration parkZone ;
             OpenCvCamera camera;
 
             TestPipeline aprilTagDetectionPipeline;
@@ -61,88 +61,66 @@
 
             // UNITS ARE METERS
             double tagsize = 0.166;
-            int LEFT =1;
-            int MIDDLE = 2;
-            int RIGHT = 3;
-
-            int ID_TAG_OF_INTEREST = 18; // Tag ID 18 from the 36h11 family
+            int IMAGE1 =1;
+            int IMAGE2 = 2;
+            int IMAGE3 = 3;
 
             AprilTagDetection tagOfInterest = null;
 
 
-            public void initalizeTensorFlow(HardwareMap hwmap , Telemetry ATTelemetry, ATRobotEnumeration rMode) {
+            public void initalizeTensorFlow(HardwareMap hwmap , Telemetry ATTelemetry, ATRobotEnumeration rMode) throws InterruptedException {
                 // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
                 // first.
                 hardwareMap = hwmap;
                 telemetry = ATTelemetry;
                 robotMode = rMode;
-            }
-
-            public ATRobotEnumeration detectObjectLabel() throws InterruptedException {
                 int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
                 camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
                 aprilTagDetectionPipeline = new TestPipeline(tagsize, fx, fy, cx, cy);
 
                 camera.setPipeline(aprilTagDetectionPipeline);
-                camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-                {
+                camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
                     @Override
-                    public void onOpened()
-                    {
-                        camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+                    public void onOpened() {
+                         camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
                     }
 
                     @Override
-                    public void onError(int errorCode)
-                    {
-
+                    public void onError(int errorCode) {
                     }
                 });
 
-                telemetry.setMsTransmissionInterval(50);
+            }
+            public ATRobotEnumeration detectObjectLabel() throws InterruptedException {
 
-                /*
-                 * The INIT-loop:
-                 * This REPLACES waitForStart!
-                 */
-                while (count < 300)
-                {
-                    count = count +1;
-                    ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
-                    if(currentDetections.size() != 0)
+                  ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+
+                    if(currentDetections!=null && currentDetections.size() != 0)
                     {
                         for(AprilTagDetection tag : currentDetections)
                         {
-                            if(tag.id == LEFT )
+                            telemetry.addLine("FOR LOOP: " + "LOOP" );
+                            if(tag.id == IMAGE1 )
                             {
-                                telemetry.addLine("PARK ZONE: " + "PARK1" );
+                                telemetry.addLine("PARK ZONE APRIL TAG: " + "PARK1" );
                                 parkZone = ATRobotEnumeration.PARK1;
-                                tagOfInterest = tag;
 
-                            } else if(tag.id == MIDDLE){
-                            telemetry.addLine("PARK ZONE: " + "PARK2" );
+                            } else if(tag.id == IMAGE2){
+                            telemetry.addLine("PARK ZONE APRIL TAG: " + "PARK2" );
                                 parkZone = ATRobotEnumeration.PARK2;;
-                                tagOfInterest = tag;
-                            } else if(tag.id== RIGHT){
-                            telemetry.addLine("PARK ZONE: " + "PARK3" );
+
+                            } else if(tag.id== IMAGE3){
+                            telemetry.addLine("PARK ZONE APRIL TAG: " + "PARK3" );
                                 parkZone = ATRobotEnumeration.PARK3;;
-                                tagOfInterest = tag;
 
                             }
                         }
-
-
                     }
-
-                    telemetry.update();
-                    Thread.sleep(20);
-                }    // ENd While
-
-                /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
-                //while (opModeIsActive()) {sleep(20);}
+                    else{
+                        parkZone = ATRobotEnumeration.SUBSTATION;
+                    }
                 return parkZone;
             }
-
-
         }
