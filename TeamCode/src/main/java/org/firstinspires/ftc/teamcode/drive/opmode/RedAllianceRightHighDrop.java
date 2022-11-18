@@ -27,7 +27,7 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
     ATAprilTag ATObjectDetection;
     ATRobotEnumeration parkingZone=ATRobotEnumeration.SUBSTATION;
     Pose2d poseEstimate;
-    boolean isAutonConePickupReady=false;
+    boolean isAutonConePickupReady=true;
     @Override
     public void runOpMode() throws InterruptedException {
         tophatController=new TopHatAutoController();
@@ -45,14 +45,14 @@ public class RedAllianceRightHighDrop extends LinearOpMode {
                     tophatController.setRobotMode(ATRobotEnumeration.SET_RED_RIGHT_PRELOADED_CONE);
                     tophatController.redAllianceRightAutonHigh();})
                 .waitSeconds(2.5)
-                .splineToConstantHeading(new Vector2d(38,-55), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38,-55), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .splineToConstantHeading(new Vector2d(38,-34), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .splineToConstantHeading(new Vector2d(35,(-24+ ATConstants.RED_RIGHT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(35,(-21.5+ ATConstants.RED_RIGHT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(6, ()->{
                     tophatController.setRobotMode(ATRobotEnumeration.DROP_RED_RIGHT_PRELOADED_CONE);
                     tophatController.redAllianceRightAutonHigh();})
                 .waitSeconds(2)
-                .splineToConstantHeading(new Vector2d(43,(-12+ATConstants.RED_RIGHT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)), Math.toRadians(340),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(43.5,(-12+ATConstants.RED_RIGHT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)), Math.toRadians(0),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .build();
 
         while (opModeInInit()) {
