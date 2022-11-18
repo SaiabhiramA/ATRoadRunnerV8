@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Config
 //@Autonomous(group = "drive")
 @Autonomous(name = "AprilTag")
-@Disabled
+//@Disabled
 public class BlueAllianceLeftHighDropAprilTag extends LinearOpMode {
     MecanumDriveAT drive;
     TopHatAutoController tophatController;
@@ -35,12 +35,12 @@ public class BlueAllianceLeftHighDropAprilTag extends LinearOpMode {
         tophatController=new TopHatAutoController();
         ATObjectDetection = new ATAprilTag();
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_SETUP);
-        parkingZone = ATObjectDetection.detectObjectLabel();
+        //parkingZone = ATObjectDetection.detectObjectLabel();
         //tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, ATRobotEnumeration.RESET, hardwareMap);
         drive = new MecanumDriveAT(hardwareMap);
         Pose2d startPose = new Pose2d(40, 60, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
-        parkingZone=ATRobotEnumeration.SUBSTATION;
+        //parkingZone=ATRobotEnumeration.SUBSTATION;
         setRobotStateInStorage();
         TrajectorySequence trajSeqConePickup = drive.trajectorySequenceBuilder(startPose)
                 .addTemporalMarker(.001, ()->{
