@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Config
 //@Autonomous(group = "drive")
 @Autonomous(name = "AprilTag")
-//@Disabled
+@Disabled
 public class BlueAllianceLeftHighDropAprilTag extends LinearOpMode {
     MecanumDriveAT drive;
     TopHatAutoController tophatController;

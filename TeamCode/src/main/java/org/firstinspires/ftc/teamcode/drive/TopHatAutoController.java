@@ -1058,16 +1058,18 @@ public class TopHatAutoController {
         /**
          * This is to preset TopHat to pickup cone from Alliance side specific substation
          */
-        if (gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.x){
-            if (substationPickConfig ==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH) {
-                setTopHatPosition(subWristHighPickupPos, true, subArmHighPickupPos, subElbowHighPickupPos, subTTHighPickupPos);
-                robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
-            }
-            else if (substationPickConfig ==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM){
-                setTopHatPosition(subWristMedPickupPos, true, subArmMedPickupPos, subElbowMedPickupPos, subTTMedPickupPos);
-                robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
-            }
+        if (gamepad2.right_bumper && gamepad2.right_trigger && gamepad2.x){
+            setTopHatPosition(subWristHighPickupPos, true, subArmHighPickupPos, subElbowHighPickupPos, subTTHighPickupPos);
+            robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+        }
 
+        /**
+         * This is to preset TopHat to pickup cone from Alliance side specific substation
+         */
+        if (gamepad2.left_bumper && gamepad2.left_trigger && gamepad2.x){
+
+            setTopHatPosition(subWristMedPickupPos, true, subArmMedPickupPos, subElbowMedPickupPos, subTTMedPickupPos);
+            robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
         }
 
         /**

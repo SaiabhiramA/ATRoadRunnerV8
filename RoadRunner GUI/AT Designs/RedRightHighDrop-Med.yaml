@@ -19,15 +19,15 @@ waypoints:
   interpolationType: "CONSTANT"
 - position:
     x: 35.0
-    y: -22.0
+    y: -21.5
   heading: 0.0
   tangent: 1.5707963267948966
   interpolationType: "CONSTANT"
 - position:
     x: 43.0
-    y: -12.0
+    y: -10.0
   heading: 0.0
-  tangent: 5.93411945678072
+  tangent: 0.0
   interpolationType: "CONSTANT"
 resolution: 0.25
 version: 1
