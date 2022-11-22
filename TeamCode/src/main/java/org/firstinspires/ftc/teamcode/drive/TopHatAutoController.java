@@ -109,7 +109,7 @@ public class TopHatAutoController {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elbow.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turntable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        setTopHatMotorPowers(5000, 5000,1000);
+        setTopHatMotorPowers(1000, 1000,1000);
         ResetTopHat();
         setTopHatMotorPowers(5000, 5000,1000);
       }
@@ -279,7 +279,7 @@ public class TopHatAutoController {
             teleOpStep=0;
         }
         if (robotMode == ATRobotEnumeration.MANUAL) {
-            setTopHatMotorsVelocity(1000, 5000, 5000);
+           // setTopHatMotorsVelocity(1000, 5000, 5000);
             teleOpStep=0;
         }
         fullManualControl();
@@ -435,7 +435,7 @@ public class TopHatAutoController {
             ClawPosition = 1;
         }
         else{
-            ClawPosition = 0.78;
+            ClawPosition = .5;
         }
         claw.setPosition(ClawPosition);
     }
@@ -1058,15 +1058,27 @@ public class TopHatAutoController {
         /**
          * This is to preset TopHat to pickup cone from Alliance side specific substation for Medium Junction Drop
          */
-        /*if (require pre set key and we will set it){
+
+
+        if (gamepad2.left_trigger == 0 && gamepad2.right_trigger > 0 && gamepad2.x){
             setTopHatPosition(subWristMedPickupPos, true, subArmMedPickupPos, subElbowMedPickupPos, subTTMedPickupPos);
-            robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
-        }*/
+        robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+        }
+
+
+
+        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0 && gamepad1.dpad_up){
+            setTopHatMotorsVelocity(2000,5000,5000);
+        }
+
+        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0 && gamepad1.dpad_down){
+            setTopHatMotorsVelocity(1000,5000,5000);
+        }
 
         /**
-         * This is to preset TopHat to pickup cone from Alliance side specific substation
+         * This is to preset TopHat to pickup cone from Alliance side specific substation for high cone drop
          */
-        if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.x){
+        if (gamepad2.left_trigger > 0 && gamepad2.right_trigger == 0 && gamepad2.x){
             setTopHatPosition(subWristHighPickupPos, true, subArmHighPickupPos, subElbowHighPickupPos, subTTHighPickupPos);
             robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
         }
