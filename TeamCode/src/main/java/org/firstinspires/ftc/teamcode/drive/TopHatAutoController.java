@@ -55,7 +55,7 @@ public class TopHatAutoController {
     int teleOpStep=0;
     int noOfCones = 0 ;
     MecanumDriveAT drive;
-    ATRobotEnumeration robotMode= ATRobotEnumeration.RESET;
+    ATRobotEnumeration robotActionType = ATRobotEnumeration.RESET;
     ATRobotEnumeration substationHSide;
     ATRobotEnumeration substationMSide;
     ATRobotEnumeration substationPickConfig;
@@ -82,7 +82,7 @@ public class TopHatAutoController {
 
 
     public void fullyInitializeRobot(Telemetry tl, Gamepad gp1, Gamepad gp2, ATRobotEnumeration rMode, HardwareMap hardwareMapAT) {
-        robotMode=rMode;
+        robotActionType =rMode;
         telemetry = tl;
         gamepad1=gp1;
         gamepad2=gp2;
@@ -115,7 +115,7 @@ public class TopHatAutoController {
       }
 
     public void basicInitializeRobot(HardwareMap hardwareMapAT, Telemetry tl, Gamepad gp1, Gamepad gp2, ATRobotEnumeration rMode) {
-        robotMode=rMode;
+        robotActionType =rMode;
         telemetry = tl;
         gamepad1=gp1;
         gamepad2=gp2;
@@ -254,7 +254,7 @@ public class TopHatAutoController {
     }
 
     public void ResetTopHat(){
-        robotMode= ATRobotEnumeration.RESET;
+        robotActionType = ATRobotEnumeration.RESET;
         ResetWristNClaw();
         ResetArmUp();
         ResetArmElbow();
@@ -263,7 +263,7 @@ public class TopHatAutoController {
      }
 
      public void ResetTopHatStop(){
-        robotMode= ATRobotEnumeration.STOP;
+        robotActionType = ATRobotEnumeration.STOP;
         ResetWristNClaw();
         ResetArmUptoStop();
         ResetArmElbowtoStop();
@@ -274,35 +274,35 @@ public class TopHatAutoController {
      * This function is executed when this Op Mode is selected from the Driver Station.
      */
     public void runTopHat() {
-        if (robotMode==ATRobotEnumeration.TELE_OP_AUTO){
+        if (robotActionType ==ATRobotEnumeration.TELE_OP_AUTO){
             moveTopHatPosition(-1,false,arm.getCurrentPosition(),elbow.getCurrentPosition(),turntable.getCurrentPosition());
             teleOpStep=0;
         }
-        if (robotMode == ATRobotEnumeration.MANUAL) {
+        if (robotActionType == ATRobotEnumeration.MANUAL) {
            // setTopHatMotorsVelocity(1000, 5000, 5000);
             teleOpStep=0;
         }
         fullManualControl();
         partialManualControl();
-        if (robotMode== ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN){
+        if (robotActionType == ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN){
             moveTopHatOneWayInOrder();
         }
-        if (robotMode== ATRobotEnumeration.PICK_CONE_READY_TO_NAVIGATE){
+        if (robotActionType == ATRobotEnumeration.PICK_CONE_READY_TO_NAVIGATE){
             conePickupToNavigate();
         }
-        if (robotMode== ATRobotEnumeration.PICK_CONE_DROP_HIGH_IN_LOOP){
+        if (robotActionType == ATRobotEnumeration.PICK_CONE_DROP_HIGH_IN_LOOP){
             pickFromSubstationDropInHighJunction();
         }
 
-        if (robotMode== ATRobotEnumeration.PICK_CONE_DROP_MEDIUM_IN_LOOP){
+        if (robotActionType == ATRobotEnumeration.PICK_CONE_DROP_MEDIUM_IN_LOOP){
             pickFromSubstationDropInMedJunction();
         }
 
-        if (robotMode==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH){
+        if (robotActionType ==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH){
             pickNSetforHighDrop();
         }
 
-        if (robotMode==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM){
+        if (robotActionType ==ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM){
             pickNSetforMediumDrop();
         }
 
@@ -315,7 +315,7 @@ public class TopHatAutoController {
         telemetry.addData("elbow position", elbow.getCurrentPosition());
         telemetry.addData("turntable position", turntable.getCurrentPosition());
         telemetry.addData("testCounter", testCounter);
-        telemetry.addData("TopHat robot mode", robotMode);
+        telemetry.addData("TopHat robot mode", robotActionType);
     }
 
     private void moveTopHatMotors(){
@@ -442,10 +442,10 @@ public class TopHatAutoController {
 
     private void fullAutoControl( )
     {
-      if (this.robotMode== ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PICK_CONE) {
+      if (this.robotActionType == ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PICK_CONE) {
           redAllianceRightAutonHigh();
         }
-      if (this.robotMode== ATRobotEnumeration.AUTO_RED_RIGHT_MEDIUM_PICK_CONE){
+      if (this.robotActionType == ATRobotEnumeration.AUTO_RED_RIGHT_MEDIUM_PICK_CONE){
           redAllianceRightAutonMedium();
       }
 
@@ -482,32 +482,32 @@ public class TopHatAutoController {
         TurnTableVelocity=turntableVel;
     }
 
-    public void setRobotMode(ATRobotEnumeration rMode){
-        robotMode=rMode;
+    public void setRobotActionType(ATRobotEnumeration rMode){
+        robotActionType =rMode;
     }
 
-    public ATRobotEnumeration getRobotMode(){
-        return robotMode;
+    public ATRobotEnumeration getRobotActionType(){
+        return robotActionType;
     }
 
 
     public void redAllianceRightAutonHigh(){
-        if (this.robotMode== ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_SETUP) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_SETUP) {
             moveTopHatPosition(-1, false, 4300, -20, 200);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.SET_RED_RIGHT_PRELOADED_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.SET_RED_RIGHT_PRELOADED_CONE) {
             //This is for medium drop with preloaded
             //moveTopHatPosition(.51, false, 4240, -1539, 1651);
             moveTopHatPosition(.55, false, 4161, -1134, 401);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.DROP_RED_RIGHT_PRELOADED_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.DROP_RED_RIGHT_PRELOADED_CONE) {
             openClaw(true);
             noOfCones=0;
         }
         // 13th Nov 2022
-        if (this.robotMode== ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PICK_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PICK_CONE) {
             if (step == 0) {
                 if (noOfCones == 0) {
                     desiredWristPosition=.37;
@@ -588,7 +588,7 @@ public class TopHatAutoController {
             }
 
             if (!(noOfCones<desiredNoOfConesToPick)){
-                robotMode= ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PARK;
+                robotActionType = ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PARK;
                 //moveTopHatPosition(-1, false, 4224, -200, desiredTurnTablePosition);
                 //***************** This is important to set the position in navigation mode
                 moveTopHatPosition(-1, false, 4250, -1800, 945);
@@ -597,21 +597,21 @@ public class TopHatAutoController {
     }
 
     public void blueAllianceLeftAutonHigh(){
-        if (this.robotMode== ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_SETUP) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_SETUP) {
             moveTopHatPosition(-1, false, robotMidPointArmPosition, -20, 1600);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE) {
             //This is for medium drop with preloaded
             moveTopHatPosition(.55, false, 4300, -1366, 1548);
             //moveTopHatPosition(.54, false, 4305, -2153, 1902);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.DROP_BLUE_LEFT_PRELOADED_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.DROP_BLUE_LEFT_PRELOADED_CONE) {
             openClaw(true);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PICK_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PICK_CONE) {
             if (step == 0) {
                 if (noOfCones == 0) {
                     desiredWristPosition=.41;
@@ -688,7 +688,7 @@ public class TopHatAutoController {
                 step = 0;
             }
             if (!(noOfCones<desiredNoOfConesToPick)){
-                robotMode= ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PARK;
+                robotActionType = ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PARK;
                 //moveTopHatPosition(-1, false, 4224, -200, desiredTurnTablePosition);
                 //***************** This is important to set the position in navigation mode
                 moveTopHatPosition(-1, false, 4250, -1800, 945);
@@ -699,21 +699,21 @@ public class TopHatAutoController {
     }
 
     public void blueAllianceRightAutonHigh(){
-        if (this.robotMode== ATRobotEnumeration.AUTO_BLUE_RIGHT_HIGH_SETUP) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_BLUE_RIGHT_HIGH_SETUP) {
             moveTopHatPosition(-1, false, robotMidPointArmPosition, -20, 1600);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.SET_BLUE_RIGHT_PRELOADED_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.SET_BLUE_RIGHT_PRELOADED_CONE) {
             //This is for medium drop with preloaded
             //moveTopHatPosition(.51, false, 4240, -1539, 1651);
             moveTopHatPosition(.56, false, 4251, -1130, 361);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.DROP_BLUE_RIGHT_PRELOADED_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.DROP_BLUE_RIGHT_PRELOADED_CONE) {
             openClaw(true);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.AUTO_BLUE_RIGHT_HIGH_PICK_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_BLUE_RIGHT_HIGH_PICK_CONE) {
             if (step == 0) {
                 if (noOfCones == 0) {
                     desiredWristPosition=.39;
@@ -791,7 +791,7 @@ public class TopHatAutoController {
                 step = 0;
             }
             if (!(noOfCones<desiredNoOfConesToPick)){
-                robotMode= ATRobotEnumeration.AUTO_BLUE_RIGHT_HIGH_PARK;
+                robotActionType = ATRobotEnumeration.AUTO_BLUE_RIGHT_HIGH_PARK;
                 //moveTopHatPosition(-1, false, 4224, -200, desiredTurnTablePosition);
                 //***************** This is important to set the position in navigation mode
                 moveTopHatPosition(-1, false, 4250, -1800, 945);
@@ -802,11 +802,11 @@ public class TopHatAutoController {
     }
 
     public void redAllianceLeftAutonHigh(){
-        if (this.robotMode== ATRobotEnumeration.AUTO_RED_LEFT_HIGH_SETUP) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_RED_LEFT_HIGH_SETUP) {
             moveTopHatPosition(-1, false, robotMidPointArmPosition, -20, 1600);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.SET_RED_LEFT_PRELOADED_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.SET_RED_LEFT_PRELOADED_CONE) {
             //This is for medium drop with preloaded
             moveTopHatPosition(.58, false, 4300, -1219, 1475);
 
@@ -814,11 +814,11 @@ public class TopHatAutoController {
             //moveTopHatPosition(.53, false, 4300, -2152, 1900);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.DROP_RED_LEFT_PRELOADED_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.DROP_RED_LEFT_PRELOADED_CONE) {
             openClaw(true);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.AUTO_RED_LEFT_HIGH_PICK_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_RED_LEFT_HIGH_PICK_CONE) {
             if (step == 0) {
                 if (noOfCones == 0) {
                     desiredWristPosition=.44;
@@ -894,7 +894,7 @@ public class TopHatAutoController {
                 step = 0;
             }
             if (!(noOfCones<desiredNoOfConesToPick)){
-                robotMode= ATRobotEnumeration.AUTO_RED_LEFT_HIGH_PARK;
+                robotActionType = ATRobotEnumeration.AUTO_RED_LEFT_HIGH_PARK;
                 //moveTopHatPosition(-1, false, 4224, -200, desiredTurnTablePosition);
                 //***************** This is important to set the position in navigation mode
                 moveTopHatPosition(-1, false, 4250, -1800, 945);
@@ -915,11 +915,11 @@ public class TopHatAutoController {
         }
     }
     public void redAllianceRightAutonMedium(){
-        if (this.robotMode== ATRobotEnumeration.AUTO_RED_RIGHT_MEDIUM_SETUP) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_RED_RIGHT_MEDIUM_SETUP) {
             moveTopHatPosition(-1, false, 4300, -20, 200);
             noOfCones=0;
         }
-        if (this.robotMode== ATRobotEnumeration.AUTO_RED_RIGHT_MEDIUM_PICK_CONE) {
+        if (this.robotActionType == ATRobotEnumeration.AUTO_RED_RIGHT_MEDIUM_PICK_CONE) {
                 if (step == 0) {
                     if (noOfCones == 0) {
                         desiredElbowPosition = -6241;
@@ -975,7 +975,7 @@ public class TopHatAutoController {
                     step = 0;
                 }
                 if (!(noOfCones<desiredNoOfConesToPick)){
-                    robotMode= ATRobotEnumeration.AUTO_RED_RIGHT_MEDIUM_PARK;
+                    robotActionType = ATRobotEnumeration.AUTO_RED_RIGHT_MEDIUM_PARK;
                     moveTopHatPosition(-1, false, 4224, -200, desiredTurnTablePosition);
                 }
         }
@@ -994,46 +994,46 @@ public class TopHatAutoController {
 
     private void fullManualControl(){
         if (gamepad2.dpad_up) {
-            robotMode= ATRobotEnumeration.MANUAL;
+            robotActionType = ATRobotEnumeration.MANUAL;
             WristPosition += WristSpeed;
             setWristPosition(WristPosition);
             telemetry.addData("DpadUp Wrist Up", "Pressed");
         }
         if (gamepad2.dpad_down) {
-            robotMode= ATRobotEnumeration.MANUAL;
+            robotActionType = ATRobotEnumeration.MANUAL;
             WristPosition += -WristSpeed;
             setWristPosition(WristPosition);
             telemetry.addData("DpadDown Wrist Down", "Pressed");
         }
         if (gamepad2.dpad_right) {
-            robotMode= ATRobotEnumeration.MANUAL;
+            robotActionType = ATRobotEnumeration.MANUAL;
             openClaw(false);
             HoldCone = true;
             telemetry.addData("DpadRight Claw Close", "Pressed");
         }
         if (gamepad2.dpad_left) {
-            robotMode= ATRobotEnumeration.MANUAL;
+            robotActionType = ATRobotEnumeration.MANUAL;
             openClaw(true);
             HoldCone = false;
             telemetry.addData("DpadLeft Claw Open", "Pressed");
         }
         if (gamepad2.left_stick_y != 0) {
-            robotMode= ATRobotEnumeration.MANUAL;
+            robotActionType = ATRobotEnumeration.MANUAL;
             ArmPosition += -gamepad2.left_stick_y*ArmSpeed;
             telemetry.addData("left stick y Arm Up or Down", "Pressed");
         }
         if (gamepad2.right_stick_y != 0) {
-            robotMode= ATRobotEnumeration.MANUAL;
+            robotActionType = ATRobotEnumeration.MANUAL;
             ElbowPosition += gamepad2.right_stick_y*ElbowSpeed;
             telemetry.addData("right stick y Elbow Up or Down", "Pressed");
         }
         if (!gamepad2.x && !gamepad2.y && gamepad2.left_trigger > 0) {
-            robotMode= ATRobotEnumeration.MANUAL;
+            robotActionType = ATRobotEnumeration.MANUAL;
             TurnTablePosition += gamepad2.left_trigger*TurnTableSpeed;
             telemetry.addData("Left Trigger TurnTable Left", "Pressed");
         }
         if (!gamepad2.x && !gamepad2.y && gamepad2.right_trigger > 0) {
-            robotMode= ATRobotEnumeration.MANUAL;
+            robotActionType = ATRobotEnumeration.MANUAL;
             TurnTablePosition += -gamepad2.right_trigger*TurnTableSpeed;
             telemetry.addData("Right Trigger TurnTable Right", "Pressed");
         }
@@ -1045,14 +1045,14 @@ public class TopHatAutoController {
          * This is to preset TopHat for left ground junction drop
          */
         if (!gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.x){
-             robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+             robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
              setTopHatPosition(.14,false,1902,-7394,1382);
         }
         /**
          * This is to preset TopHat for right ground junction drop
          */
         if (gamepad2.right_bumper && !gamepad2.left_bumper && gamepad2.x){
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(.14,false,1902,-7394,494);
         }
         /**
@@ -1062,7 +1062,7 @@ public class TopHatAutoController {
 
         if (gamepad2.left_trigger == 0 && gamepad2.right_trigger > 0 && gamepad2.x){
             setTopHatPosition(subWristMedPickupPos, true, subArmMedPickupPos, subElbowMedPickupPos, subTTMedPickupPos);
-        robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+        robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
         }
 
 
@@ -1080,7 +1080,7 @@ public class TopHatAutoController {
          */
         if (gamepad2.left_trigger > 0 && gamepad2.right_trigger == 0 && gamepad2.x){
             setTopHatPosition(subWristHighPickupPos, true, subArmHighPickupPos, subElbowHighPickupPos, subTTHighPickupPos);
-            robotMode = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
         }
 
         /**
@@ -1090,20 +1090,20 @@ public class TopHatAutoController {
          * or complete the circuit
          */
         if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.x){
-            robotMode= ATRobotEnumeration.PICK_CONE_READY_TO_NAVIGATE;
+            robotActionType = ATRobotEnumeration.PICK_CONE_READY_TO_NAVIGATE;
         }
         /**
          * This is to preset TopHat for left high junction drop
          */
         if (!gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.y){
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(subWristHighDropPos,false, subArmHighDropPos, subElbowHighDropPos,subTTHighDropPos);
         }
         /**
          * This is to preset TopHat for right high junction drop
          */
         if (gamepad2.right_bumper && !gamepad2.left_bumper && gamepad2.y){
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(subWristHighDropPos,false, subArmHighDropPos, subElbowHighDropPos,subTTHighDropPos);
         }
         /**
@@ -1111,7 +1111,7 @@ public class TopHatAutoController {
          * in high junction
          */
         if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.y){
-            robotMode= ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH;
+            robotActionType = ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH;
             substationPickConfig =ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH;
         }
 
@@ -1120,21 +1120,21 @@ public class TopHatAutoController {
          * have TopHat continue dropping cones till action being interrupted by pressing any additional key
          */
         if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.y){
-            robotMode= ATRobotEnumeration.PICK_CONE_DROP_HIGH_IN_LOOP;
+            robotActionType = ATRobotEnumeration.PICK_CONE_DROP_HIGH_IN_LOOP;
         }
 
         /**
          * This is to preset TopHat for right medium junction drop
          */
         if (gamepad2.right_bumper && !gamepad2.left_bumper && gamepad2.b){
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(.87,false,2018,-1888,607);
         }
         /**
          * This is to preset TopHat for left medium junction drop
          */
         if (gamepad2.left_bumper && !gamepad2.right_bumper && gamepad2.b){
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(.87,false,2018,-1888,1507);
         }
 
@@ -1143,7 +1143,7 @@ public class TopHatAutoController {
          * in medium junction
          */
         if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.b){
-            robotMode= ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM;
+            robotActionType = ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM;
             substationPickConfig =ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM;
         }
 
@@ -1152,22 +1152,22 @@ public class TopHatAutoController {
          * have TopHat continue dropping cones in Medium Junction till action being interrupted by pressing any additional key
          */
         if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.b){
-            robotMode= ATRobotEnumeration.PICK_CONE_DROP_MEDIUM_IN_LOOP;
+            robotActionType = ATRobotEnumeration.PICK_CONE_DROP_MEDIUM_IN_LOOP;
         }
 
         /**
          * This is to preset TopHat for left low junction drop
          */
         if (!gamepad2.right_bumper && gamepad2.left_bumper && gamepad2.a){
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(.8,false,391,-1080,1406);
         }
         /**
          * This is to preset TopHat for right low junction drop
          */
         if (gamepad2.right_bumper && !gamepad2.left_bumper && gamepad2.a){
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(.8,false,391,-1080,506);
         }
         /**
@@ -1175,7 +1175,7 @@ public class TopHatAutoController {
          * in low junction
          */
         if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.a){
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             //setTopHatPosition(.6777,false,3946,-4309,605);
         }
     }
@@ -1212,7 +1212,7 @@ public class TopHatAutoController {
             setWristPosition(desiredWristPosition);
             sleep(500);
             teleOpStep=0;
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_END;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_END;
         }
     }
 
@@ -1252,7 +1252,7 @@ public class TopHatAutoController {
         }
         if (teleOpStep==5 && isInRange(945, turntable.getCurrentPosition())){
             teleOpStep=0;
-            robotMode= ATRobotEnumeration.MANUAL;
+            robotActionType = ATRobotEnumeration.MANUAL;
         }
     }
 
@@ -1266,7 +1266,7 @@ public class TopHatAutoController {
         }
         if (teleOpStep == 1){
             teleOpStep=0;
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(subWristHighDropPos,false, subArmHighDropPos, subElbowHighDropPos,subTTHighDropPos);
         }
     }
@@ -1281,7 +1281,7 @@ public class TopHatAutoController {
         }
         if (teleOpStep == 1){
             teleOpStep=0;
-            robotMode= ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            robotActionType = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             setTopHatPosition(subWristMedDropPos,false, subArmMedDropPos, subElbowMedDropPos,subTTMedDropPos);
         }
     }
@@ -1328,7 +1328,7 @@ public class TopHatAutoController {
                 && isInRange(subTTHighDropPos, turntable.getCurrentPosition()) ){
             openClaw(true);
             sleep(500);
-            robotMode= ATRobotEnumeration.PICK_CONE_DROP_HIGH_IN_LOOP;
+            robotActionType = ATRobotEnumeration.PICK_CONE_DROP_HIGH_IN_LOOP;
             teleOpStep=0;
         }
     }
@@ -1375,7 +1375,7 @@ public class TopHatAutoController {
                 && isInRange(subTTMedDropPos, turntable.getCurrentPosition()) ){
             openClaw(true);
             sleep(500);
-            robotMode= ATRobotEnumeration.PICK_CONE_DROP_MEDIUM_IN_LOOP;
+            robotActionType = ATRobotEnumeration.PICK_CONE_DROP_MEDIUM_IN_LOOP;
             teleOpStep=0;
         }
     }
