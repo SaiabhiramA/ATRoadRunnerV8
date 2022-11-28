@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
+import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStates;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
@@ -24,14 +25,14 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Disabled
 public class BlueAllianceLeftHighDropAprilTag extends LinearOpMode {
     MecanumDriveAT drive;
-    TopHatAutoController tophatController;
+    TopHatAutoControllerStates tophatController;
     ATAprilTag ATObjectDetection;
     ATRobotEnumeration parkingZone=ATRobotEnumeration.SUBSTATION;
     Pose2d poseEstimate;
     boolean isAutonConePickupReady=false;
     @Override
     public void runOpMode() throws InterruptedException {
-        tophatController=new TopHatAutoController();
+        tophatController=new TopHatAutoControllerStates();
         ATObjectDetection = new ATAprilTag();
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_SETUP);
         //parkingZone = ATObjectDetection.detectObjectLabel();
@@ -89,8 +90,8 @@ public class BlueAllianceLeftHighDropAprilTag extends LinearOpMode {
             }
         }
         else {
-            tophatController.moveTopHatPosition(-1, false, 4250, -1800, 945);
-            while ((!isStopRequested()) && !tophatController.isTopHatMoveCompleted(4250,-1800,945)) {
+            tophatController.moveTopHatPosition(-1, false, 4250*tophatController.armMultiplier, -1800*tophatController.elbowMultiplier, 945);
+            while ((!isStopRequested()) && !tophatController.isTopHatMoveCompleted(4250*tophatController.armMultiplier,-1800*tophatController.elbowMultiplier,945)) {
                 poseEstimate = drive.getPoseEstimate();
                 telemetry.addData("x", poseEstimate.getX());
                 telemetry.addData("y", poseEstimate.getY());

@@ -6,6 +6,7 @@ import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.TRACK_WIDTH
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,10 +22,12 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
  */
 //@TeleOp(group = "drive")
 @TeleOp(name = "ATTeleOpMode-GameDay")
+@Disabled
 public class TeleopATGameDay extends LinearOpMode {
     TopHatAutoController tophatController;
     MecanumDriveATCancelable drive;
     ATRobotEnumeration robotActionType = ATRobotEnumeration.TELE_OP_AUTO;
+    ATRobotEnumeration robotMode=ATRobotEnumeration.AUTO;
     Pose2d poseEstimate;
     TrajectorySequence trajSeqPark1;
     TrajectorySequence trajSeqPark2;
