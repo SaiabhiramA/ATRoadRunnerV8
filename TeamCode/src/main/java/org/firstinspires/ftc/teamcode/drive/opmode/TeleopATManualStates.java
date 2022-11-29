@@ -35,15 +35,14 @@ public class TeleopATManualStates extends LinearOpMode {
         telemetry.update();
         waitForStart();
         while (opModeIsActive() && !isStopRequested())  {
-            drive.update();
+            this.runPlatform();
+            tophatController.runTopHat();
             poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
             telemetry.addData("robot mode", robotMode);
             telemetry.update();
-            this.runPlatform();
-            tophatController.runTopHat();
         }
     }
     public void runPlatform(){
@@ -64,6 +63,7 @@ public class TeleopATManualStates extends LinearOpMode {
                             -0.5*gamepad1.right_stick_x
                     )
             );
+            drive.update();
         }
        }
 

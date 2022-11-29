@@ -49,7 +49,6 @@ public class TeleopATGameDayStates extends LinearOpMode {
         drive.setPoseEstimate(ATGlobalStorage.currentPose);
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
-            drive.update();
             this.runPlatform();
             if (tophatController.sleepMode==ATRobotEnumeration.SLEEP_MODE_REQUEST){
                 elapsedTime=getRuntime()+tophatController.sleepMSecReq;
@@ -59,37 +58,39 @@ public class TeleopATGameDayStates extends LinearOpMode {
                 tophatController.sleepMode=ATRobotEnumeration.SLEEP_MODE_OFF;
             }
             tophatController.runTopHat();
-            poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-            telemetry.addData("Platform robot mode", platformAction);
             telemetry.addData("AutoMode Name", ATGlobalStorage.autonModeName);
             telemetry.addData("Parking Zone", ATGlobalStorage.parkingPos);
             telemetry.update();
         }
 
     }
+    private void platformDrive(){
+        drive.setWeightedDrivePower(
+                new Pose2d(
+                        -gamepad1.left_stick_y*0.8,
+                        -gamepad1.left_stick_x * 0.5,
+                        -gamepad1.right_stick_x *0.5
+                )
+        );
+        drive.update();
+        poseEstimate = drive.getPoseEstimate();
+        telemetry.addData("x", poseEstimate.getX());
+        telemetry.addData("y", poseEstimate.getY());
+        telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+        telemetry.addData("Platform robot mode", platformAction);
+    }
     public void runPlatform(){
+        /**
+         * This method would run all the time to ensure platform drive will not be drifting due to platform action condictions
+         */
+        this.platformDrive();
+
         /** Reset the robot manually when needed
          */
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x && gamepad1.left_trigger>0 && gamepad1.right_trigger>0) {
             platformAction = ATRobotEnumeration.RESET;
             platformMode = ATRobotEnumeration.AUTO;
             tophatController.ResetTopHat();
-        }
-        /** In manual mode only set the drive platform coordinates based on left/right stick x/y positions
-         */
-        if (gamepad1.left_stick_y!= 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x !=0){
-            platformAction = ATRobotEnumeration.MANUAL;
-            platformMode = ATRobotEnumeration.MANUAL;
-            drive.setWeightedDrivePower(
-                    new Pose2d(
-                            -0.75*gamepad1.left_stick_y,
-                            -0.75*gamepad1.left_stick_x,
-                            -0.5*gamepad1.right_stick_x
-                    )
-            );
         }
 
         /** perform auto navigation from auton position to teleop pickup position only for first time

@@ -71,4 +71,5 @@ public enum ATRobotEnumeration {
     SLEEP_MODE_OFF,
     KILL_ALL_ACTIONS,
     FULL_AUTO,
+    PLATFORM_DRIVE
 }

@@ -142,12 +142,12 @@ public class TopHatAutoControllerStates {
         armdowntouch = hardwareMapAT.get(TouchSensor.class, "armdowntouch");
         armuptouch = hardwareMapAT.get(TouchSensor.class, "armuptouch");
         elbowtouch = hardwareMapAT.get(TouchSensor.class, "elbowtouch");
+        turntable.setDirection(DcMotorSimple.Direction.REVERSE);
         // Set servo to mid position
         ElbowPosition = elbow.getCurrentPosition();
         ElbowSpeed = 10;
         TurnTablePosition = turntable.getCurrentPosition();
         TurnTableSpeed = 10;
-        turntable.setDirection(DcMotorSimple.Direction.REVERSE);
         ArmPosition = arm.getCurrentPosition();
         ArmSpeed = 10;
         ClawSpeed = 0.05;
@@ -366,7 +366,7 @@ public class TopHatAutoControllerStates {
             setMotorPosition( -100, elbow, ElbowVelocity);
         }
         if (!turntabletouch.isPressed()) {
-            setMotorPosition((int) TurnTablePosition, turntable, TurnTableVelocity);
+            setMotorPosition((int) (TurnTablePosition), turntable, TurnTableVelocity);
         }
         else{
             setMotorPosition(100, turntable, TurnTableVelocity);
