@@ -17,6 +17,7 @@ public enum ATRobotEnumeration {
     SET_RED_RIGHT_PRELOADED_CONE,
     DROP_RED_RIGHT_PRELOADED_CONE,
 
+
     //Blue Alliance Left Enumerations
     AUTO_BLUE_LEFT_HIGH_SETUP,
     AUTO_BLUE_RIGHT_HIGH_SETUP,
@@ -36,6 +37,8 @@ public enum ATRobotEnumeration {
     PARK2 ,
     PARK3 ,
     SUBSTATION ,
+    SUBSTATION_PICKUP_POS,
+    TURN_PLATFORM_180,
     MANUAL_RIGHT_PICKUP,
     MANUAL_LEFT_PICKUP,
     MANUAL_HIGH_DROP,

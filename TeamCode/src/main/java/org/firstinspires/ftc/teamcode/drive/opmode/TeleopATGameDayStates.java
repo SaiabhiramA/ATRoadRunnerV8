@@ -50,6 +50,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
             this.runPlatform();
+            drive.update();
             if (tophatController.sleepMode==ATRobotEnumeration.SLEEP_MODE_REQUEST){
                 elapsedTime=getRuntime()+tophatController.sleepMSecReq;
                 tophatController.sleepMode=ATRobotEnumeration.SLEEP_MODE_ON;
@@ -58,32 +59,36 @@ public class TeleopATGameDayStates extends LinearOpMode {
                 tophatController.sleepMode=ATRobotEnumeration.SLEEP_MODE_OFF;
             }
             tophatController.runTopHat();
+            poseEstimate = drive.getPoseEstimate();
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+            telemetry.addData("Platform robot mode", platformAction);
             telemetry.addData("AutoMode Name", ATGlobalStorage.autonModeName);
             telemetry.addData("Parking Zone", ATGlobalStorage.parkingPos);
             telemetry.update();
         }
 
     }
-    private void platformDrive(){
-        drive.setWeightedDrivePower(
-                new Pose2d(
-                        -gamepad1.left_stick_y*0.8,
-                        -gamepad1.left_stick_x * 0.5,
-                        -gamepad1.right_stick_x *0.5
-                )
-        );
-        drive.update();
-        poseEstimate = drive.getPoseEstimate();
-        telemetry.addData("x", poseEstimate.getX());
-        telemetry.addData("y", poseEstimate.getY());
-        telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-        telemetry.addData("Platform robot mode", platformAction);
-    }
+
     public void runPlatform(){
         /**
          * This method would run all the time to ensure platform drive will not be drifting due to platform action condictions
          */
-        this.platformDrive();
+        if (gamepad1.left_stick_y!=0 || gamepad1.left_stick_x!=0 || gamepad1.right_stick_x!=0) {
+            platformAction = ATRobotEnumeration.PLATFORM_DRIVE;
+            platformMode = ATRobotEnumeration.MANUAL;
+        }
+
+        if (platformAction==ATRobotEnumeration.PLATFORM_DRIVE){
+            drive.setWeightedDrivePower(
+                    new Pose2d(
+                            -gamepad1.left_stick_y * 0.8,
+                            -gamepad1.left_stick_x * 0.5,
+                            -gamepad1.right_stick_x * 0.5
+                    )
+            );
+        }
 
         /** Reset the robot manually when needed
          */
@@ -97,7 +102,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
          * enhance further later from any position in zone to move to substation pickup position
         */
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.a){
-            platformAction = ATRobotEnumeration.TELE_OP_AUTO;
+            platformAction = ATRobotEnumeration.SUBSTATION_PICKUP_POS;
             platformMode = ATRobotEnumeration.AUTO;
             navigateToPickupInSubstation();
         }
@@ -115,7 +120,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
          * This is to turn robot in 180 degrees
          * */
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
-            platformAction = ATRobotEnumeration.TELE_OP_AUTO;
+            platformAction = ATRobotEnumeration.TURN_PLATFORM_180;
             platformMode = ATRobotEnumeration.AUTO;
             TrajectorySequence trajSeqMedSubstation = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                     .turn(Math.toRadians(180))
