@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveATCancelable;
-import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStates;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -25,8 +24,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class TeleopATGameDayStates extends LinearOpMode {
     TopHatAutoControllerStates tophatController;
     MecanumDriveATCancelable drive;
-    ATRobotEnumeration robotActionType = ATRobotEnumeration.TELE_OP_AUTO;
-    ATRobotEnumeration robotMode=ATRobotEnumeration.AUTO;
+    ATRobotEnumeration platformAction;
+    ATRobotEnumeration platformMode;
     Pose2d poseEstimate;
     TrajectorySequence trajSeqPark1;
     TrajectorySequence trajSeqPark2;
@@ -38,12 +37,13 @@ public class TeleopATGameDayStates extends LinearOpMode {
     double robotHeading;
     double elapsedTime;
 
-
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new MecanumDriveATCancelable(hardwareMap);
         tophatController = new TopHatAutoControllerStates();
-        tophatController.basicInitializeRobot(hardwareMap,telemetry,gamepad1,gamepad2, robotActionType);
+        platformMode = ATRobotEnumeration.AUTO;
+        platformAction = ATRobotEnumeration.TELE_OP_AUTO;
+        tophatController.basicInitializeRobot(hardwareMap,telemetry,gamepad1,gamepad2, platformAction);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.update();
         drive.setPoseEstimate(ATGlobalStorage.currentPose);
@@ -58,14 +58,12 @@ public class TeleopATGameDayStates extends LinearOpMode {
             if (elapsedTime<getRuntime()){
                 tophatController.sleepMode=ATRobotEnumeration.SLEEP_MODE_OFF;
             }
-            if (tophatController.sleepMode==ATRobotEnumeration.SLEEP_MODE_OFF) {
-                tophatController.runTopHat();
-            }
+            tophatController.runTopHat();
             poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-            telemetry.addData("Platform robot mode", robotActionType);
+            telemetry.addData("Platform robot mode", platformAction);
             telemetry.addData("AutoMode Name", ATGlobalStorage.autonModeName);
             telemetry.addData("Parking Zone", ATGlobalStorage.parkingPos);
             telemetry.update();
@@ -76,17 +74,15 @@ public class TeleopATGameDayStates extends LinearOpMode {
         /** Reset the robot manually when needed
          */
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x && gamepad1.left_trigger>0 && gamepad1.right_trigger>0) {
-            robotActionType = ATRobotEnumeration.RESET;
+            platformAction = ATRobotEnumeration.RESET;
+            platformMode = ATRobotEnumeration.AUTO;
             tophatController.ResetTopHat();
         }
         /** In manual mode only set the drive platform coordinates based on left/right stick x/y positions
          */
         if (gamepad1.left_stick_y!= 0 || gamepad1.left_stick_x != 0 || gamepad1.right_stick_x !=0){
-            robotActionType = ATRobotEnumeration.MANUAL;
-        }
-        /** In manual mode only set the drive platform coordinates based on left/right stick x/y positions
-         */
-        if (robotActionType == ATRobotEnumeration.MANUAL) {
+            platformAction = ATRobotEnumeration.MANUAL;
+            platformMode = ATRobotEnumeration.MANUAL;
             drive.setWeightedDrivePower(
                     new Pose2d(
                             -0.75*gamepad1.left_stick_y,
@@ -95,34 +91,31 @@ public class TeleopATGameDayStates extends LinearOpMode {
                     )
             );
         }
+
         /** perform auto navigation from auton position to teleop pickup position only for first time
          * enhance further later from any position in zone to move to substation pickup position
         */
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.a){
-            robotActionType = ATRobotEnumeration.TELE_OP_AUTO;
+            platformAction = ATRobotEnumeration.TELE_OP_AUTO;
+            platformMode = ATRobotEnumeration.AUTO;
             navigateToPickupInSubstation();
         }
         /**
          * Execute emergency stop during auto navigation
          */
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.x){
-            robotActionType = ATRobotEnumeration.MANUAL;
+            platformAction = ATRobotEnumeration.KILL_ALL_ACTIONS;
+            platformMode = ATRobotEnumeration.AUTO;
             drive.breakFollowing();
             tophatController.stopTopHatMovement();
         }
+
         /**
-         * This is to resume high junction drop off remaining cones from Auton and completed during first 15 sec of
-         * Tele Op Mode
-         */
-        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.y){
-            robotActionType = ATRobotEnumeration.TELE_OP_AUTO;
-        }
-        /**
-         * This is to resume medium junction drop off remaining cones from Auton and completed during first 15 sec of
-         * Tele Op Mode
-         */
+         * This is to turn robot in 180 degrees
+         * */
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
-            robotActionType = ATRobotEnumeration.TELE_OP_AUTO;
+            platformAction = ATRobotEnumeration.TELE_OP_AUTO;
+            platformMode = ATRobotEnumeration.AUTO;
             TrajectorySequence trajSeqMedSubstation = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                     .turn(Math.toRadians(180))
                     .build();
@@ -133,12 +126,13 @@ public class TeleopATGameDayStates extends LinearOpMode {
          * This is to set the tophat in navigation position in the field
          */
         if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
-            tophatController.setRobotActionType(ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN);
+            tophatController.setTophatAction(ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN);
+            tophatController.setTophatMode(ATRobotEnumeration.AUTO);
             tophatController.setTopHatPosition(.1,false,4300*tophatController.armMultiplier,-1800*tophatController.elbowMultiplier,945);
         }
     }
     /**
-     * This method needs to be enhanced to make it more dynamic based on either RED or BLUE alliance
+     * This method is to move the robot to substation pickup position
      */
     private void navigateToPickupInSubstation(){
         if (!teleOpConePickupPositioned) {
@@ -165,7 +159,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
                 telemetry.addData("x", poseEstimate.getX());
                 telemetry.addData("y", poseEstimate.getY());
                 telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-                telemetry.addData("robot mode", tophatController.getRobotActionType());
+                telemetry.addData("robot mode", tophatController.getTophatAction());
                 telemetry.addData("Alliance Name", ATGlobalStorage.allianceName);
                 telemetry.update();
 

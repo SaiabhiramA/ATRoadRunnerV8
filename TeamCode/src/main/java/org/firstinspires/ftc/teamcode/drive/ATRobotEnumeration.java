@@ -69,4 +69,6 @@ public enum ATRobotEnumeration {
     SLEEP_MODE_REQUEST,
     SLEEP_MODE_ON,
     SLEEP_MODE_OFF,
+    KILL_ALL_ACTIONS,
+    FULL_AUTO,
 }
