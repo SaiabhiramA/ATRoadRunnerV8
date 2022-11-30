@@ -43,6 +43,9 @@ public class TeleopATGameDayStates extends LinearOpMode {
         tophatController = new TopHatAutoControllerStates();
         platformMode = ATRobotEnumeration.AUTO;
         platformAction = ATRobotEnumeration.TELE_OP_AUTO;
+
+        this.mockupAutonExecution(); // this is only used for testing and needs to be removed for states
+
         tophatController.basicInitializeRobot(hardwareMap,telemetry,gamepad1,gamepad2, platformAction);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.update();
@@ -117,7 +120,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         }
 
         /**
-         * This is to turn robot in 180 degrees
+         * This is to turn robot in 180 degrees in counter clockwise
          * */
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
             platformAction = ATRobotEnumeration.TURN_PLATFORM_180;
@@ -144,7 +147,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0 && gamepad1.dpad_down){
             platformAction = ATRobotEnumeration.SPEED_DOWN;
             platformMode = ATRobotEnumeration.MANUAL;
-            tophatController.setTopHatMotorsVelocity(1000,1500,1500);
+            tophatController.setTopHatMotorsVelocity(1000,1000,1000);
         }
 
         /**
@@ -351,4 +354,16 @@ public class TeleopATGameDayStates extends LinearOpMode {
             break;
         }
     }
+
+    /**
+     * This method is only used when Gameday states to be debugged without Auton Program
+     */
+    private void mockupAutonExecution(){
+        ATGlobalStorage.autonModeName=ATRobotEnumeration.BLUE_LEFT_HIGH_DROP;
+        ATGlobalStorage.currentPose=drive.getPoseEstimate();
+        ATGlobalStorage.parkingPos=ATRobotEnumeration.PARK2;
+        ATGlobalStorage.allianceName=ATRobotEnumeration.BLUE_ALLIANCE;
+        tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, platformAction, hardwareMap);
+    }
+
 }
