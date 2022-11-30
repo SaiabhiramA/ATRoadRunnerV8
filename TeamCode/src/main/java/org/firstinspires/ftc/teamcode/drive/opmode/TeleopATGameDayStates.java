@@ -129,6 +129,25 @@ public class TeleopATGameDayStates extends LinearOpMode {
         }
 
         /**
+         * This is to increase the tophat motors speed
+         */
+        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0 && gamepad1.dpad_up){
+            platformAction = ATRobotEnumeration.SPEED_UP;
+            platformMode = ATRobotEnumeration.MANUAL;
+            tophatController.setTopHatMotorsVelocity(2000,3000,3000);
+        }
+
+        /**
+         * This is to decrease the tophat motors speed
+         */
+
+        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0 && gamepad1.dpad_down){
+            platformAction = ATRobotEnumeration.SPEED_DOWN;
+            platformMode = ATRobotEnumeration.MANUAL;
+            tophatController.setTopHatMotorsVelocity(1000,1500,1500);
+        }
+
+        /**
          * This is to set the tophat in navigation position in the field
          */
         if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
