@@ -75,89 +75,12 @@ public class TeleopATGameDayStates extends LinearOpMode {
     }
 
     public void runPlatform(){
-        /**
-         * This method would run all the time to ensure platform drive will not be drifting due to platform action condictions
-         */
-        if (gamepad1.left_stick_y!=0 || gamepad1.left_stick_x!=0 || gamepad1.right_stick_x!=0) {
-            platformAction = ATRobotEnumeration.PLATFORM_DRIVE;
-            platformMode = ATRobotEnumeration.MANUAL;
-        }
 
-        if (platformAction==ATRobotEnumeration.PLATFORM_DRIVE){
-            drive.setWeightedDrivePower(
-                    new Pose2d(
-                            -gamepad1.left_stick_y * 0.8,
-                            -gamepad1.left_stick_x * 0.5,
-                            -gamepad1.right_stick_x * 0.5
-                    )
-            );
-        }
+        //this.platformDriverActionsNovi();
 
-        /** Reset the robot manually when needed
-         */
-        if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x && gamepad1.left_trigger>0 && gamepad1.right_trigger>0) {
-            platformAction = ATRobotEnumeration.RESET;
-            platformMode = ATRobotEnumeration.AUTO;
-            tophatController.ResetTopHat();
-        }
+        this.platformDriverActionsStatesChamp();
 
-        /** perform auto navigation from auton position to teleop pickup position only for first time
-         * enhance further later from any position in zone to move to substation pickup position
-        */
-        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.a){
-            platformAction = ATRobotEnumeration.SUBSTATION_PICKUP_POS;
-            platformMode = ATRobotEnumeration.AUTO;
-            navigateToPickupInSubstation();
-        }
-        /**
-         * Execute emergency stop during auto navigation
-         */
-        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.x){
-            platformAction = ATRobotEnumeration.KILL_ALL_ACTIONS;
-            platformMode = ATRobotEnumeration.AUTO;
-            drive.breakFollowing();
-            tophatController.stopTopHatMovement();
-        }
 
-        /**
-         * This is to turn robot in 180 degrees in counter clockwise
-         * */
-        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
-            platformAction = ATRobotEnumeration.TURN_PLATFORM_180;
-            platformMode = ATRobotEnumeration.AUTO;
-            TrajectorySequence trajSeqMedSubstation = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                    .turn(Math.toRadians(180))
-                    .build();
-                    drive.followTrajectorySequenceAsync(trajSeqMedSubstation);
-        }
-
-        /**
-         * This is to increase the tophat motors speed
-         */
-        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0 && gamepad1.dpad_up){
-            platformAction = ATRobotEnumeration.SPEED_UP;
-            platformMode = ATRobotEnumeration.MANUAL;
-            tophatController.setTopHatMotorsVelocity(2000,3000,3000);
-        }
-
-        /**
-         * This is to decrease the tophat motors speed
-         */
-
-        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0 && gamepad1.dpad_down){
-            platformAction = ATRobotEnumeration.SPEED_DOWN;
-            platformMode = ATRobotEnumeration.MANUAL;
-            tophatController.setTopHatMotorsVelocity(1000,1000,1000);
-        }
-
-        /**
-         * This is to set the tophat in navigation position in the field
-         */
-        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
-            tophatController.setTophatAction(ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN);
-            tophatController.setTophatMode(ATRobotEnumeration.AUTO);
-            tophatController.setTopHatPosition(.1,false,4300*tophatController.armMultiplier,-1800*tophatController.elbowMultiplier,945);
-        }
     }
     /**
      * This method is to move the robot to substation pickup position
@@ -365,5 +288,262 @@ public class TeleopATGameDayStates extends LinearOpMode {
         ATGlobalStorage.allianceName=ATRobotEnumeration.BLUE_ALLIANCE;
         tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, platformAction, hardwareMap);
     }
+
+    private void platformDriverActionsNovi(){
+        /**
+         * This method would run all the time to ensure platform drive will not be drifting due to platform action condictions
+         */
+        if (gamepad1.left_stick_y!=0 || gamepad1.left_stick_x!=0 || gamepad1.right_stick_x!=0) {
+            platformAction = ATRobotEnumeration.PLATFORM_DRIVE;
+            platformMode = ATRobotEnumeration.MANUAL;
+        }
+        if (platformAction==ATRobotEnumeration.PLATFORM_DRIVE){
+            drive.setWeightedDrivePower(
+                    new Pose2d(
+                            -gamepad1.left_stick_y * 0.8,
+                            -gamepad1.left_stick_x * 0.5,
+                            -gamepad1.right_stick_x * 0.5
+                    )
+            );
+        }
+        /** Reset the robot manually when needed
+         */
+        if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x && gamepad1.left_trigger>0 && gamepad1.right_trigger>0) {
+            platformAction = ATRobotEnumeration.RESET;
+            platformMode = ATRobotEnumeration.AUTO;
+            tophatController.ResetTopHat();
+        }
+
+        /** perform auto navigation from auton position to teleop pickup position only for first time
+         * enhance further later from any position in zone to move to substation pickup position
+         */
+        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.a){
+            platformAction = ATRobotEnumeration.SUBSTATION_PICKUP_POS;
+            platformMode = ATRobotEnumeration.AUTO;
+            navigateToPickupInSubstation();
+        }
+        /**
+         * Execute emergency stop during auto navigation
+         */
+        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.x){
+            platformAction = ATRobotEnumeration.KILL_ALL_ACTIONS;
+            platformMode = ATRobotEnumeration.AUTO;
+            drive.breakFollowing();
+            tophatController.stopTopHatMovement();
+        }
+
+        /**
+         * This is to turn robot in 180 degrees in counter clockwise
+         * */
+        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
+            platformAction = ATRobotEnumeration.TURN_PLATFORM_180;
+            platformMode = ATRobotEnumeration.AUTO;
+            TrajectorySequence trajSeqMedSubstation = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                    .turn(Math.toRadians(180))
+                    .build();
+            drive.followTrajectorySequenceAsync(trajSeqMedSubstation);
+        }
+
+        /**
+         * This is to increase the tophat motors speed
+         */
+        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0 && gamepad1.dpad_up){
+            platformAction = ATRobotEnumeration.SPEED_UP;
+            platformMode = ATRobotEnumeration.MANUAL;
+            tophatController.setTopHatMotorsVelocity(2000,3000,3000);
+        }
+
+        /**
+         * This is to decrease the tophat motors speed
+         */
+
+        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0 && gamepad1.dpad_down){
+            platformAction = ATRobotEnumeration.SPEED_DOWN;
+            platformMode = ATRobotEnumeration.MANUAL;
+            tophatController.setTopHatMotorsVelocity(1000,1000,1000);
+        }
+
+        /**
+         * This is to set the tophat in navigation position in the field
+         */
+        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
+            tophatController.setTophatAction(ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN);
+            tophatController.setTophatMode(ATRobotEnumeration.AUTO);
+            tophatController.setTopHatPosition(.1,false,4300*tophatController.armMultiplier,-1800*tophatController.elbowMultiplier,945);
+        }
+    }
+
+    private void platformDriverActionsStatesChamp(){
+        /**
+         * This method would run all the time to ensure platform drive will not be drifting due to platform action condictions
+         */
+        if (gamepad1.left_stick_y!=0 || gamepad1.left_stick_x!=0 || gamepad1.right_stick_x!=0) {
+            platformAction = ATRobotEnumeration.PLATFORM_DRIVE;
+            platformMode = ATRobotEnumeration.MANUAL;
+        }
+        if (platformAction==ATRobotEnumeration.PLATFORM_DRIVE){
+            drive.setWeightedDrivePower(
+                    new Pose2d(
+                            -gamepad1.left_stick_y * 0.8,
+                            -gamepad1.left_stick_x * 0.5,
+                            -gamepad1.right_stick_x * 0.5
+                    )
+            );
+        }
+
+        /** perform auto navigation from auton position to teleop pickup position only for first time
+         * enhance further later from any position in zone to move to substation pickup position
+         */
+        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
+            platformAction = ATRobotEnumeration.SUBSTATION_PICKUP_POS;
+            platformMode = ATRobotEnumeration.AUTO;
+            navigateToPickupInSubstation();
+        }
+
+        /**
+         * Execute emergency stop during auto navigation
+         */
+        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.x){
+            platformAction = ATRobotEnumeration.KILL_ALL_ACTIONS;
+            platformMode = ATRobotEnumeration.AUTO;
+            drive.breakFollowing();
+            tophatController.stopTopHatMovement();
+        }
+
+        /** Reset the robot manually when needed
+         */
+        if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x && gamepad1.left_trigger>0 && gamepad1.right_trigger>0) {
+            platformAction = ATRobotEnumeration.RESET;
+            platformMode = ATRobotEnumeration.AUTO;
+            tophatController.ResetTopHat();
+        }
+
+        /**
+         * This is to set the tophat in navigation position in the field
+         */
+        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.y){
+            tophatController.setTophatAction(ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN);
+            tophatController.setTophatMode(ATRobotEnumeration.AUTO);
+            tophatController.setTopHatPosition(.1,false,4300*tophatController.armMultiplier,-1800*tophatController.elbowMultiplier,945);
+        }
+
+        /**
+         * This is to turn robot in 180 degrees in counter clockwise
+         * */
+        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.b){
+            platformAction = ATRobotEnumeration.TURN_PLATFORM_180;
+            platformMode = ATRobotEnumeration.AUTO;
+            TrajectorySequence trajSeqMedSubstation = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                    .turn(Math.toRadians(180))
+                    .build();
+            drive.followTrajectorySequenceAsync(trajSeqMedSubstation);
+        }
+
+        /**
+         * This is to preset TopHat for left ground junction drop         *
+         */
+        if (!gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.14,false,1902*tophatController.armMultiplier,-7394*tophatController.elbowMultiplier,1382*tophatController.turnTableMultiplier);
+        }
+        /**
+         * This is to preset TopHat for right ground junction drop
+         */
+        if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.x){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.14,false,1902*tophatController.armMultiplier,-7394*tophatController.elbowMultiplier,494*tophatController.turnTableMultiplier);
+        }
+
+        /**
+         * This is to preset TopHat for left low junction drop
+         */
+        if (!gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.8,false,391*tophatController.armMultiplier,-1080*tophatController.elbowMultiplier,1406*tophatController.turnTableMultiplier);
+        }
+        /**
+         * This is to preset TopHat for right low junction drop
+         */
+        if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.a){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.8,false,391*tophatController.armMultiplier,-1080*tophatController.elbowMultiplier,506*tophatController.turnTableMultiplier);
+        }
+
+        /**
+         * This is to preset TopHat for left medium junction drop
+         */
+        if (gamepad1.left_bumper && !gamepad1.right_bumper && gamepad1.b){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.87,false,2018*tophatController.armMultiplier,-1888*tophatController.elbowMultiplier,1507*tophatController.turnTableMultiplier);
+        }
+
+        /**
+         * This is to preset TopHat for right medium junction drop
+         */
+        if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.b){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.87,false,2018*tophatController.armMultiplier,-1888*tophatController.elbowMultiplier,607*tophatController.turnTableMultiplier);
+        }
+
+
+        /**
+         * This is to preset TopHat for left high junction drop
+         */
+        if (!gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.y){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.6555,false, 3874*tophatController.armMultiplier, -4605*tophatController.elbowMultiplier,1700*tophatController.turnTableMultiplier);
+        }
+        /**
+         * This is to preset TopHat for right high junction drop
+         */
+        if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.y){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.6555,false,  3874*tophatController.armMultiplier, -4605*tophatController.elbowMultiplier,280*tophatController.turnTableMultiplier);
+        }
+
+        /**
+         * This is to preset TopHat for ground junction drop and also front pickup         *
+         */
+        if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.14,false,1902*tophatController.armMultiplier,-7394*tophatController.elbowMultiplier,980*tophatController.turnTableMultiplier);
+        }
+
+        /**
+         * This is to preset TopHat for left low junction drop
+         */
+        if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.8,false,391*tophatController.armMultiplier,-1080*tophatController.elbowMultiplier,980*tophatController.turnTableMultiplier);
+        }
+        /**
+         * This is to preset TopHat for left medium junction drop
+         */
+        if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.87,false,2018*tophatController.armMultiplier,-1888*tophatController.elbowMultiplier,980*tophatController.turnTableMultiplier);
+        }
+
+        /**
+         * This is to preset TopHat for left high junction drop
+         */
+        if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.y){
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.teleOpStep=0;
+            tophatController.setTopHatPosition(.6555,false, 3874*tophatController.armMultiplier, -4605*tophatController.elbowMultiplier,980*tophatController.turnTableMultiplier);
+        }
+    }
+
 
 }

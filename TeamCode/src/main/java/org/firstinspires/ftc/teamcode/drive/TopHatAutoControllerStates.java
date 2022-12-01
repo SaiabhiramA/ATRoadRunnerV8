@@ -62,15 +62,15 @@ public class TopHatAutoControllerStates {
     double robotMidPointElbowPosition=-3500*elbowMultiplier;
     double robotMidPointTurnTablePosition=945*turnTableMultiplier;
     int step = 0 ;
-    double teleOpStep=0;
+    public double teleOpStep=0;
     int noOfCones = 0 ;
     MecanumDriveAT drive;
-    ATRobotEnumeration tophatAction;
+    public ATRobotEnumeration tophatAction;
 
     ATRobotEnumeration tophatMode;
     ATRobotEnumeration substationHSide;
     ATRobotEnumeration substationMSide;
-    ATRobotEnumeration substationPickConfig;
+    public ATRobotEnumeration substationPickConfig;
     double subTTHighPickupPos;
     double subArmHighPickupPos;
     double subElbowHighPickupPos;
@@ -294,8 +294,8 @@ public class TopHatAutoControllerStates {
      * This function is executed when this Op Mode is selected from the Driver Station.
      */
     public void runTopHat() {
-        fullManualControl_New();
-        partialManualControl();
+        //tophatDriverActionsNovi();
+        this.tophatDriverActionsStateChamp();
         if (tophatAction == ATRobotEnumeration.MANUAL) {
             tophatMode = ATRobotEnumeration.MANUAL;
             sleepMode = ATRobotEnumeration.SLEEP_MODE_OFF;
@@ -780,7 +780,6 @@ public class TopHatAutoControllerStates {
          * have TopHat stay at medium junction specific height
          * this can be used to pickup cone and navigate anywhere within the filed to either own a junction
          * or complete the circuit
-         * *#################### NOT WORKING ####################
          */
         if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.x){
             tophatAction = ATRobotEnumeration.PICK_CONE_READY_TO_NAVIGATE;
@@ -1615,6 +1614,157 @@ public class TopHatAutoControllerStates {
             telemetry.addData("No Of COnes", noOfCones);
             return false;
         }
+    }
+
+    private void tophatDriverActionsNovi(){
+        fullManualControl_New();
+        partialManualControl();
+    }
+
+    private void tophatDriverActionsStateChamp(){
+
+        if (gamepad2.left_trigger > 0  && gamepad2.left_bumper && gamepad2.right_bumper)
+        {
+            tophatAction = ATRobotEnumeration.MANUAL;
+            TurnTablePosition += gamepad2.left_trigger*TurnTableSpeed;
+            telemetry.addData("Left Trigger TurnTable Left", "Pressed");
+        }
+
+        if (gamepad2.right_trigger > 0  && gamepad2.left_bumper && gamepad2.right_bumper)
+        {
+            tophatAction = ATRobotEnumeration.MANUAL;
+            TurnTablePosition += -gamepad2.right_trigger*TurnTableSpeed;
+            telemetry.addData("Right Trigger TurnTable Right", "Pressed");
+        }
+
+        if (gamepad2.left_stick_y != 0 && gamepad2.left_bumper && gamepad2.right_bumper) {
+            tophatAction = ATRobotEnumeration.MANUAL;
+            ArmPosition += -gamepad2.left_stick_y*ArmSpeed;
+            telemetry.addData("left stick y Arm Up or Down", "Pressed");
+        }
+        if (gamepad2.right_stick_y != 0 && gamepad2.left_bumper && gamepad2.right_bumper) {
+            tophatAction = ATRobotEnumeration.MANUAL;
+            ElbowPosition += gamepad2.right_stick_y*ElbowSpeed;
+            telemetry.addData("right stick y Elbow Up or Down", "Pressed");
+        }
+
+        if (gamepad2.dpad_up && gamepad2.left_bumper && gamepad2.right_bumper)
+        {
+            tophatAction = ATRobotEnumeration.MANUAL;
+            WristPosition += WristSpeed;
+            setWristPosition(WristPosition);
+            telemetry.addData("DpadUp Wrist Up", "Pressed");
+        }
+        if (gamepad2.dpad_down && gamepad2.left_bumper && gamepad2.right_bumper)
+        {
+            tophatAction = ATRobotEnumeration.MANUAL;
+            WristPosition += -WristSpeed;
+            setWristPosition(WristPosition);
+            telemetry.addData("DpadDown Wrist Down", "Pressed");
+        }
+        if (gamepad2.dpad_left && gamepad2.left_bumper && gamepad2.right_bumper)
+        {
+            tophatAction = ATRobotEnumeration.MANUAL;
+            openClaw(true);
+            HoldCone = false;
+            telemetry.addData("DpadLeft Claw Open", "Pressed");
+        }
+        if (gamepad2.dpad_right && gamepad2.left_bumper && gamepad2.right_bumper)
+        {
+            tophatAction = ATRobotEnumeration.MANUAL;
+            openClaw(false);
+            HoldCone = true;
+            telemetry.addData("DpadRight Claw Close", "Pressed");
+        }
+
+        /**
+         * This is to preset TopHat to pickup cone from Alliance side specific substation for Medium Junction Drop
+         * This needs to be added to the instruction sheet and not to analyze this as left or right instead focus on High vs
+         * Medium Junction
+         */
+
+        if (gamepad2.left_trigger == 0 && gamepad2.right_trigger > 0 && gamepad2.x){
+            tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            teleOpStep=0;
+            setTopHatPosition(subWristMedPickupPos, true, subArmMedPickupPos, subElbowMedPickupPos, subTTMedPickupPos);
+        }
+
+        /**
+         * This is to preset TopHat to pickup cone from Alliance side specific substation for High Junction Drop
+         * This needs to be added to the instruction sheet and not to analyze this as left or right instead focus on High vs
+         * Medium Junction
+         */
+        if (gamepad2.left_trigger > 0 && gamepad2.right_trigger == 0 && gamepad2.x){
+            tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            teleOpStep=0;
+            setTopHatPosition(subWristHighPickupPos, true, subArmHighPickupPos, subElbowHighPickupPos, subTTHighPickupPos);
+        }
+
+        /**
+         * This is to preset TopHat to pickup cone from Alliance side specific substation and
+         * have TopHat stay at medium junction specific height
+         * this can be used to pickup cone and navigate anywhere within the filed to either own a junction
+         * or complete the circuit
+         */
+        if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.x){
+            tophatAction = ATRobotEnumeration.PICK_CONE_READY_TO_NAVIGATE;
+            teleOpStep=0;
+        }
+
+        /**
+         * This is to pickup cone from Alliance side specific substation and have it ready to drop
+         * in high junction
+         */
+        if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.y){
+            tophatAction = ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH;
+            teleOpStep=0;
+            substationPickConfig =ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH;
+        }
+
+        /**
+         * This is to preset TopHat to pickup cone from Alliance side specific substation and
+         * have TopHat continue dropping cones till action being interrupted by pressing any additional key
+         */
+        if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.y){
+            tophatAction = ATRobotEnumeration.PICK_CONE_DROP_HIGH_IN_LOOP;
+            teleOpStep=0;
+        }
+        /**
+         * This is to pickup cone from Alliance side specific substation and have it ready to drop
+         * in medium junction
+         */
+        if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.b){
+            tophatAction = ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM;
+            teleOpStep=0;
+            substationPickConfig =ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM;
+        }
+        /**
+         * This is to preset TopHat to pickup cone from Alliance side specific substation and
+         * have TopHat continue dropping cones in Medium Junction till action being interrupted by pressing any additional key
+         */
+        if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.b){
+            tophatAction = ATRobotEnumeration.PICK_CONE_DROP_MEDIUM_IN_LOOP;
+            teleOpStep=0;
+        }
+        /**
+         * This is to increase the tophat motors speed
+         */
+        if (gamepad2.left_trigger > 0 && gamepad2.right_trigger > 0 && gamepad2.dpad_up){
+            tophatAction = ATRobotEnumeration.SPEED_UP;
+            tophatMode = ATRobotEnumeration.MANUAL;
+            setTopHatMotorsVelocity(2000,3000,3000);
+        }
+
+        /**
+         * This is to decrease the tophat motors speed
+         */
+
+        if (gamepad2.left_trigger > 0 && gamepad2.right_trigger > 0 && gamepad2.dpad_down){
+            tophatAction = ATRobotEnumeration.SPEED_DOWN;
+            tophatMode = ATRobotEnumeration.MANUAL;
+            setTopHatMotorsVelocity(1000,1000,1000);
+        }
+
     }
 
 }
