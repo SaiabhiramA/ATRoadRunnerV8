@@ -424,7 +424,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.y){
             tophatController.setTophatAction(ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN);
             tophatController.setTophatMode(ATRobotEnumeration.AUTO);
-            tophatController.setTopHatPosition(.1,false,4300*tophatController.armMultiplier,-1800*tophatController.elbowMultiplier,945);
+            tophatController.setTopHatPosition(.1,false,4300*tophatController.armMultiplier,-1800*tophatController.elbowMultiplier,tophatController.frontPickTTPos);
         }
 
         /**
@@ -443,17 +443,17 @@ public class TeleopATGameDayStates extends LinearOpMode {
          * This is to preset TopHat for left ground junction drop         *
          */
         if (!gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x){
-            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_GROUND_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.14,false,1902*tophatController.armMultiplier,-7394*tophatController.elbowMultiplier,1382*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.groundJunctionWristPos,false,tophatController.groundJunctionArmPos,tophatController.groundJunctionElbowPos,tophatController.leftDiagPickTTPos);
         }
         /**
          * This is to preset TopHat for right ground junction drop
          */
         if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.x){
-            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_GROUND_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.14,false,1902*tophatController.armMultiplier,-7394*tophatController.elbowMultiplier,494*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.groundJunctionWristPos,false,tophatController.groundJunctionArmPos,tophatController.groundJunctionElbowPos,tophatController.rightDiagPickTTPos);
         }
 
         /**
@@ -462,7 +462,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (!gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.8,false,391*tophatController.armMultiplier,-1080*tophatController.elbowMultiplier,1406*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.lowJunctionWristPos,false,tophatController.lowJunctionArmPos,tophatController.lowJunctionElbowPos,tophatController.leftDiagPickTTPos);
         }
         /**
          * This is to preset TopHat for right low junction drop
@@ -470,7 +470,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.a){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.8,false,391*tophatController.armMultiplier,-1080*tophatController.elbowMultiplier,506*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.lowJunctionWristPos,false,tophatController.lowJunctionArmPos,tophatController.lowJunctionElbowPos,tophatController.rightDiagPickTTPos);
         }
 
         /**
@@ -479,7 +479,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (gamepad1.left_bumper && !gamepad1.right_bumper && gamepad1.b){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.87,false,2018*tophatController.armMultiplier,-1888*tophatController.elbowMultiplier,1507*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.mediumJunctionWristPos,false,tophatController.mediumJunctionArmPos,tophatController.mediumJunctionElbowPos,tophatController.leftDiagPickTTPos);
         }
 
         /**
@@ -488,7 +488,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.b){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.87,false,2018*tophatController.armMultiplier,-1888*tophatController.elbowMultiplier,607*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.mediumJunctionWristPos,false,tophatController.mediumJunctionArmPos,tophatController.mediumJunctionElbowPos,tophatController.rightDiagPickTTPos);
         }
 
 
@@ -498,7 +498,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (!gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.y){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.6555,false, 3874*tophatController.armMultiplier, -4605*tophatController.elbowMultiplier,1700*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.highJunctionWristPos,false, tophatController.highJunctionArmPos, tophatController.highJunctionElbowPos,tophatController.leftDiagPickTTPos);
         }
         /**
          * This is to preset TopHat for right high junction drop
@@ -506,44 +506,42 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.y){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.6555,false,  3874*tophatController.armMultiplier, -4605*tophatController.elbowMultiplier,280*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.highJunctionWristPos,false, tophatController.highJunctionArmPos, tophatController.highJunctionElbowPos,tophatController.rightDiagPickTTPos);
         }
 
         /**
          * This is to preset TopHat for ground junction drop and also front pickup         *
          */
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x){
-            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
+            tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_GROUND_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.14,false,1902*tophatController.armMultiplier,-7394*tophatController.elbowMultiplier,980*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.groundJunctionWristPos,false,tophatController.groundJunctionArmPos,tophatController.groundJunctionElbowPos,tophatController.frontPickTTPos);
         }
 
         /**
-         * This is to preset TopHat for left low junction drop
+         * This is to preset TopHat for front low junction drop
          */
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.8,false,391*tophatController.armMultiplier,-1080*tophatController.elbowMultiplier,980*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.lowJunctionWristPos,false,tophatController.lowJunctionArmPos,tophatController.lowJunctionElbowPos,tophatController.frontPickTTPos);
         }
         /**
-         * This is to preset TopHat for left medium junction drop
+         * This is to preset TopHat for front medium junction drop
          */
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.87,false,2018*tophatController.armMultiplier,-1888*tophatController.elbowMultiplier,980*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.mediumJunctionWristPos,false,tophatController.mediumJunctionArmPos,tophatController.mediumJunctionElbowPos,tophatController.frontPickTTPos);
         }
 
         /**
-         * This is to preset TopHat for left high junction drop
+         * This is to preset TopHat for front high junction drop
          */
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.y){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
-            tophatController.setTopHatPosition(.6555,false, 3874*tophatController.armMultiplier, -4605*tophatController.elbowMultiplier,980*tophatController.turnTableMultiplier);
+            tophatController.setTopHatPosition(tophatController.highJunctionWristPos,false, tophatController.highJunctionArmPos, tophatController.highJunctionElbowPos,tophatController.frontPickTTPos);
         }
     }
-
-
 }
