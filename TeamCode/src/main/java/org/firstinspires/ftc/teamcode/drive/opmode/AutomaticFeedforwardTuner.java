@@ -11,16 +11,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
+
+import org.firstinspires.ftc.teamcode.drive.MecanumDriveATWheels;
 import org.firstinspires.ftc.teamcode.util.LoggingUtil;
 import org.firstinspires.ftc.teamcode.util.RegressionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.MAX_RPM;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.rpmToVelocity;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstantsATWheels.MAX_RPM;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstantsATWheels.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstantsATWheels.rpmToVelocity;
 
 /*
  * Op mode for computing kV, kStatic, and kA from various drive routines. For the curious, here's an
@@ -34,7 +35,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.rpmToVelocit
  */
 @Config
 @Autonomous(group = "drive")
-@Disabled
+//@Disabled
 public class AutomaticFeedforwardTuner extends LinearOpMode {
     public static double MAX_POWER = 0.7;
     public static double DISTANCE = 100; // in
@@ -48,7 +49,7 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        MecanumDriveAT drive = new MecanumDriveAT(hardwareMap);
+        MecanumDriveATWheels drive = new MecanumDriveATWheels(hardwareMap);
 
         NanoClock clock = NanoClock.system();
 

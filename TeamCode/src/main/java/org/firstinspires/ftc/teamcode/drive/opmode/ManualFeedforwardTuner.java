@@ -15,15 +15,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
+import org.firstinspires.ftc.teamcode.drive.MecanumDriveATWheels;
 
 import java.util.Objects;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.kA;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.kV;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstantsATWheels.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstantsATWheels.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstantsATWheels.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstantsATWheels.kA;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstantsATWheels.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstantsATWheels.kV;
 
 /*
  * This routine is designed to tune the open-loop feedforward coefficients. Although it may seem unnecessary,
@@ -42,13 +43,13 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstantsAT.kV;
  */
 @Config
 @Autonomous(group = "drive")
-@Disabled
+//@Disabled
 public class ManualFeedforwardTuner extends LinearOpMode {
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 96; // in
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
-    private MecanumDriveAT drive;
+    private MecanumDriveATWheels drive;
 
     enum Mode {
         DRIVER_MODE,
@@ -72,7 +73,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        drive = new MecanumDriveAT(hardwareMap);
+        drive = new MecanumDriveATWheels(hardwareMap);
 
         mode = Mode.TUNING_MODE;
 
