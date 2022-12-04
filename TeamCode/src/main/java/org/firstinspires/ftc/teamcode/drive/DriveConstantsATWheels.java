@@ -49,7 +49,7 @@ public class DriveConstantsATWheels {
      */
     public static double WHEEL_RADIUS = 1.88976; // in
     public static double GEAR_RATIO = 1.015;//.99; // output (wheel) speed / input (motor) speed- MODIFIED
-    public static double TRACK_WIDTH = 11.5;//10.76;//13.84;//14; // in    ???? RA-CHANGE THIS WILL NEED TO BE CHANGED ONCE NEW Chasis is Built
+    public static double TRACK_WIDTH = 10.78;//11.5;//10.76;//13.84;//14; // in    ???? RA-CHANGE THIS WILL NEED TO BE CHANGED ONCE NEW Chasis is Built
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -57,7 +57,7 @@ public class DriveConstantsATWheels {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.01609;//1.0 / rpmToVelocity(MAX_RPM);
+    public static double kV = 0.017;//1.0 / rpmToVelocity(MAX_RPM);
     public static double kA = 0.003;//0;
     public static double kStatic = 0.08300;//0;
 
@@ -78,9 +78,9 @@ public class DriveConstantsATWheels {
     public static double MAX_ANG_ACCEL = Math.toRadians(184.02607784577722);
 */
     // RA-CHANGE
-    public static double MAX_VEL = 50;//40; //52.48180821614297; // reported on 12/2/2022 is 53.54317736
+    public static double MAX_VEL = 50;//54.98645//40; //52.48180821614297; // reported on 12/2/2022 is 53.54317736
     public static double MAX_ACCEL = 52.5;
-    public static double MAX_ANG_VEL = 4.89954;//5; //0.006666666828095913;// Math.toRadians(184.02607784577722);
+    public static double MAX_ANG_VEL = 4.9258;//4.89954;//5; //0.006666666828095913;// Math.toRadians(184.02607784577722);
     public static double MAX_ANG_ACCEL = 4.5;//;Math.toRadians(184.02607784577722);
 
     public static double encoderTicksToInches(double ticks) {

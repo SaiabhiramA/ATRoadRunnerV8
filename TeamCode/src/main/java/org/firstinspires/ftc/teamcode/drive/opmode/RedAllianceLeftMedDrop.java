@@ -32,7 +32,6 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 //@Autonomous(group = "drive")
 @Disabled
 @Autonomous(name = "Red Allinace Left Medium Drop")
-//@Disabled
 public class RedAllianceLeftMedDrop extends LinearOpMode {
     MecanumDriveAT drive;
   //  TopHatAutoController tophatController;

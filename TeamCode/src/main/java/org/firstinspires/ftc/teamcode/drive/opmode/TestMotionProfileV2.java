@@ -5,12 +5,13 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 //import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 //import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 
 @Autonomous(name = "AMotionProfileV2")
-
+@Disabled
 public class TestMotionProfileV2 extends LinearOpMode {
 
     double output;

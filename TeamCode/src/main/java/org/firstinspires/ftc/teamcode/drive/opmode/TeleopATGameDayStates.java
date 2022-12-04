@@ -6,6 +6,7 @@ import static freightfrenzy.teamcode.drive.AtomicToadsDriveConstants.TRACK_WIDTH
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
  */
 //@TeleOp(group = "drive")
 @TeleOp(name = "ATTeleOpMode-GameDayStates")
+@Disabled
 public class TeleopATGameDayStates extends LinearOpMode {
     TopHatAutoControllerStates tophatController;
     MecanumDriveATCancelable drive;
@@ -112,7 +114,6 @@ public class TeleopATGameDayStates extends LinearOpMode {
                 telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
                 telemetry.addData("robot mode", tophatController.getTophatAction());
                 telemetry.addData("Alliance Name", ATGlobalStorage.allianceName);
-                telemetry.update();
 
                 if (ATGlobalStorage.autonModeName==ATRobotEnumeration.BLUE_LEFT_HIGH_DROP) {
                     if (Math.abs(robotYpos)>27 &&Math.abs(robotYpos) <39) {
@@ -281,7 +282,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
     /**
      * This method is only used when Gameday states to be debugged without Auton Program
      */
-    private void mockupAutonExecution(){
+    public void mockupAutonExecution(){
         ATGlobalStorage.autonModeName=ATRobotEnumeration.BLUE_LEFT_HIGH_DROP;
         ATGlobalStorage.currentPose=drive.getPoseEstimate();
         ATGlobalStorage.parkingPos=ATRobotEnumeration.PARK2;
@@ -320,7 +321,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.a){
             platformAction = ATRobotEnumeration.SUBSTATION_PICKUP_POS;
             platformMode = ATRobotEnumeration.AUTO;
-            navigateToPickupInSubstation();
+            //navigateToPickupInSubstation();
         }
         /**
          * Execute emergency stop during auto navigation
@@ -397,7 +398,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
             platformAction = ATRobotEnumeration.SUBSTATION_PICKUP_POS;
             platformMode = ATRobotEnumeration.AUTO;
-            navigateToPickupInSubstation();
+            //navigateToPickupInSubstation(); REENABLE THIS LATER
         }
 
         /**
@@ -428,15 +429,15 @@ public class TeleopATGameDayStates extends LinearOpMode {
         }
 
         /**
-         * This is to turn robot in 180 degrees in counter clockwise
+         * This is to turn robot in 180 degrees in counter clockwise  - REENABLE THIS LATER
          * */
         if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.b){
-            platformAction = ATRobotEnumeration.TURN_PLATFORM_180;
+            /*platformAction = ATRobotEnumeration.TURN_PLATFORM_180;
             platformMode = ATRobotEnumeration.AUTO;
             TrajectorySequence trajSeqMedSubstation = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                     .turn(Math.toRadians(180))
                     .build();
-            drive.followTrajectorySequenceAsync(trajSeqMedSubstation);
+            drive.followTrajectorySequenceAsync(trajSeqMedSubstation);*/
         }
 
         /**
