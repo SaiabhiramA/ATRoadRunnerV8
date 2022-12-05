@@ -953,12 +953,12 @@ public class TopHatAutoControllerStates {
             teleOpStep = 0.1;
         }
         else if (teleOpStep==0.1){
-            moveTopHatPosition(.3, desiredClawPosition, 4300 * armMultiplier, -2600 * elbowMultiplier, turntable.getCurrentPosition());
+            moveTopHatPosition(.3, desiredClawPosition, highJunctionArmPos, highJunctionElbowPos, turntable.getCurrentPosition());
             teleOpStep = 1;
         }
-        else if (teleOpStep == 1 && isInRange(-2600*elbowMultiplier, elbow.getCurrentPosition())
-                && isInRange(4300*armMultiplier, arm.getCurrentPosition())){
-            moveTopHatPosition(.3,desiredClawPosition,4300*armMultiplier,-2600*elbowMultiplier,desiredTurnTablePosition);
+        else if (teleOpStep == 1 && isInRange(highJunctionElbowPos, elbow.getCurrentPosition())
+                && isInRange(highJunctionArmPos, arm.getCurrentPosition())){
+            moveTopHatPosition(.3,desiredClawPosition,highJunctionArmPos,highJunctionElbowPos,desiredTurnTablePosition);
             teleOpStep=2;
         }
         else if (teleOpStep == 2 && isInRange(desiredTurnTablePosition, turntable.getCurrentPosition())){
@@ -987,12 +987,12 @@ public class TopHatAutoControllerStates {
             teleOpStep = 0.1;
         }
         else if (teleOpStep==0.1){
-            moveTopHatPosition(0, desiredClawPosition, 4300 * armMultiplier, -2600 * elbowMultiplier, turntable.getCurrentPosition());
+            moveTopHatPosition(0, desiredClawPosition, highJunctionArmPos, highJunctionElbowPos, turntable.getCurrentPosition());
             teleOpStep = 1;
         }
-        else if (teleOpStep == 1 && isInRange(-2600*elbowMultiplier, elbow.getCurrentPosition())
-                && isInRange(4300*armMultiplier, arm.getCurrentPosition())){
-            moveTopHatPosition(0,desiredClawPosition,4300*armMultiplier,-2600*elbowMultiplier,desiredTurnTablePosition);
+        else if (teleOpStep == 1 && isInRange(highJunctionElbowPos, elbow.getCurrentPosition())
+                && isInRange(highJunctionArmPos, arm.getCurrentPosition())){
+            moveTopHatPosition(0,desiredClawPosition,highJunctionArmPos,highJunctionElbowPos,desiredTurnTablePosition);
             teleOpStep=2;
         }
         else if (teleOpStep == 2 && isInRange(desiredTurnTablePosition, turntable.getCurrentPosition())){
@@ -1023,12 +1023,12 @@ public class TopHatAutoControllerStates {
             teleOpStep = 0.1;
         }
         else if (teleOpStep==0.1){
-            moveTopHatPosition(.1, false, 4300 * armMultiplier, -2600 * elbowMultiplier, turntable.getCurrentPosition());
+            moveTopHatPosition(.1, false,highJunctionArmPos , highJunctionElbowPos, turntable.getCurrentPosition());
             teleOpStep = 1;
         }
-        else if (teleOpStep == 1 && isInRange(-2600*elbowMultiplier, elbow.getCurrentPosition())
-                && isInRange(4300*armMultiplier, arm.getCurrentPosition())){
-            moveTopHatPosition(subWristHighPickupPos,true,4300*armMultiplier,-2600*elbowMultiplier, subTTHighPickupPos);
+        else if (teleOpStep == 1 && isInRange(highJunctionElbowPos, elbow.getCurrentPosition())
+                && isInRange(highJunctionArmPos, arm.getCurrentPosition())){
+            moveTopHatPosition(subWristHighPickupPos,true,highJunctionArmPos,highJunctionElbowPos, subTTHighPickupPos);
             teleOpStep=2;
         }
         else if (teleOpStep == 2 && isInRange(subTTHighPickupPos, turntable.getCurrentPosition())){
@@ -1060,14 +1060,14 @@ public class TopHatAutoControllerStates {
                 && isInRange(subArmHighPickupPos, arm.getCurrentPosition())
                 && isInRange(subTTHighPickupPos, turntable.getCurrentPosition()) ) {
             teleOpStep=4;
-            moveTopHatPosition(.1,false,4300*armMultiplier,-1800*elbowMultiplier, subTTHighPickupPos);
+            moveTopHatPosition(.1,false,highJunctionArmPos,-1800*elbowMultiplier, subTTHighPickupPos);
         }
         else if (teleOpStep==4 && isInRange(-1800*elbowMultiplier, elbow.getCurrentPosition())
-                && isInRange(4300*armMultiplier, arm.getCurrentPosition())){
+                && isInRange(highJunctionArmPos, arm.getCurrentPosition())){
             teleOpStep=5;
-            moveTopHatPosition(.1,false,4300*armMultiplier,-1800*elbowMultiplier,945*turnTableMultiplier);
+            moveTopHatPosition(.1,false,highJunctionArmPos,-1800*elbowMultiplier,frontPickTTPos);
         }
-        else if (teleOpStep==5 && isInRange(945*turnTableMultiplier, turntable.getCurrentPosition())){
+        else if (teleOpStep==5 && isInRange(frontPickTTPos, turntable.getCurrentPosition())){
             teleOpStep=0;
             tophatAction = ATRobotEnumeration.FULL_AUTO;
         }
@@ -1179,11 +1179,11 @@ public class TopHatAutoControllerStates {
             //teleOpSleep(500);
             teleOpStep = 0.1;
         } else if (teleOpStep == 0.1) {
-            moveTopHatPosition(0, false, 4300 * armMultiplier, -2600 * elbowMultiplier, turntable.getCurrentPosition());
+            moveTopHatPosition(0, false, highJunctionArmPos, highJunctionElbowPos, turntable.getCurrentPosition());
             teleOpStep = 1;
-        } else if (teleOpStep == 1 && isInRange(-2600 * elbowMultiplier, elbow.getCurrentPosition())
-                && isInRange(4300 * armMultiplier, arm.getCurrentPosition())) {
-            moveTopHatPosition(0, true, 4300 * armMultiplier, -2600 * elbowMultiplier, subTTHighPickupPos_Loop);
+        } else if (teleOpStep == 1 && isInRange(highJunctionElbowPos, elbow.getCurrentPosition())
+                && isInRange(highJunctionArmPos, arm.getCurrentPosition())) {
+            moveTopHatPosition(0, true, highJunctionArmPos, highJunctionElbowPos, subTTHighPickupPos_Loop);
             teleOpStep = 2;
         } else if (teleOpStep == 2 && isInRange(subTTHighPickupPos_Loop, turntable.getCurrentPosition())) {
             moveTopHatPosition(0, true, subArmHighPickupPos_Loop, subElbowHighPickupPos_Loop, subTTHighPickupPos_Loop);
@@ -1210,10 +1210,10 @@ public class TopHatAutoControllerStates {
                 && isInRange(subArmHighPickupPos_Loop, arm.getCurrentPosition())
                 && isInRange(subTTHighPickupPos_Loop, turntable.getCurrentPosition())) {
             teleOpStep = 4;
-            moveTopHatPosition(.1, false, 4300 * armMultiplier, -2600 * elbowMultiplier, subTTHighPickupPos_Loop);
-        } else if (teleOpStep == 4 && isInRange(-2600 * elbowMultiplier, elbow.getCurrentPosition())
-                && isInRange(4300 * armMultiplier, arm.getCurrentPosition())) {
-            moveTopHatPosition(.1, false, 4300 * armMultiplier, -2600 * elbowMultiplier, subTTHighDropPos_Loop);
+            moveTopHatPosition(.1, false, highJunctionArmPos, highJunctionElbowPos, subTTHighPickupPos_Loop);
+        } else if (teleOpStep == 4 && isInRange(highJunctionElbowPos, elbow.getCurrentPosition())
+                && isInRange(highJunctionArmPos, arm.getCurrentPosition())) {
+            moveTopHatPosition(.1, false, highJunctionArmPos, highJunctionElbowPos, subTTHighDropPos_Loop);
             teleOpStep = 5;
         } else if (teleOpStep == 5 && isInRange(subTTHighDropPos_Loop, turntable.getCurrentPosition())) {
             moveTopHatPosition(subWristHighDropPos_Loop, false, subArmHighDropPos_Loop, subElbowHighDropPos_Loop, subTTHighDropPos_Loop);
@@ -1303,11 +1303,11 @@ public class TopHatAutoControllerStates {
             //teleOpSleep(500);
             teleOpStep = 0.1;
         } else if (teleOpStep == 0.1) {
-            moveTopHatPosition(0, false, 4300 * armMultiplier, -2600 * elbowMultiplier, turntable.getCurrentPosition());
+            moveTopHatPosition(0, false, highJunctionArmPos, highJunctionElbowPos, turntable.getCurrentPosition());
             teleOpStep = 1;
-        } else if (teleOpStep == 1 && isInRange(-2600 * elbowMultiplier, elbow.getCurrentPosition())
-                && isInRange(4300 * armMultiplier, arm.getCurrentPosition())) {
-            moveTopHatPosition(0, true, 4300 * armMultiplier, -2600 * elbowMultiplier, subTTMedPickupPos_Loop);
+        } else if (teleOpStep == 1 && isInRange(highJunctionElbowPos, elbow.getCurrentPosition())
+                && isInRange(highJunctionArmPos, arm.getCurrentPosition())) {
+            moveTopHatPosition(0, true, highJunctionArmPos, highJunctionElbowPos, subTTMedPickupPos_Loop);
             teleOpStep = 2;
         } else if (teleOpStep == 2 && isInRange(subTTMedPickupPos_Loop, turntable.getCurrentPosition())) {
             moveTopHatPosition(0, true, subArmMedPickupPos_Loop, subElbowMedPickupPos_Loop, subTTMedPickupPos_Loop);
@@ -1334,10 +1334,10 @@ public class TopHatAutoControllerStates {
                 && isInRange(subArmMedPickupPos_Loop, arm.getCurrentPosition())
                 && isInRange(subTTMedPickupPos_Loop, turntable.getCurrentPosition())) {
             teleOpStep = 4;
-            moveTopHatPosition(.1, false, 4300 * armMultiplier, -2600 * elbowMultiplier, subTTMedPickupPos_Loop);
-        } else if (teleOpStep == 4 && isInRange(-2600 * elbowMultiplier, elbow.getCurrentPosition())
-                && isInRange(4300 * armMultiplier, arm.getCurrentPosition())) {
-            moveTopHatPosition(.1, false, 4300 * armMultiplier, -2600 * elbowMultiplier, subTTMedDropPos_Loop);
+            moveTopHatPosition(.1, false, highJunctionArmPos, highJunctionElbowPos, subTTMedPickupPos_Loop);
+        } else if (teleOpStep == 4 && isInRange(highJunctionElbowPos, elbow.getCurrentPosition())
+                && isInRange(highJunctionArmPos, arm.getCurrentPosition())) {
+            moveTopHatPosition(.1, false, highJunctionArmPos, highJunctionElbowPos, subTTMedDropPos_Loop);
             teleOpStep = 5;
         } else if (teleOpStep == 5 && isInRange(subTTMedDropPos_Loop, turntable.getCurrentPosition())) {
             moveTopHatPosition(subWristMedDropPos_Loop, false, subArmMedDropPos_Loop, subElbowMedDropPos_Loop, subTTMedDropPos_Loop);
