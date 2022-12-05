@@ -108,10 +108,10 @@ public class TopHatAutoControllerStates {
     double subElbowHighPickupPos_Loop=-1666;
     double subWristHighPickupPos_Loop=.26;
 
-    double subTTHighDropPos_Loop=1406;
-    double subArmHighDropPos_Loop=2206;
-    double subElbowHighDropPos_Loop=-1298;
-    double subWristHighDropPos_Loop=.63;
+    double subTTHighDropPos_Loop=1371;
+    double subArmHighDropPos_Loop=2203;
+    double subElbowHighDropPos_Loop=-1259;
+    double subWristHighDropPos_Loop=.68;
 
     public double frontPickTTPos=884;
     public double leftDiagPickTTPos=1225;
@@ -129,11 +129,11 @@ public class TopHatAutoControllerStates {
 
     public double lowJunctionArmPos=391*armMultiplier;
     public double lowJunctionElbowPos=-1080*elbowMultiplier;
-    public double lowJunctionWristPos=.8;
+    public double lowJunctionWristPos=.85;
 
     public double groundJunctionArmPos=869;
     public double groundJunctionElbowPos=-1946;
-    public double groundJunctionWristPos=0.14;
+    public double groundJunctionWristPos=0.16;
 
     public ATRobotEnumeration topHatSpeed = ATRobotEnumeration.TOPHAT_MEDIUM_SPEED;
 
@@ -169,9 +169,7 @@ public class TopHatAutoControllerStates {
         elbow.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turntable.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turntable.setDirection(DcMotorSimple.Direction.REVERSE);
-        setTopHatSpeed(ATRobotEnumeration.TOPHAT_LOW_SPEED);
         ResetTopHat();
-        setTopHatSpeed(ATRobotEnumeration.TOPHAT_MEDIUM_SPEED);
       }
 
     public void basicInitializeRobot(HardwareMap hardwareMapAT, Telemetry tl, Gamepad gp1, Gamepad gp2, ATRobotEnumeration rMode) {
@@ -202,7 +200,8 @@ public class TopHatAutoControllerStates {
         LeftClawPosition = leftClaw.getPosition();
         WristSpeed = 0.01;
         WristPosition = wrist.getPosition();
-        setTopHatMotorsVelocity(2000, 2000,1000);
+        //setTopHatMotorsVelocity(2000, 2000,1000);
+        setTopHatSpeed(ATRobotEnumeration.TOPHAT_MEDIUM_SPEED);
 
         switch (ATGlobalStorage.autonModeName) {
             case RED_RIGHT_HIGH_DROP: {
@@ -227,6 +226,29 @@ public class TopHatAutoControllerStates {
                 subWristMedDropPos=.7794;
                 substationHSide=ATRobotEnumeration.SUBSTATION_LEFT;
                 substationMSide=ATRobotEnumeration.SUBSTATION_RIGHT;
+
+                /**
+                 * Following needs to be tuned well for specific substation and this is very generic
+                 */
+                subTTMedPickupPos_Loop=1705;
+                subArmMedPickupPos_Loop=755;
+                subElbowMedPickupPos_Loop=-1590;
+                subWristMedPickupPos_Loop=.2988;
+
+                subTTMedDropPos_Loop=450;
+                subArmMedDropPos_Loop=1030;
+                subElbowMedDropPos_Loop=-604;
+                subWristMedDropPos_Loop=.81;
+
+                subTTHighPickupPos_Loop=188;
+                subArmHighPickupPos_Loop=833;
+                subElbowHighPickupPos_Loop=-1666;
+                subWristHighPickupPos_Loop=.26;
+
+                subTTHighDropPos_Loop=1371;
+                subArmHighDropPos_Loop=2203;
+                subElbowHighDropPos_Loop=-1259;
+                subWristHighDropPos_Loop=.68;
             }
             break;
             case RED_LEFT_HIGH_DROP: {
@@ -251,6 +273,28 @@ public class TopHatAutoControllerStates {
                 subWristMedDropPos=.7794;
                 substationHSide=ATRobotEnumeration.SUBSTATION_RIGHT;
                 substationMSide=ATRobotEnumeration.SUBSTATION_LEFT;
+
+                subTTMedPickupPos_Loop=1705;
+                subArmMedPickupPos_Loop=755;
+                subElbowMedPickupPos_Loop=-1590;
+                subWristMedPickupPos_Loop=.2988;
+
+                subTTMedDropPos_Loop=450;
+                subArmMedDropPos_Loop=1030;
+                subElbowMedDropPos_Loop=-604;
+                subWristMedDropPos_Loop=.81;
+
+                subTTHighPickupPos_Loop=188;
+                subArmHighPickupPos_Loop=833;
+                subElbowHighPickupPos_Loop=-1666;
+                subWristHighPickupPos_Loop=.26;
+
+                subTTHighDropPos_Loop=1371;
+                subArmHighDropPos_Loop=2203;
+                subElbowHighDropPos_Loop=-1259;
+                subWristHighDropPos_Loop=.68;
+
+
             }
             break;
             case BLUE_RIGHT_HIGH_DROP: {
@@ -279,6 +323,27 @@ public class TopHatAutoControllerStates {
             }
             break;
             case BLUE_LEFT_HIGH_DROP: {
+
+                subTTMedPickupPos_Loop=1705;
+                subArmMedPickupPos_Loop=755;
+                subElbowMedPickupPos_Loop=-1590;
+                subWristMedPickupPos_Loop=.2988;
+
+                subTTMedDropPos_Loop=450;
+                subArmMedDropPos_Loop=1030;
+                subElbowMedDropPos_Loop=-604;
+                subWristMedDropPos_Loop=.81;
+
+                subTTHighPickupPos_Loop=188;
+                subArmHighPickupPos_Loop=833;
+                subElbowHighPickupPos_Loop=-1666;
+                subWristHighPickupPos_Loop=.26;
+
+                subTTHighDropPos_Loop=1371;
+                subArmHighDropPos_Loop=2203;
+                subElbowHighDropPos_Loop=-1259;
+                subWristHighDropPos_Loop=.68;
+
 
                 subTTHighPickupPos =281*turnTableMultiplier;
                 subArmHighPickupPos =1155*armMultiplier;
@@ -315,6 +380,7 @@ public class TopHatAutoControllerStates {
     }
 
     public void ResetTopHat(){
+        setTopHatSpeed(ATRobotEnumeration.TOPHAT_LOW_SPEED);
         tophatAction = ATRobotEnumeration.RESET;
         tophatMode = ATRobotEnumeration.AUTO;
         ResetWristNClaw();
@@ -322,6 +388,7 @@ public class TopHatAutoControllerStates {
         ResetArmElbow();
         ResetTurnTable();
         ResetArmDown();
+        setTopHatSpeed(ATRobotEnumeration.TOPHAT_MEDIUM_SPEED);
      }
 
      public void ResetTopHatStop(){
@@ -341,7 +408,7 @@ public class TopHatAutoControllerStates {
         if (tophatAction == ATRobotEnumeration.MANUAL) {
             tophatMode = ATRobotEnumeration.MANUAL;
             sleepMode = ATRobotEnumeration.SLEEP_MODE_OFF;
-            setTopHatSpeed(ATRobotEnumeration.TOPHAT_MEDIUM_SPEED);
+            resetSelectedTopHatSpeed();
             teleOpStep=0;
         }
         if (sleepMode !=ATRobotEnumeration.SLEEP_MODE_ON) {
@@ -1102,10 +1169,10 @@ public class TopHatAutoControllerStates {
     }
     private void pickFromSubstationDropInHighJunctionStates() {
         if (teleOpStep==2){
-            setTopHatMotorsVelocity(2000,500,750);
+            setTopHatSpeed(ATRobotEnumeration.TOPHAT_LOW_SPEED);
         }
         else{
-            setTopHatSpeed(ATRobotEnumeration.TOPHAT_MEDIUM_SPEED);
+            resetSelectedTopHatSpeed();
         }
         if (teleOpStep == 0) {
             openClaw(true);
@@ -1226,10 +1293,10 @@ public class TopHatAutoControllerStates {
 
     private void pickFromSubstationDropInMedJunctionStates() {
         if (teleOpStep==2){
-            setTopHatMotorsVelocity(2000,1000,750);
+            setTopHatSpeed(ATRobotEnumeration.TOPHAT_LOW_SPEED);
         }
         else{
-            setTopHatSpeed(ATRobotEnumeration.TOPHAT_MEDIUM_SPEED);
+            resetSelectedTopHatSpeed();
         }
         if (teleOpStep == 0) {
             openClaw(true);
@@ -1977,7 +2044,7 @@ public class TopHatAutoControllerStates {
         if (gamepad2.left_trigger > 0 && gamepad2.right_trigger > 0 && gamepad2.dpad_up){
             tophatAction = ATRobotEnumeration.SPEED_UP;
             tophatMode = ATRobotEnumeration.MANUAL;
-            setTopHatMotorsVelocity(3000,3000,1500);
+            setTopHatSpeed(ATRobotEnumeration.TOPHAT_HIGH_SPEED);
         }
 
         /**
@@ -1987,7 +2054,7 @@ public class TopHatAutoControllerStates {
         if (gamepad2.left_trigger > 0 && gamepad2.right_trigger > 0 && gamepad2.dpad_down){
             tophatAction = ATRobotEnumeration.SPEED_DOWN;
             tophatMode = ATRobotEnumeration.MANUAL;
-            setTopHatMotorsVelocity(2000,2000,1000);
+            setTopHatSpeed(ATRobotEnumeration.TOPHAT_MEDIUM_SPEED);
         }
 
     }
@@ -1995,17 +2062,23 @@ public class TopHatAutoControllerStates {
     public void setTopHatSpeed(ATRobotEnumeration speedLevel) {
         switch (speedLevel) {
             case TOPHAT_HIGH_SPEED:{
-                setTopHatMotorsVelocity(2500, 3000,1500);
+                setTopHatMotorsVelocity(3000, 3000,2000);
+                this.topHatSpeed=ATRobotEnumeration.TOPHAT_HIGH_SPEED;
             }
             break;
             case TOPHAT_MEDIUM_SPEED:{
                 setTopHatMotorsVelocity(2000, 2000,1000);
+                this.topHatSpeed=ATRobotEnumeration.TOPHAT_MEDIUM_SPEED;
             }
             break;
             case TOPHAT_LOW_SPEED:{
-                setTopHatMotorsVelocity(1000, 1500,1000);
+                setTopHatMotorsVelocity(1000, 1000,500);
+                this.topHatSpeed=ATRobotEnumeration.TOPHAT_LOW_SPEED;
             }
             break;
         }
+    }
+    private void resetSelectedTopHatSpeed(){
+        setTopHatSpeed(topHatSpeed);
     }
 }

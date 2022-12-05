@@ -429,7 +429,7 @@ public class TeleopATGameDayStates extends LinearOpMode {
         }
 
         /**
-         * This is to turn robot in 180 degrees in counter clockwise  - REENABLE THIS LATER
+         * This is to turn robot in 180 degrees in counter clockwise  - RE ENABLE THIS LATER
          * */
         if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.b){
             /*platformAction = ATRobotEnumeration.TURN_PLATFORM_180;

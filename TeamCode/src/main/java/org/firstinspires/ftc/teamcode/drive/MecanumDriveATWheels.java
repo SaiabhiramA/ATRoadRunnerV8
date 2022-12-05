@@ -55,8 +55,8 @@ import java.util.List;
 public class MecanumDriveATWheels extends MecanumDrive {
     //public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     //public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0,0,0.1);//3, 0, 0);//PIDCoefficients(4.75, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(6,0,0);//(7, 0, 0);//PIDCoefficients(4, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8,0,1);//3, 0, 0);//PIDCoefficients(4.75, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(20,0,0);//(7, 0, 0);//PIDCoefficients(4, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1.98;//1.57894;//1.16;//0.97935;//;//1.141;//38; //1;
 
