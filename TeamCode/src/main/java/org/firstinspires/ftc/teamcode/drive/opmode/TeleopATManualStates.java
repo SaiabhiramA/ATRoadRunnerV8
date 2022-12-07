@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
+import org.firstinspires.ftc.teamcode.drive.MecanumDriveATWheels;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoController;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStates;
 
@@ -19,16 +20,17 @@ import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStates;
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
 //@TeleOp(group = "drive")
-@TeleOp(name = "ATTeleOpMode-FullyManualStates")
+@TeleOp(name = "ATFullyManual***CAUTION***")
+@Disabled
 public class TeleopATManualStates extends LinearOpMode {
     TopHatAutoControllerStates tophatController;
-    MecanumDriveAT drive;
+    MecanumDriveATWheels drive;
     ATRobotEnumeration robotMode= ATRobotEnumeration.MANUAL;
     Pose2d poseEstimate;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drive = new MecanumDriveAT(hardwareMap);
+        drive = new MecanumDriveATWheels(hardwareMap);
         tophatController = new TopHatAutoControllerStates();
         tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, robotMode, hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

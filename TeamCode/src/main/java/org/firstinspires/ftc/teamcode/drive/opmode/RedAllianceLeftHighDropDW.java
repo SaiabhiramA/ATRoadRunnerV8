@@ -28,7 +28,7 @@ public class RedAllianceLeftHighDropDW extends LinearOpMode {
     ATAprilTag ATObjectDetection;
     ATRobotEnumeration parkingZone=ATRobotEnumeration.SUBSTATION;
     Pose2d poseEstimate;
-    boolean isAutonConePickupReady=false;
+    boolean isAutonConePickupReady=true;
     @Override
     public void runOpMode() throws InterruptedException {
         tophatController=new TopHatAutoControllerStates();
@@ -53,7 +53,7 @@ public class RedAllianceLeftHighDropDW extends LinearOpMode {
                         tophatController.redAllianceLeftAutonHigh();
                     }
                 })
-                .splineToConstantHeading(new Vector2d(-33,(-18+ ATConstants.RED_LEFT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(-32,(-18+ ATConstants.RED_LEFT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(2, ()->{
                     if (tophatController.tophatAction==ATRobotEnumeration.SET_RED_LEFT_PRELOADED_CONE) {
                         tophatController.redAllianceLeftAutonHigh();
@@ -67,9 +67,9 @@ public class RedAllianceLeftHighDropDW extends LinearOpMode {
                 .addTemporalMarker(4, ()->{
                     tophatController.setTophatAction(ATRobotEnumeration.DROP_RED_LEFT_PRELOADED_CONE);
                     tophatController.redAllianceLeftAutonHigh();})
-                .waitSeconds(1)
-                .splineToConstantHeading(new Vector2d(-39,(-11+ATConstants.RED_LEFT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)), Math.toRadians(0),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .lineToConstantHeading(new Vector2d(-39.5,(-11+ATConstants.RED_LEFT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)),drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(2)
+                .splineToConstantHeading(new Vector2d(-39,(-11+ATConstants.RED_LEFT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)), Math.toRadians(0),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .lineToConstantHeading(new Vector2d(-39.5,(-11+ATConstants.RED_LEFT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .build();
 
         while (opModeInInit()) {
@@ -104,16 +104,13 @@ public class RedAllianceLeftHighDropDW extends LinearOpMode {
             }
         }
         else {
-            tophatController.moveTopHatPosition(.9, false, 4250*tophatController.armMultiplier, -1800*tophatController.elbowMultiplier, 1800*tophatController.turnTableMultiplier);
-            while ((!isStopRequested()) && !tophatController.isTopHatMoveCompleted(4250*tophatController.armMultiplier,-1800*tophatController.elbowMultiplier,945)) {
-                poseEstimate = drive.getPoseEstimate();
-                telemetry.addData("x", poseEstimate.getX());
-                telemetry.addData("y", poseEstimate.getY());
-                telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-                telemetry.addData("robot mode", tophatController.getTophatAction());
-                telemetry.addData("In While Loop", "YES");
-                telemetry.update();
-            }
+            poseEstimate = drive.getPoseEstimate();
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+            telemetry.addData("robot mode", tophatController.getTophatAction());
+            telemetry.addData("In While Loop", "YES");
+            telemetry.update();
             tophatController.setTophatAction(ATRobotEnumeration.AUTO_RED_LEFT_HIGH_PARK);
         }
 
@@ -122,8 +119,6 @@ public class RedAllianceLeftHighDropDW extends LinearOpMode {
                 telemetry.addData("Top Hat is in Parking Mode", "YES");
             }
         }
-
-
         TrajectorySequence trajSeqParking;
         if (parkingZone==ATRobotEnumeration.PARK1){
             trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
