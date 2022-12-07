@@ -1025,21 +1025,21 @@ public class TopHatAutoControllerStates {
 
         if (teleOpStep==0){
             openClaw(desiredClawPosition);
-            setWristPosition(0);
+            setWristPosition(0.10);
             teleOpSleep(1000);
             teleOpStep = 0.1;
         }
         else if (teleOpStep==0.1){
-            moveTopHatPosition(0, desiredClawPosition, highJunctionArmPos, highJunctionElbowPos, turntable.getCurrentPosition());
+            moveTopHatPosition(0.10, desiredClawPosition, highJunctionArmPos, highJunctionElbowPos, turntable.getCurrentPosition());
             teleOpStep = 1;
         }
         else if (teleOpStep == 1 && isInRange(highJunctionElbowPos, elbow.getCurrentPosition())
                 && isInRange(highJunctionArmPos, arm.getCurrentPosition())){
-            moveTopHatPosition(0,desiredClawPosition,highJunctionArmPos,highJunctionElbowPos,desiredTurnTablePosition);
+            moveTopHatPosition(0.1,desiredClawPosition,highJunctionArmPos,highJunctionElbowPos,desiredTurnTablePosition);
             teleOpStep=2;
         }
         else if (teleOpStep == 2 && isInRange(desiredTurnTablePosition, turntable.getCurrentPosition())){
-            moveTopHatPosition(0,desiredClawPosition,desiredArmPosition,desiredElbowPosition,desiredTurnTablePosition);
+            moveTopHatPosition(0.1,desiredClawPosition,desiredArmPosition,desiredElbowPosition,desiredTurnTablePosition);
             teleOpStep=3;
         }
         else if (teleOpStep==3 && isInRange(desiredElbowPosition, elbow.getCurrentPosition())
