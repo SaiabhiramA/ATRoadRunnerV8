@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveATCancelable;
+import org.firstinspires.ftc.teamcode.drive.MecanumDriveATCancelableDW;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStates;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -24,7 +25,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @TeleOp(name = "ATTeleOp-GameDayStates-DeadWheels")
 public class TeleopATGameDayStatesDW extends LinearOpMode {
     TopHatAutoControllerStates tophatController;
-    MecanumDriveATCancelable drive;
+    MecanumDriveATCancelableDW drive;
     ATRobotEnumeration platformAction;
     ATRobotEnumeration platformMode;
     Pose2d poseEstimate;
@@ -40,7 +41,7 @@ public class TeleopATGameDayStatesDW extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drive = new MecanumDriveATCancelable(hardwareMap);
+        drive = new MecanumDriveATCancelableDW(hardwareMap);
         tophatController = new TopHatAutoControllerStates();
         platformMode = ATRobotEnumeration.AUTO;
         platformAction = ATRobotEnumeration.TELE_OP_AUTO;

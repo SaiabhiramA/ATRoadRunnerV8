@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
  */
 //@TeleOp(group = "drive")
 @TeleOp(name = "ATTeleOpMode-RedRight")
+@Disabled
 public class TeleopATGameDayStates_RedRight extends TeleopATGameDayStates {
     @Override
     public void mockupAutonExecution(){

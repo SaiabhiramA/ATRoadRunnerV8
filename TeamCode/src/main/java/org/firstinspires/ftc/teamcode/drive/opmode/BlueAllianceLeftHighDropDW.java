@@ -33,6 +33,7 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         tophatController=new TopHatAutoControllerStates();
+        tophatController.robotMode=ATRobotEnumeration.FULL_AUTON;
         ATObjectDetection =  new ATAprilTag();
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_SETUP);
         //parkingZone = ATObjectDetection.detectObjectLabel();
@@ -120,7 +121,6 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
             }
             tophatController.setTophatAction(ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PARK);
         }
-
         if (tophatController.tophatAction==ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PARK){
             while ((!isStopRequested()) && !tophatController.isTopHatInParkingPosition()){
                 telemetry.addData("Top Hat is in Parking Mode", "YES");
