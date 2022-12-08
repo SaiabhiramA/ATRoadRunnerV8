@@ -45,7 +45,6 @@ public class TeleopATGameDayStatesDW extends LinearOpMode {
         tophatController = new TopHatAutoControllerStates();
         platformMode = ATRobotEnumeration.AUTO;
         platformAction = ATRobotEnumeration.TELE_OP_AUTO;
-
         tophatController.basicInitializeRobot(hardwareMap,telemetry,gamepad1,gamepad2, platformAction);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.update();
@@ -158,7 +157,7 @@ public class TeleopATGameDayStatesDW extends LinearOpMode {
             break;
             case RED_LEFT_HIGH_DROP:{
                 trajSeqPark1=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(new Vector2d(-12,-10))
+                        .lineToConstantHeading(new Vector2d(-12,-11))
                         .lineToLinearHeading(new Pose2d(-12,-40,Math.toRadians(0)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .build();
             }
@@ -192,7 +191,7 @@ public class TeleopATGameDayStatesDW extends LinearOpMode {
             break;
             case RED_LEFT_HIGH_DROP:{
                 trajSeqPark2=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(new Vector2d(-12,-10))
+                        .lineToConstantHeading(new Vector2d(-12,-11))
                         .lineToLinearHeading(new Pose2d(-12,-40,Math.toRadians(0)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .build();
             }
@@ -225,7 +224,7 @@ public class TeleopATGameDayStatesDW extends LinearOpMode {
             break;
             case RED_LEFT_HIGH_DROP:{
                 trajSeqPark3=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(new Vector2d(-12,-10))
+                        .lineToConstantHeading(new Vector2d(-12,-11))
                         .lineToLinearHeading(new Pose2d(-12,-40,Math.toRadians(0)),drive.getVelocityConstraint(35, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                         .build();
             }
