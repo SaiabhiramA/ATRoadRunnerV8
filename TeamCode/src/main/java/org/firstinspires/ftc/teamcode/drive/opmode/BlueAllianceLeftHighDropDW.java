@@ -38,7 +38,7 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_SETUP);
         //parkingZone = ATObjectDetection.detectObjectLabel();
         tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, ATRobotEnumeration.RESET, hardwareMap);
-        tophatController.setTopHatMotorsVelocity(1000,1000,1000);
+        tophatController.setTopHatSpeed(ATRobotEnumeration.TOPHAT_LOW_AUTON_SPEED);
         drive = new MecanumDriveATWheels(hardwareMap);
         Pose2d startPose = new Pose2d(40, 60, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
@@ -60,7 +60,7 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
                         tophatController.blueAllianceLeftAutonHigh();
                     }
                 })
-                .splineToConstantHeading(new Vector2d(32,(19-ATConstants.BLUE_LEFT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(-90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(33,18.5), Math.toRadians(-90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(3, ()->{
                     if (tophatController.tophatAction==ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE) {
                         tophatController.blueAllianceLeftAutonHigh();
@@ -70,9 +70,11 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
                     tophatController.setTophatAction(ATRobotEnumeration.DROP_BLUE_LEFT_PRELOADED_CONE);
                     tophatController.blueAllianceLeftAutonHigh();})
                 .waitSeconds(1)
-                .splineToConstantHeading(new Vector2d(38,(11+ATConstants.BLUE_LEFT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)), Math.toRadians(0),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
-                .lineToConstantHeading(new Vector2d(39.5,(11+ATConstants.BLUE_LEFT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)),drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(40,11), Math.toRadians(0),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                //.lineToConstantHeading(new Vector2d(40,11),drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .build();
+
+        //TrajectorySequence coneAdjust = drive.trajectorySequenceBuilder(startPose)
 
         while (opModeInInit()) {
             parkingZone = ATObjectDetection.detectObjectLabel();
@@ -89,9 +91,7 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
         tophatController.setTopHatSpeed(ATRobotEnumeration.TOPHAT_MEDIUM_SPEED);
         if (isAutonConePickupReady) {
             tophatController.setTophatAction(ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PICK_CONE);
-
             while ((!isStopRequested()) && !tophatController.areFiveConesDone()) {
-                tophatController.setTopHatSpeed(ATRobotEnumeration.TOPHAT_MEDIUM_SPEED);
                 tophatController.blueAllianceLeftAutonHigh();
                 poseEstimate = drive.getPoseEstimate();
                 telemetry.addData("x", poseEstimate.getX());

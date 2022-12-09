@@ -44,7 +44,7 @@ public class MeepMeepTesting {
                                 .splineToConstantHeading(new Vector2d(-36,1), Math.toRadians(-90))
                                 .splineToConstantHeading(new Vector2d(-29,1), Math.toRadians(-180))
                                 .waitSeconds(.5)
-                                .splineToConstantHeading(new Vector2d(-30,1), Math.toRadians(-180))
+                                .splineToLinearHeading(new Pose2d(-30,1, Math.toRadians(90)), Math.toRadians(-180))
                                 .addDisplacementMarker(()->{})
                                 .waitSeconds(1.5)
                                 .splineToConstantHeading(new Vector2d(-40,10), Math.toRadians(0))

@@ -393,9 +393,9 @@ public class TeleopATGameDayStatesDW extends LinearOpMode {
          * enhance further later from any position in zone to move to substation pickup position
          */
         if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
-            platformAction = ATRobotEnumeration.SUBSTATION_PICKUP_POS;
-            platformMode = ATRobotEnumeration.AUTO;
-            navigateToPickupInSubstation();
+            //platformAction = ATRobotEnumeration.SUBSTATION_PICKUP_POS;
+            //platformMode = ATRobotEnumeration.AUTO;
+            //navigateToPickupInSubstation();
         }
 
         /**
