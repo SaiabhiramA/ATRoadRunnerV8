@@ -60,7 +60,7 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
                         tophatController.blueAllianceLeftAutonHigh();
                     }
                 })
-                .splineToConstantHeading(new Vector2d(33,18.5), Math.toRadians(-90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(33,18), Math.toRadians(-90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(3, ()->{
                     if (tophatController.tophatAction==ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE) {
                         tophatController.blueAllianceLeftAutonHigh();
@@ -70,7 +70,7 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
                     tophatController.setTophatAction(ATRobotEnumeration.DROP_BLUE_LEFT_PRELOADED_CONE);
                     tophatController.blueAllianceLeftAutonHigh();})
                 .waitSeconds(1)
-                .splineToConstantHeading(new Vector2d(40,11), Math.toRadians(0),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(40.5,11), Math.toRadians(0),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 //.lineToConstantHeading(new Vector2d(40,11),drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .build();
 
@@ -122,6 +122,8 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
             tophatController.setTophatAction(ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PARK);
         }
         if (tophatController.tophatAction==ATRobotEnumeration.AUTO_BLUE_LEFT_HIGH_PARK){
+            tophatController.parkingTurnTablePosition=250;
+            tophatController.setTopHatSpeed(ATRobotEnumeration.TOPHAT_HIGH_SPEED);
             while ((!isStopRequested()) && !tophatController.isTopHatInParkingPosition()){
                 telemetry.addData("Top Hat is in Parking Mode", "YES");
             }

@@ -69,7 +69,7 @@ public class BlueAllianceRightHighDropDW extends LinearOpMode {
                     tophatController.setTophatAction(ATRobotEnumeration.DROP_BLUE_RIGHT_PRELOADED_CONE);
                     tophatController.blueAllianceRightAutonHigh();})
                 .waitSeconds(2)
-                .splineToConstantHeading(new Vector2d(-43,15), Math.toRadians(-180),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(-43.25,15), Math.toRadians(-180),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 //.lineToConstantHeading(new Vector2d(-43,15),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .build();
         while (opModeInInit()) {
@@ -113,7 +113,9 @@ public class BlueAllianceRightHighDropDW extends LinearOpMode {
             tophatController.setTophatAction(ATRobotEnumeration.AUTO_BLUE_RIGHT_HIGH_PARK);
         }
         if (tophatController.tophatAction==ATRobotEnumeration.AUTO_BLUE_RIGHT_HIGH_PARK){
+            tophatController.setTopHatSpeed(ATRobotEnumeration.TOPHAT_HIGH_SPEED);
             while ((!isStopRequested()) && !tophatController.isTopHatInParkingPosition()){
+                tophatController.parkingTurnTablePosition=1750;
                 telemetry.addData("Top Hat is in Parking Mode", "YES");
             }
         }

@@ -48,10 +48,10 @@ public class TopHatAutoControllerStates {
     double desiredArmPosition ;
     double desiredElbowPosition ;
     double desiredTurnTablePosition ;
-    double parkingTurnTablePosition=250;
+    public double parkingTurnTablePosition=250;
 
 
-    int desiredNoOfConesToPick=1;
+    int desiredNoOfConesToPick=2;
     double robotMidPointWristPosition=.1;
     boolean robotMidPointClawPosition=false ;
     public final double armMultiplier=.51282; // 60 RPM to 117 RPM motor conversion
@@ -1792,10 +1792,10 @@ public class TopHatAutoControllerStates {
         }
         else if (step == 1&& isInRange(-1800*elbowMultiplier, elbow.getCurrentPosition())
                 && isInRange(4300*armMultiplier, arm.getCurrentPosition())){
-            moveTopHatPosition(1, false, 4300*armMultiplier, -1800*elbowMultiplier, 1800*turnTableMultiplier);
+            moveTopHatPosition(1, false, 4300*armMultiplier, -1800*elbowMultiplier, parkingTurnTablePosition);
             step=2;
         }
-        else if (step==2 && isInRange(1800*turnTableMultiplier, turntable.getCurrentPosition())){
+        else if (step==2 && isInRange(parkingTurnTablePosition, turntable.getCurrentPosition())){
             step=0;
             return true;
         }

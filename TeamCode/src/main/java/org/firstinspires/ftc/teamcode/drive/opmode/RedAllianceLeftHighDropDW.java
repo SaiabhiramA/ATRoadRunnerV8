@@ -114,6 +114,8 @@ public class RedAllianceLeftHighDropDW extends LinearOpMode {
         }
 
         if (tophatController.tophatAction==ATRobotEnumeration.AUTO_RED_LEFT_HIGH_PARK){
+            tophatController.parkingTurnTablePosition=250;
+            tophatController.setTopHatSpeed(ATRobotEnumeration.TOPHAT_HIGH_SPEED);
             while ((!isStopRequested()) && !tophatController.isTopHatInParkingPosition()){
                 telemetry.addData("Top Hat is in Parking Mode", "YES");
             }
