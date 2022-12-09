@@ -114,6 +114,81 @@ public class RedAllianceRightHighDropDW extends LinearOpMode {
             tophatController.setTophatAction(ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PARK);
         }
 
+        tophatController.parkingTurnTablePosition=1750;
+        tophatController.setTopHatSpeed(ATRobotEnumeration.TOPHAT_HIGH_SPEED);
+
+        TrajectorySequence trajSeqParking;
+
+            if (parkingZone==ATRobotEnumeration.PARK1){
+                trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(12, -15, Math.toRadians(90)))
+                        .addTemporalMarker(.0001, ()->{
+                            if (!tophatController.isTopHatInParkingPosition()){
+                                telemetry.addData("Top Hat is in Parking Mode", "YES");
+                            }
+                        })
+                        .addTemporalMarker(1, ()->{
+                            if (!tophatController.isTopHatInParkingPosition()){
+                                telemetry.addData("Top Hat is in Parking Mode", "YES");
+                            }
+                        })
+                        .build();
+                drive.followTrajectorySequence(trajSeqParking);
+            }
+            else if (parkingZone==ATRobotEnumeration.PARK2){
+                trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(36, -15, Math.toRadians(90)))
+                        .addTemporalMarker(.0001, ()->{
+                            if (!tophatController.isTopHatInParkingPosition()){
+                                telemetry.addData("Top Hat is in Parking Mode", "YES");
+                            }
+                        })
+                        .addTemporalMarker(1, ()->{
+                            if (!tophatController.isTopHatInParkingPosition()){
+                                telemetry.addData("Top Hat is in Parking Mode", "YES");
+                            }
+                        })
+
+
+                        .build();
+                drive.followTrajectorySequence(trajSeqParking);
+            }
+            else if (parkingZone==ATRobotEnumeration.PARK3){
+                trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(60, -15, Math.toRadians(90)))
+                        .addTemporalMarker(.0001, ()->{
+                            if (!tophatController.isTopHatInParkingPosition()){
+                                telemetry.addData("Top Hat is in Parking Mode", "YES");
+                            }
+                        })
+                        .addTemporalMarker(1, ()->{
+                            if (!tophatController.isTopHatInParkingPosition()){
+                                telemetry.addData("Top Hat is in Parking Mode", "YES");
+                            }
+                        })
+
+
+                        .build();
+                drive.followTrajectorySequence(trajSeqParking);
+            }
+            else if (parkingZone==ATRobotEnumeration.SUBSTATION){
+                trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(12, -15, Math.toRadians(270)))
+                        .addTemporalMarker(.0001, ()->{
+                            if (!tophatController.isTopHatInParkingPosition()){
+                                telemetry.addData("Top Hat is in Parking Mode", "YES");
+                            }
+                        })
+                        .addTemporalMarker(1, ()->{
+                            if (!tophatController.isTopHatInParkingPosition()){
+                                telemetry.addData("Top Hat is in Parking Mode", "YES");
+                            }
+                        })
+                        .lineToLinearHeading(new Pose2d(12, -63, Math.toRadians(270)))
+                        .build();
+                drive.followTrajectorySequence(trajSeqParking);
+            }
+
         if (tophatController.tophatAction==ATRobotEnumeration.AUTO_RED_RIGHT_HIGH_PARK){
             tophatController.parkingTurnTablePosition=1750;
             tophatController.setTopHatSpeed(ATRobotEnumeration.TOPHAT_HIGH_SPEED);
@@ -121,36 +196,7 @@ public class RedAllianceRightHighDropDW extends LinearOpMode {
                 telemetry.addData("Top Hat is in Parking Mode", "YES");
             }
         }
-
-        TrajectorySequence trajSeqParking;
-
-            if (parkingZone==ATRobotEnumeration.PARK1){
-                trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(12, -15, Math.toRadians(90)))
-                        .build();
-                drive.followTrajectorySequence(trajSeqParking);
-            }
-            else if (parkingZone==ATRobotEnumeration.PARK2){
-                trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(36, -15, Math.toRadians(90)))
-                        .build();
-                drive.followTrajectorySequence(trajSeqParking);
-            }
-            else if (parkingZone==ATRobotEnumeration.PARK3){
-                trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(60, -15, Math.toRadians(90)))
-                        .build();
-                drive.followTrajectorySequence(trajSeqParking);
-            }
-            else if (parkingZone==ATRobotEnumeration.SUBSTATION){
-                trajSeqParking=drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(12, -15, Math.toRadians(270)))
-                        .lineToLinearHeading(new Pose2d(12, -63, Math.toRadians(270)))
-                        .build();
-                drive.followTrajectorySequence(trajSeqParking);
-            }
         setRobotStateInStorage();
-
         poseEstimate = drive.getPoseEstimate();
         telemetry.addData("x", poseEstimate.getX());
         telemetry.addData("y", poseEstimate.getY());
