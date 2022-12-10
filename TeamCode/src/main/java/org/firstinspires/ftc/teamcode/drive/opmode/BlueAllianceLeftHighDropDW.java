@@ -48,28 +48,28 @@ public class BlueAllianceLeftHighDropDW extends LinearOpMode {
                 .addTemporalMarker(.001, ()->{
                     tophatController.setTophatAction(ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE);
                     tophatController.blueAllianceLeftAutonHigh();})
-                .splineToConstantHeading(new Vector2d(36,58), Math.toRadians(-90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(36,58), Math.toRadians(-90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(1, ()->{
                     if (tophatController.tophatAction==ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE) {
                         tophatController.blueAllianceLeftAutonHigh();
                     }
                     })
-                .splineToConstantHeading(new Vector2d(36,40), Math.toRadians(-90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(36,40), Math.toRadians(-90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(2, ()->{
                     if (tophatController.tophatAction==ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE) {
                         tophatController.blueAllianceLeftAutonHigh();
                     }
                 })
-                .splineToConstantHeading(new Vector2d(33,18), Math.toRadians(-90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(33,18), Math.toRadians(-90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(3, ()->{
                     if (tophatController.tophatAction==ATRobotEnumeration.SET_BLUE_LEFT_PRELOADED_CONE) {
                         tophatController.blueAllianceLeftAutonHigh();
                     }
                 })
-                .addTemporalMarker(4, ()->{
+                .addTemporalMarker(3, ()->{
                     tophatController.setTophatAction(ATRobotEnumeration.DROP_BLUE_LEFT_PRELOADED_CONE);
                     tophatController.blueAllianceLeftAutonHigh();})
-                .waitSeconds(1)
+                .waitSeconds(2)
                 .splineToConstantHeading(new Vector2d(40.5,11), Math.toRadians(0),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 //.lineToConstantHeading(new Vector2d(40,11),drive.getVelocityConstraint(25, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .build();

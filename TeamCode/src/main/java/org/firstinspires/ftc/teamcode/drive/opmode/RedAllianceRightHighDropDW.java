@@ -47,29 +47,29 @@ public class RedAllianceRightHighDropDW extends LinearOpMode {
                 .addTemporalMarker(.001, ()->{
                     tophatController.setTophatAction(ATRobotEnumeration.SET_RED_RIGHT_PRELOADED_CONE);
                     tophatController.redAllianceRightAutonHigh();})
-                .splineToConstantHeading(new Vector2d(38,-55), Math.toRadians(90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(38,-55), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(1, ()->{
                     if (tophatController.tophatAction==ATRobotEnumeration.SET_RED_RIGHT_PRELOADED_CONE) {
                         tophatController.redAllianceRightAutonHigh();
                     }
                 })
-                .splineToConstantHeading(new Vector2d(38,-34), Math.toRadians(90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(38,-34), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(2, ()->{
                     if (tophatController.tophatAction==ATRobotEnumeration.SET_RED_RIGHT_PRELOADED_CONE) {
                         tophatController.redAllianceRightAutonHigh();
                     }
                 })
-                .splineToConstantHeading(new Vector2d(35.5,(-21.5+ ATConstants.RED_RIGHT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .splineToConstantHeading(new Vector2d(35.5,(-21.5+ ATConstants.RED_RIGHT_HIGH_DROP_CONE_DROP_OFFSET_Y)), Math.toRadians(90),drive.getVelocityConstraint(20, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .addTemporalMarker(2.5, ()->{
                     if (tophatController.tophatAction==ATRobotEnumeration.SET_RED_RIGHT_PRELOADED_CONE) {
                         tophatController.redAllianceRightAutonHigh();
                     }
                 })
-                .addTemporalMarker(4, ()->{
+                .addTemporalMarker(3, ()->{
                     tophatController.setTophatAction(ATRobotEnumeration.DROP_RED_RIGHT_PRELOADED_CONE);
                     tophatController.redAllianceRightAutonHigh();})
-                .waitSeconds(2)
-                .splineToConstantHeading(new Vector2d(43,-15), Math.toRadians(0),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
+                .waitSeconds(1)
+                .splineToConstantHeading(new Vector2d(42.5,-15), Math.toRadians(0),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 //.lineToConstantHeading(new Vector2d(43,(-15+ATConstants.RED_RIGHT_HIGH_DROP_CONE_PICKUP_OFFSET_Y)),drive.getVelocityConstraint(15, MAX_ANG_VEL, TRACK_WIDTH), drive.getAccelerationConstraint(MAX_ACCEL))
                 .build();
 
