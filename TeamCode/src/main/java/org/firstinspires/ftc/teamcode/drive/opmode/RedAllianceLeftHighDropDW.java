@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveAT;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveATWheels;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStates;
+import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStatesV2;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
@@ -24,14 +25,14 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Autonomous(name = "RedLeftHighDropAT-DeadWheel")
 public class RedAllianceLeftHighDropDW extends LinearOpMode {
     MecanumDriveATWheels drive;
-    TopHatAutoControllerStates tophatController;
+    TopHatAutoControllerStatesV2 tophatController;
     ATAprilTag ATObjectDetection;
     ATRobotEnumeration parkingZone=ATRobotEnumeration.SUBSTATION;
     Pose2d poseEstimate;
     boolean isAutonConePickupReady=true;
     @Override
     public void runOpMode() throws InterruptedException {
-        tophatController=new TopHatAutoControllerStates();
+        tophatController=new TopHatAutoControllerStatesV2();
         tophatController.robotMode=ATRobotEnumeration.FULL_AUTON;
         ATObjectDetection = new ATAprilTag();
         ATObjectDetection.initalizeTensorFlow(hardwareMap, telemetry, ATRobotEnumeration.AUTO_RED_LEFT_HIGH_SETUP);
