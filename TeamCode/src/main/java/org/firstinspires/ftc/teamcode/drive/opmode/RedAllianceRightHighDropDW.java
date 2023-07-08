@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Config
 //@Autonomous(group = "drive")
 @Autonomous(name = "RedRightHighDropAT-DeadWheel")
+@Disabled
 public class RedAllianceRightHighDropDW extends LinearOpMode {
     MecanumDriveATWheels drive;
     TopHatAutoControllerStates tophatController;

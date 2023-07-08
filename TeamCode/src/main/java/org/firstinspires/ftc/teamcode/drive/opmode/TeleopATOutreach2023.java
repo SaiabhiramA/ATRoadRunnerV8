@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveATCancelableDW;
-import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStates;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStatesV2;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -22,9 +21,9 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
  */
 //@TeleOp(group = "drive")
-@TeleOp(name = "ATTeleOp-GameDayStates-V2**")
-@Disabled
-public class TeleopATGameDayStatesDWV2 extends LinearOpMode {
+@TeleOp(name = "ATTeleOp-Outreach")
+
+public class TeleopATOutreach2023 extends LinearOpMode {
     TopHatAutoControllerStatesV2 tophatController;
     MecanumDriveATCancelableDW drive;
     ATRobotEnumeration platformAction;
@@ -46,7 +45,8 @@ public class TeleopATGameDayStatesDWV2 extends LinearOpMode {
         tophatController = new TopHatAutoControllerStatesV2();
         platformMode = ATRobotEnumeration.AUTO;
         platformAction = ATRobotEnumeration.TELE_OP_AUTO;
-        tophatController.basicInitializeRobot(hardwareMap,telemetry,gamepad1,gamepad2, platformAction);
+        //tophatController.basicInitializeRobot(hardwareMap,telemetry,gamepad1,gamepad2, platformAction);
+        tophatController.fullyInitializeRobot(telemetry, gamepad1, gamepad2, ATRobotEnumeration.RESET, hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         telemetry.update();
         drive.setPoseEstimate(ATGlobalStorage.currentPose);

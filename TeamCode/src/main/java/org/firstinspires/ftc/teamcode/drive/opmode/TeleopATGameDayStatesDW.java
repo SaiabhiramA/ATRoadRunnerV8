@@ -23,6 +23,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
  */
 //@TeleOp(group = "drive")
 @TeleOp(name = "ATTeleOp-GameDayStates-DeadWheels")
+@Disabled
 public class TeleopATGameDayStatesDW extends LinearOpMode {
     TopHatAutoControllerStates tophatController;
     MecanumDriveATCancelableDW drive;
