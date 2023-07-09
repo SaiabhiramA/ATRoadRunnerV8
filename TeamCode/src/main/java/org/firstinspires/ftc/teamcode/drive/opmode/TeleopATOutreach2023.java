@@ -393,22 +393,24 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /** perform auto navigation from auton position to teleop pickup position only for first time
          * enhance further later from any position in zone to move to substation pickup position
          */
-        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
+       /*SV SEVA
+         if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.a){
             //platformAction = ATRobotEnumeration.SUBSTATION_PICKUP_POS;
             //platformMode = ATRobotEnumeration.AUTO;
             //navigateToPickupInSubstation();
         }
-
+*/
         /**
          * Execute emergency stop during auto navigation
          */
-        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.x){
+        /*SV SEVA
+       if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.x){
             platformAction = ATRobotEnumeration.KILL_ALL_ACTIONS;
             platformMode = ATRobotEnumeration.AUTO;
             drive.breakFollowing();
             tophatController.stopTopHatMovement();
         }
-
+*/
         /** Reset the robot manually when needed
          */
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x && gamepad1.left_trigger>0 && gamepad1.right_trigger>0) {
@@ -420,27 +422,31 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to set the tophat in navigation position in the field
          */
+        /*SV SEVA
         if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.y){
             tophatController.setTophatAction(ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN);
             tophatController.setTophatMode(ATRobotEnumeration.AUTO);
             tophatController.setTopHatPosition(.1,false,4300*tophatController.armMultiplier,-1800*tophatController.elbowMultiplier,tophatController.frontPickTTPos);
-        }
+        }*/
 
         /**
          * This is to turn robot in 180 degrees in counter clockwise  - RE ENABLE THIS LATER
          * */
-        if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.b){
+               /*SV SEVA
+
+ //       if (gamepad1.left_trigger>0 && gamepad1.right_trigger>0 && gamepad1.b){
             /*platformAction = ATRobotEnumeration.TURN_PLATFORM_180;
             platformMode = ATRobotEnumeration.AUTO;
             TrajectorySequence trajSeqMedSubstation = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                     .turn(Math.toRadians(180))
                     .build();
             drive.followTrajectorySequenceAsync(trajSeqMedSubstation);*/
-        }
+   //     }
 
         /**
          * This is to preset TopHat for left ground junction drop         *
          */
+        /*SV SEVA
         if (!gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_GROUND_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -449,6 +455,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for right ground junction drop
          */
+        /*SV SEVA
         if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.x){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_GROUND_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -458,6 +465,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for left low junction drop
          */
+        /*SV SEVA
         if (!gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -466,6 +474,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for right low junction drop
          */
+        /*SV SEVA
         if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.a){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -475,6 +484,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for left medium junction drop
          */
+        /*SV SEVA
         if (gamepad1.left_bumper && !gamepad1.right_bumper && gamepad1.b){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -484,6 +494,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for right medium junction drop
          */
+        /*SV SEVA
         if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.b){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -494,6 +505,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for left high junction drop
          */
+        /*SV SEVA
         if (!gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.y){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -502,6 +514,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for right high junction drop
          */
+        /*SV SEVA
         if (gamepad1.right_bumper && !gamepad1.left_bumper && gamepad1.y){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -511,6 +524,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for ground junction drop and also front pickup         *
          */
+        /*SV SEVA
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.x){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_GROUND_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -520,6 +534,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for front low junction drop
          */
+        /*SV SEVA
         if (gamepad1.right_bumper && gamepad1.left_bumper && gamepad1.a){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
@@ -528,6 +543,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
         /**
          * This is to preset TopHat for front medium junction drop
          */
+        /*SV SEVA
         if (gamepad1.left_bumper && gamepad1.right_bumper && gamepad1.b){
             tophatController.tophatAction = ATRobotEnumeration.AUTO_TOPHAT_ONEWAY_MOVE_BEGIN;
             tophatController.teleOpStep=0;
