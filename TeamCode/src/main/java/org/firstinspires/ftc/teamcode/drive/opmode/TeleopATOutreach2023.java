@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.drive.ATGlobalStorage;
 import org.firstinspires.ftc.teamcode.drive.ATRobotEnumeration;
 import org.firstinspires.ftc.teamcode.drive.MecanumDriveATCancelableDW;
+import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerOutreach;
 import org.firstinspires.ftc.teamcode.drive.TopHatAutoControllerStatesV2;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -24,7 +25,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @TeleOp(name = "ATTeleOp-Outreach")
 
 public class TeleopATOutreach2023 extends LinearOpMode {
-    TopHatAutoControllerStatesV2 tophatController;
+    TopHatAutoControllerOutreach tophatController;
     MecanumDriveATCancelableDW drive;
     ATRobotEnumeration platformAction;
     ATRobotEnumeration platformMode;
@@ -42,7 +43,7 @@ public class TeleopATOutreach2023 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new MecanumDriveATCancelableDW(hardwareMap);
-        tophatController = new TopHatAutoControllerStatesV2();
+        tophatController = new TopHatAutoControllerOutreach();
         platformMode = ATRobotEnumeration.AUTO;
         platformAction = ATRobotEnumeration.TELE_OP_AUTO;
         //tophatController.basicInitializeRobot(hardwareMap,telemetry,gamepad1,gamepad2, platformAction);
