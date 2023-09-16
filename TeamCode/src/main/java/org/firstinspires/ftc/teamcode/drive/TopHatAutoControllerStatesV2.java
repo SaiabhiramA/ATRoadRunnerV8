@@ -2131,7 +2131,6 @@ public class TopHatAutoControllerStatesV2 {
          * This needs to be added to the instruction sheet and not to analyze this as left or right instead focus on High vs
          * Medium Junction
          */
-       /*SV SEVA
 
         if (gamepad2.left_trigger == 0 && gamepad2.right_trigger > 0 && gamepad2.x){
             tophatAction = ATRobotEnumeration.AUTO_TOPHAT_GROUND_MOVE_BEGIN;
@@ -2144,7 +2143,6 @@ public class TopHatAutoControllerStatesV2 {
          * This needs to be added to the instruction sheet and not to analyze this as left or right instead focus on High vs
          * Medium Junction
          */
-        /*SV SEVA
         if (gamepad2.left_trigger > 0 && gamepad2.right_trigger == 0 && gamepad2.x){
             tophatAction = ATRobotEnumeration.AUTO_TOPHAT_GROUND_MOVE_BEGIN;
             teleOpStep=0;
@@ -2157,7 +2155,6 @@ public class TopHatAutoControllerStatesV2 {
          * this can be used to pickup cone and navigate anywhere within the filed to either own a junction
          * or complete the circuit
          */
-        /*SV SEVA
         if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.x){
             tophatAction = ATRobotEnumeration.PICK_CONE_READY_TO_NAVIGATE;
             teleOpStep=0;
@@ -2167,7 +2164,6 @@ public class TopHatAutoControllerStatesV2 {
          * This is to pickup cone from Alliance side specific substation and have it ready to drop
          * in high junction
          */
-        /*SV SEVA
         if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.y){
             tophatAction = ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_HIGH;
             teleOpStep=0;
@@ -2178,7 +2174,6 @@ public class TopHatAutoControllerStatesV2 {
          * This is to preset TopHat to pickup cone from Alliance side specific substation and
          * have TopHat continue dropping cones till action being interrupted by pressing any additional key
          */
-        /*SV SEVA
         if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.y){
             tophatAction = ATRobotEnumeration.PICK_CONE_DROP_HIGH_IN_LOOP;
             teleOpStep=0;
@@ -2187,7 +2182,6 @@ public class TopHatAutoControllerStatesV2 {
          * This is to pickup cone from Alliance side specific substation and have it ready to drop
          * in medium junction
          */
-        /*SV SEVA
         if (gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.b){
             tophatAction = ATRobotEnumeration.PICK_CONE_SET_TO_DRPOP_MEDIUM;
             teleOpStep=0;
@@ -2197,7 +2191,6 @@ public class TopHatAutoControllerStatesV2 {
          * This is to preset TopHat to pickup cone from Alliance side specific substation and
          * have TopHat continue dropping cones in Medium Junction till action being interrupted by pressing any additional key
          */
-        /*SV SEVA
         if (gamepad2.right_trigger>0 && gamepad2.left_trigger>0 && gamepad2.b){
             tophatAction = ATRobotEnumeration.PICK_CONE_DROP_MEDIUM_IN_LOOP;
             teleOpStep=0;
@@ -2205,7 +2198,6 @@ public class TopHatAutoControllerStatesV2 {
         /**
          * This is to increase the tophat motors speed
          */
-
         if (gamepad2.left_trigger > 0 && gamepad2.right_trigger > 0 && gamepad2.dpad_up){
             tophatAction = ATRobotEnumeration.SPEED_UP;
             tophatMode = ATRobotEnumeration.MANUAL;
